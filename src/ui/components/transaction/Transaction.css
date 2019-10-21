@@ -1,9 +1,29 @@
+.income {
+	border-left-width: 3px;
+	border-left-style: solid;
+	border-left-color: green;
+}
+
+.expense {
+	border-left-width: 3px;
+	border-left-style: solid;
+	border-left-color: red;
+}
+
 .transaction {
+	margin: auto;
 	border-radius: 5px;
-	box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.1);
-	box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.8);
-	width: 100%;
+	box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1), 0px 1px 4px 0px rgba(0, 0, 0, 0.5);
 	display: flex;
 	justify-content: space-between;
 	padding: 20px;
 }
+
+.amount {
+	font-weight: bold;
+}
+
+.category {
+	font-weight: bold;
+}
+

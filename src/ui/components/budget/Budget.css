@@ -1,0 +1,35 @@
+.budget {
+	width: 100%;
+}
+
+.date-section {
+	display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.progress-bar {
+	height: 50px;
+	border-radius: 15px;
+	overflow: hidden;
+	box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1),
+		0px 1px 4px 0px rgba(0, 0, 0, 0.5);
+}
+
+.date-progress-underspend {
+	height: 100%;
+	background-color: green;
+
+}
+
+.date-progress-overspend {
+
+}
+
+.spending-progress-underspend {
+
+}
+
+.spending-progress-overspend {
+
+}
