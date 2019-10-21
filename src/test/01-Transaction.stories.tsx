@@ -1,10 +1,16 @@
-import * as React from 'react';
-import { Button } from '@storybook/react/demo';
+import * as React from "react";
+import Transaction from "../ui/components/transaction/Transaction";
+import { TransactionDisplayProps, TransactionType } from "../util/types/TransactionTypes";
 
-export default { title: 'Button' };
+export default { title: "Transactions" };
 
-export const withText = () => <Button>Hello Button</Button>;
+const exampleTranscation: TransactionDisplayProps = {
+  account: 'Chequing',
+  amount: 20,
+  category: 'Eating Out',
+  date: new Date(),
+  description: 'Family Dinner',
+  type: TransactionType.EXPENSE,
+};
 
-export const withEmoji = () => (
-  <Button><span role="img" aria-label="so cool">😀 😎 👍 💯</span></Button>
-);
+export const simpleTransaction = () => <Transaction {...exampleTranscation}></Transaction>;
