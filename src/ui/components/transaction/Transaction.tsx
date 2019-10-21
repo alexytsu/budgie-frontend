@@ -1,9 +1,10 @@
 import * as React from "react";
 import { Component } from "react";
-import * as classNames from "classnames";
+import classNames from "classnames";
+
 import { TransactionDisplayProps, TransactionType } from "../../../util/types/TransactionTypes";
 
-import "../../default.css";
+import "../../styles.css";
 import "./Transaction.css";
 
 export default class Transaction extends Component<
