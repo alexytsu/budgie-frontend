@@ -2,8 +2,8 @@ import * as React from "react";
 import { Component } from "react";
 import { observer } from "mobx-react";
 
-import apiHelpers from "../../../util/api-helpers";
-import "../../tailwind.css";
+import apiHelpers from "../../util/api-helpers";
+import "../tailwind.css";
 
 @observer
 export default class LoginScene extends Component {

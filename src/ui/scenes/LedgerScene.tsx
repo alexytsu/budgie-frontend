@@ -2,7 +2,7 @@ import * as React from "react";
 import { Component } from "react";
 import { observer } from "mobx-react";
 
-import apiHelpers from "../../../util/api-helpers";
+import apiHelpers from "../../util/api-helpers";
 
 @observer
 export default class LedgerScene extends Component {

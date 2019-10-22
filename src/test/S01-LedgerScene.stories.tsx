@@ -1,5 +1,5 @@
 import * as React from "react";
-import LedgerScene from "../ui/scenes/ledger-scene/LedgerScene";
+import LedgerScene from "../ui/scenes/LedgerScene";
 
 export default { title: "Ledger" };
 
