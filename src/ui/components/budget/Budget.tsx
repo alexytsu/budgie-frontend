@@ -2,9 +2,8 @@ import * as React from "react";
 import { Component } from "react";
 import classNames from "classnames";
 
-import "./Budget.css";
-import "../../styles.css";
 import { BudgetDisplayProps } from "../../../util/types/BudgetTypes";
+import "../../tailwind.css";
 
 export default class extends Component<BudgetDisplayProps, {}> {
 	render() {
@@ -28,36 +27,30 @@ export default class extends Component<BudgetDisplayProps, {}> {
 
 
 		const dateProgressStyle = classNames({
-			'date-progress-underspent': !overspent,
-			'date-progress-overspent': overspent,
+			'h-full border-green-600 border-solid border-2 rounded-lg bg-green-100': !overspent,
+			'h-full border-red-700 border-solid border-t-2 border-l-2 border-b-2 rounded-lg rounded-r-none bg-green-600 absolute': overspent,
 		})
 
 		const spendingProgressStyle = classNames({
-			'spending-progress-underspent': !overspent,
-			'spending-progress-overspent': overspent,
+			'h-full bg-green-600 overflow-visible absolute rounded-l-lg': !overspent,
+			'h-full bg-red-300 border-solid border-2 border-red-700 rounded-lg absolute overflow-visible': overspent,
 		})
 
 		return (
-			<div className="budget">
-				<div className="money-section">
-					<div style={{width: spendingProgress + "%"}}></div>
-					<div className="money-label-container">
-						<div className="money-label"><p className="dollar-sign">$</p><p>{spent}</p></div>
-						<div className="money-label"><p className="dollar-sign">$</p><p>{limit}</p></div>
-					</div>
-				</div>
-				<div className="progress-bar">
+			<div className="w-full px-4">
+				<div className="text-xs font-bold object-right text-right">${limit}</div>
+				<div className="rounded-lg shadow-lg relative h-10">
 					<div style={{ width: spendingProgress + "%"}} className={spendingProgressStyle} />
 					<div style={{ width: dateProgress + "%" }} className={dateProgressStyle}></div>
 				</div>
-				<div className="date-section">
-					<div className="date">
+				<div className="flex flex-row justify-between">
+				<div className="mt-2 text-xs font-bold">
 						{startDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
 					</div>
-					<div className="date">
+				<div className="mt-2 text-xs font-bold">
 						{midDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
 					</div>
-					<div className="date">
+				<div className="mt-2 text-xs font-bold">
 						{endDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
 					</div>
 				</div>

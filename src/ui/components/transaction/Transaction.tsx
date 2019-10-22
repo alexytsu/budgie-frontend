@@ -17,7 +17,7 @@ export default class Transaction extends Component<
 	render() {
 
 		const transactionClass = classNames({
-			'border-l-4 border-solid rounded-lg p-3 flex flex-row justify-between shadow-lg': true,
+			'border-l-4 border-solid rounded-lg p-2 px-4 flex flex-row justify-between shadow-lg': true,
 			'border-green-600': this.props.type === TransactionType.INCOME,
 			'border-red-600': this.props.type === TransactionType.EXPENSE,
 		})
@@ -25,12 +25,12 @@ export default class Transaction extends Component<
 		return (
 			<div className={transactionClass}>
 				<div>
-					<div className="font-bold text-black">${this.props.amount}</div>
-					<div className="font-semibold text-gray-900">{this.props.account}</div>
+					<div className="font-bold text-sm text-black">${this.props.amount}</div>
+					<div className="font-semibold text-sm text-gray-900">{this.props.account}</div>
 				</div>
 				<div>
-					<div className="font-bold text-black">{this.props.category}</div>
-					<div className="font-semibold text-gray-900">{this.props.description}</div>
+					<div className="font-bold text-black text-sm">{this.props.category}</div>
+					<div className="font-semibold text-gray-900 text-sm">{this.props.description}</div>
 				</div>
 			</div>
 		);
