@@ -24,7 +24,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"]
+        use: ["style-loader", "postcss-loader"]
       }
     ]
   },
@@ -36,6 +36,6 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: "./index.html",
       filename: "./index.html"
-    })
+    }),
   ]
 };

@@ -12,6 +12,7 @@ class ApiHelper {
 				password
 			});
 			this.token = resp.data.token;
+			return this.token;
 		}
 	}
 

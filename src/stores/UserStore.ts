@@ -4,7 +4,10 @@ import ApiHelper from "../util/api-helpers";
 
 class UserStore {
 	@observable
-	username: string = "Not Logged In";
+	username: string|null = null;
+
+	@observable
+	token: string|null = null;
 }
 
 export default new UserStore();
