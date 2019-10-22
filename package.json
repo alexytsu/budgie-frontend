@@ -3,8 +3,9 @@
 	"version": "1.0.0",
 	"description": "The frontend SPA for Budgie, an Envelope method based budgeting app",
 	"scripts": {
-		"start": "node server.js",
-		"storybook": "start-storybook"
+		"build:style": "tailwind build src/ui/styles.css -o src/ui/tailwind.css",
+		"start": "yarn build:style && node server.js",
+		"storybook": "yarn build:style && start-storybook"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.6.4",
@@ -13,6 +14,7 @@
 		"awesome-typescript-loader": "^5.2.1",
 		"babel-loader": "^8.0.6",
 		"prettier": "^1.18.2",
+		"tailwindcss": "^1.1.2",
 		"tslint": "^5.20.0",
 		"tslint-config-prettier": "^1.18.0",
 		"tslint-config-standard": "^8.0.1",
@@ -23,11 +25,13 @@
 	},
 	"dependencies": {
 		"@storybook/react": "^5.2.4",
+		"autoprefixer": "^9.6.5",
 		"axios": "^0.19.0",
 		"classnames": "^2.2.6",
 		"mobx": "^5.5.2",
 		"mobx-react": "^5.3.5",
 		"mobx-react-devtools": "^6.0.3",
+		"postcss-cli": "^6.1.3",
 		"react": "^16.5.2",
 		"react-dom": "^16.5.2"
 	}

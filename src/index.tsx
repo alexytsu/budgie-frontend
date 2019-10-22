@@ -3,6 +3,8 @@ import * as ReactDOM from "react-dom";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
 
+import "./ui/tailwind.css";
+
 class AppState {
 	@observable timer = 0;
 

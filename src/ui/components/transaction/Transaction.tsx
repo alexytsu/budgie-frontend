@@ -4,8 +4,7 @@ import classNames from "classnames";
 
 import { TransactionDisplayProps, TransactionType } from "../../../util/types/TransactionTypes";
 
-import "../../styles.css";
-import "./Transaction.css";
+import "../../tailwind.css";
 
 export default class Transaction extends Component<
 	TransactionDisplayProps,
@@ -18,20 +17,20 @@ export default class Transaction extends Component<
 	render() {
 
 		const transactionClass = classNames({
-			'transaction': true,
-			'income': this.props.type === TransactionType.INCOME,
-			'expense': this.props.type === TransactionType.EXPENSE,
+			'border-l-4 border-solid rounded-lg p-3 flex flex-row justify-between shadow-lg': true,
+			'border-green-600': this.props.type === TransactionType.INCOME,
+			'border-red-600': this.props.type === TransactionType.EXPENSE,
 		})
 
 		return (
 			<div className={transactionClass}>
 				<div>
-					<div className="amount">${this.props.amount}</div>
-					<div className="account">{this.props.account}</div>
+					<div className="font-bold text-black">${this.props.amount}</div>
+					<div className="font-semibold text-gray-900">{this.props.account}</div>
 				</div>
 				<div>
-					<div className="category">{this.props.category}</div>
-					<div className="description">{this.props.description}</div>
+					<div className="font-bold text-black">{this.props.category}</div>
+					<div className="font-semibold text-gray-900">{this.props.description}</div>
 				</div>
 			</div>
 		);
