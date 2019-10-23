@@ -20,7 +20,7 @@ class ApiHelper {
 	createCategory = async (category_name: string) => {
 		const resp = await axios.post(
 			API_URL + "/categories/",
-			{ name: category_name },
+			{ name: category_name, user: 1 },
 			{
 				headers: {
 					Authorization: "Token " + this.token
@@ -28,6 +28,7 @@ class ApiHelper {
 			}
 		);
 
+		console.log(resp.status);
 		return resp.data;
 	};
 
