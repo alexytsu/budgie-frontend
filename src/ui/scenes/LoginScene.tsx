@@ -9,7 +9,6 @@ import UserStore from "../../stores/UserStore";
 interface LoginSceneState {
 	username: string;
 	password: string;
-	authenticated: boolean;
 }
 
 @observer
@@ -20,7 +19,6 @@ export default class LoginScene extends Component<{},LoginSceneState> {
 		this.state = {
 			username: "",
 			password: "",
-			authenticated: false
 		};
 	}
 
@@ -34,7 +32,7 @@ export default class LoginScene extends Component<{},LoginSceneState> {
 		const token = await apiHelpers.loginUser(this.state.username, this.state.password);
 		console.log("Received token", token);
 		UserStore.token = token;
-		this.setState({authenticated: true});
+		UserStore.username = this.state.username;
 	}
 
 	render() {
