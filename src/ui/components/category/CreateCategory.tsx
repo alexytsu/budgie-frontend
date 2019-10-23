@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Component} from "react";
+import { Component } from "react";
 
 import "../../tailwind.css";
 import apiHelpers from "../../../util/api-helpers";

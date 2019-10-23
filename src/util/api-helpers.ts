@@ -41,6 +41,16 @@ class ApiHelper {
     
     return resp.data;
 	};
+
+	getAllTransactions = async () => {
+		const resp = await axios.get(API_URL + "/transactions/", {
+			headers: {
+				Authorization: "Token " + this.token
+			}
+    });
+    
+    return resp.data;
+	};
 }
 
 export default new ApiHelper();
