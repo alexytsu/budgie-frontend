@@ -27,7 +27,7 @@ export default class ProfileScene extends Component<{}, ProfileSceneState> {
 
 	retrieveCategories = async () => {
 		ApplicationStore.categories_raw = await apiHelpers.getAllCategories();
-  };
+	};
 
 	retrieveTransactions = async () => {
 		ApplicationStore.transactions_raw = await apiHelpers.getAllTransactions();
@@ -74,9 +74,9 @@ export default class ProfileScene extends Component<{}, ProfileSceneState> {
 								>
 									Refresh Transactions
 								</button>
-                <ShowTransactions
-                  transactions={ApplicationStore.transactions_raw}
-                />
+								<ShowTransactions
+									transactions={ApplicationStore.transactions_raw}
+								/>
 							</div>
 							<div>
 								<button
@@ -90,6 +90,12 @@ export default class ProfileScene extends Component<{}, ProfileSceneState> {
 								></ShowCategories>
 							</div>
 						</div>
+						<button
+							className="bg-red-600 text-white py-2 px-8 rounded my-4"
+							onClick={() => UserStore.logout()}
+						>
+							Logout
+						</button>
 					</div>
 				</div>
 			</div>
@@ -110,7 +116,7 @@ function ShowCategories(props) {
 }
 
 function ShowTransactions(props) {
-	return props.categories.map(tr => (
+	return props.transactions.map(tr => (
 		<div>
 			{tr.id}: {tr.amount}
 		</div>
