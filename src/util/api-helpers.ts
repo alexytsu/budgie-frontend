@@ -13,6 +13,8 @@ class ApiHelper {
 			});
 			this.token = resp.data.token;
 		}
+
+		return this.token;
 	}
 
 	createCategory = async (category_name: string) => {
