@@ -2,11 +2,11 @@ import * as React from "react";
 import {Component} from "react";
 
 import "../../tailwind.css";
-import { ENETDOWN } from "constants";
 import apiHelpers from "../../../util/api-helpers";
 
 interface CreateCategoryState {
   category: string;
+  warning: boolean;
 }
 
 export default class CreateCategory extends Component<{},CreateCategoryState> {
@@ -16,6 +16,7 @@ export default class CreateCategory extends Component<{},CreateCategoryState> {
 
     this.state = {
       category: "",
+      warning: false,
     };
 
   }
@@ -25,8 +26,13 @@ export default class CreateCategory extends Component<{},CreateCategoryState> {
   }
 
   submit = async () => {
-    await apiHelpers.loginUser("joe", "password");
-    await apiHelpers.createCategory(this.state.category);
+    if (this.state.category.length < 1){
+      this.setState({warning: true})
+    } else {
+      this.setState({warning: false})
+      await apiHelpers.loginUser("joe", "password");
+      await apiHelpers.createCategory(this.state.category);
+    }
   }
 
   render() {
@@ -44,6 +50,8 @@ export default class CreateCategory extends Component<{},CreateCategoryState> {
         onClick={this.submit}
         className="bg-teal-500 text-white py-2 px-4 rounded">Create Category
         </button>
+        {this.state.warning === true ? <p className="">Please enter a category name.</p> : null}
+        
       </div>
     )
   }
