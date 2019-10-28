@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Component} from "react";
+import { Component } from "react";
 
 import "../../tailwind.css";
 import apiHelpers from "../../../util/api-helpers";
@@ -22,7 +22,7 @@ export default class ViewAllCategories extends Component <{}, ViewAllCategoriesS
 
     async componentDidMount() {
         await apiHelpers.loginUser("joe", "password");
-        const response = await apiHelpers.getAllCategories();
+        const response = await apiHelpers.getAllCategories(UserStore.token);
         this.setState({categories: response})
     }
 
@@ -32,7 +32,7 @@ export default class ViewAllCategories extends Component <{}, ViewAllCategoriesS
 
     delete = async () => {
         await apiHelpers.loginUser("joe", "password");
-        await apiHelpers.deleteCategory(this.state.selected);
+        await apiHelpers.deleteCategory(UserStore.token, this.state.selected);
 
         let i;
         let index;

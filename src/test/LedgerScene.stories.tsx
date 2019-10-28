@@ -4,5 +4,7 @@ import LedgerScene from "../ui/scenes/LedgerScene";
 export default { title: "Ledger" };
 
 export const ledgerScene = () => (
-  <LedgerScene></LedgerScene>
+  <div className="container mx-auto">
+    <LedgerScene></LedgerScene>
+  </div>
 )

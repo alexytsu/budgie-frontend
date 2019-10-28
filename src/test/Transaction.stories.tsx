@@ -9,6 +9,7 @@ import {
 export default { title: "Transactions" };
 
 const exampleTranscation: TransactionDisplayProps = {
+	id: 1,
 	account: "Chequing",
 	amount: 20.12,
 	category: "Eating Out",
@@ -22,6 +23,7 @@ export const simpleTransaction = () => (
 );
 
 const exampleIncome: TransactionDisplayProps = {
+	id: 1,
 	account: "Chequing",
 	amount: 1120.77,
 	category: "Salary",
