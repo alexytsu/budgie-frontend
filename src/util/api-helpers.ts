@@ -2,10 +2,12 @@ import axios from "axios";
 
 import { API_URL } from "./config";
 import {
-	TranscationResp,
-	TransactionDisplayProps
+	TransactionDisplayProps,
+	CreateTransactionReq,
+	TransactionResp
 } from "./types/TransactionTypes";
 import ApplicationStore from "../stores/ApplicationStore";
+import { CreateCategoryReq, CategoryResp } from "./types/CategoryTypes";
 
 export interface LoginResp {
 	id: number;
@@ -32,10 +34,10 @@ class ApiHelper {
 		return data;
 	}
 
-	createCategory = async (token: string, category_name: string) => {
+	createCategory = async (token: string, category: CreateCategoryReq): Promise<CategoryResp> => {
 		const resp = await axios.post(
 			API_URL + "/categories/",
-			{ name: category_name, operation: "OUT" },
+			{ name: category.name, operation: category.operation },
 			{
 				headers: {
 					Authorization: "Token " + token
@@ -43,9 +45,30 @@ class ApiHelper {
 			}
 		);
 
-		console.log(resp.status);
-		return resp.data;
+		const new_category: CategoryResp = {
+			... resp.data
+		}
+
+		return new_category;
 	};
+
+	createTransaction = async(token: string, transaction: CreateTransactionReq): Promise<TransactionResp> => {
+		const resp = await axios.post(
+			API_URL + "/transactions/",
+			{ ... transaction },
+			{
+				headers: {
+					Authorization: "Token " + token
+				}
+			}
+		);
+
+		const new_transaction: TransactionResp = {
+			... resp.data
+		}
+
+		return new_transaction;
+	}
 
 	getAllCategories = async (token: string) => {
 		const resp = await axios.get(API_URL + "/categories/", {
@@ -77,7 +100,7 @@ class ApiHelper {
 	};
 
 	convertTransaction = (
-		tr_raw: TranscationResp
+		tr_raw: TransactionResp
 	): TransactionDisplayProps => {
 		// must be called from within a render function
 

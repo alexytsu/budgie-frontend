@@ -1,8 +1,8 @@
 import * as React from "react";
 import TransactionForm from "../ui/components/transaction/TransactionForm";
 
-export default { title: "TransactionFrom" };
+export default { title: "Transaction Form" };
 
-export const EGTransactionForm = () => (
+export const EmptyForm = () => (
   <TransactionForm></TransactionForm>
 )

@@ -7,8 +7,6 @@ class UserStore {
 	username: string = "Not Logged In";
 	@observable
 	token: string = "";
-	@observable
-	categories: [];
 
 	@computed
 	get authenticated() {
