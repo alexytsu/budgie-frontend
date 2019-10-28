@@ -37,32 +37,46 @@ export default class TransactionForm extends Component<{},any>{
 	render() {
         const {amount, description, category, account, type} = this.state;
 		return (
-			<div className="">
-                <form className="" onSubmit={this.submitHandler}>
-                    <div className="">
+			
+            <div className='container mx-auto h-full flex justify-center items-center'>
+                <form className='bg-white border-l-4 border-solid border-green-600 shadow-md rounded px-8 p-4' onSubmit={this.submitHandler}>
+                    <div className="p-4">
                         <input
+                        className='border-2 border-solid rounded my-2'
                         type="number" name="amount"
                         value={amount} placeholder="Amount"
                         onChange={this.changeHandler}
                         />
                         <br/>
                         <input 
+                        className='border-2 border-solid rounded my-2'
                         name="description" value={description} 
                         placeholder="Description" 
                         onChange={this.changeHandler}
                         />
                         <br/>
-                        <input 
+                        {/* <input 
+                        className='border-2 border-solid rounded my-2'
                         name="category" value={category}
                         placeholder="Category"
                         onChange={this.changeHandler}
-                        />
+                        /> */}
+                        <select>
+                            <option>Category1</option>
+                            <option>Category2</option>
+                            <option>Category3</option>
+                        </select>
                         <br/>
-                        <input 
+                        {/* <input 
+                        className='border-2 border-solid rounded my-2'
                         name="account" value={account}
                         placeholder="Account"
                         onChange={this.changeHandler}
-                        />
+                        /> */}
+                        <select>
+                            <option>Account1</option>
+                            <option>Account2</option>
+                        </select>
                         <br/>
                     </div>
 
@@ -82,9 +96,13 @@ export default class TransactionForm extends Component<{},any>{
                     </div>
 
                     <br/>
-                    <button type="submit">Add</button>
+                    <button className='bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-1 px-2 mb-5 rounded shadow focus:outline-none focus:shadow-outline'
+                    type="submit">
+                    Add
+                    </button>
                 </form>
             </div>
+            
 		);
 	}
 }
