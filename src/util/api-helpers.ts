@@ -20,7 +20,7 @@ class ApiHelper {
 	createCategory = async (category_name: string) => {
 		const resp = await axios.post(
 			API_URL + "/categories/",
-			{ name: category_name, user: 1 },
+			{ name: category_name, operation: "OUT" },
 			{
 				headers: {
 					Authorization: "Token " + this.token
@@ -40,6 +40,15 @@ class ApiHelper {
     });
     
     return resp.data;
+	};
+
+	deleteCategory = async (id: string) => {
+		const resp = await axios.delete(
+			API_URL + "/categories/" + id, {
+				headers: {
+					Authorization: "Token " + this.token
+				}
+		})
 	};
 
 	getAllTransactions = async () => {
