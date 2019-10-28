@@ -5,6 +5,9 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   devtool: "eval",
+  devServer: {
+    open: true,
+  },
   mode: "development",
   entry: ["webpack-dev-server/client?http://localhost:3000", "./src/index"],
   output: {

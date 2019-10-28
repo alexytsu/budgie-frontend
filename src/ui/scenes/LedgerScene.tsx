@@ -13,9 +13,9 @@ export default class LedgerScene extends Component {
 	render() {
 		return (
 			<>
-				<h1 className="text-xl">Transactions</h1>
+				<h1 className="text-xl">Ledger</h1>
 				<div className="flex">
-					<div className="w-full">
+					<div className="w-full mr-4">
 						{ApplicationStore.transactions_raw.map(tr_raw => {
 							const tr = apiHelpers.convertTransaction(tr_raw);
 							return (
@@ -25,7 +25,7 @@ export default class LedgerScene extends Component {
 							);
 						})}
 					</div>
-					<div className="w-full">
+					<div className="w-full ml-4">
 						<div>Mlem</div>
 					</div>
 				</div>
