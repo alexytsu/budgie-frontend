@@ -5,6 +5,7 @@ export interface TransactionProps {
 }
 
 export interface TranscationResp {
+    id: number;
     amount: number;
     date: string;
     operation: TransactionType;
@@ -21,7 +22,8 @@ export interface TransactionDisplayProps {
     amount: number;
     description: string;
     date: Date;
-    category: string;
+    category: number | string;
     account: string;
     type: TransactionType;
+    id: number;
 }

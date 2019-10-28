@@ -1,25 +1,31 @@
 import axios from "axios";
 
 import { API_URL } from "./config";
+import {
+	TranscationResp,
+	TransactionDisplayProps
+} from "./types/TransactionTypes";
+import ApplicationStore from "../stores/ApplicationStore";
 
 export interface LoginResp {
 	id: number;
 	token: string;
 }
 class ApiHelper {
-
-	async loginUser(username: string, password: string):Promise<LoginResp>{
-		const resp = await axios.post(API_URL + "/login/", {
-			username,
-			password
-		}).catch((e)=>{
-			throw e;
-		});
+	async loginUser(username: string, password: string): Promise<LoginResp> {
+		const resp = await axios
+			.post(API_URL + "/login/", {
+				username,
+				password
+			})
+			.catch(e => {
+				throw e;
+			});
 
 		const data: LoginResp = {
 			id: resp.data.id,
-			token: resp.data.token,
-		}
+			token: resp.data.token
+		};
 
 		console.log("Logging In", data);
 
@@ -46,9 +52,9 @@ class ApiHelper {
 			headers: {
 				Authorization: "Token " + token
 			}
-    });
-    
-    return resp.data;
+		});
+
+		return resp.data;
 	};
 
 	getAllTransactions = async (token: string) => {
@@ -56,9 +62,31 @@ class ApiHelper {
 			headers: {
 				Authorization: "Token " + token
 			}
-    });
-    
-    return resp.data;
+		});
+
+		return resp.data;
+	};
+
+	convertTransaction = (
+		tr_raw: TranscationResp
+	): TransactionDisplayProps => {
+		// must be called from within a render function
+
+		const category_name = ApplicationStore.categories_raw.filter(
+			cat_raw => cat_raw.id === tr_raw.category
+		)[0];
+
+		const tr: TransactionDisplayProps = {
+			account: "Test",
+			amount: tr_raw.amount,
+			category: tr_raw.category,
+			type: tr_raw.operation,
+			date: new Date(tr_raw.date),
+			description: "",
+			id: tr_raw.id,
+		};
+
+		return tr;
 	};
 }
 

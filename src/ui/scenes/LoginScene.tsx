@@ -35,10 +35,10 @@ export default class LoginScene extends Component<{},LoginSceneState> {
 	attemptLogin = async() => {
 		try{
 			const loginResp = await apiHelpers.loginUser(this.state.username, this.state.password);
-			UserStore.token = loginResp.token;
-			UserStore.username = this.state.username;
 			ApplicationStore.transactions_raw = await apiHelpers.getAllTransactions(UserStore.token);
 			ApplicationStore.categories_raw = await apiHelpers.getAllCategories(UserStore.token);
+			UserStore.token = loginResp.token;
+			UserStore.username = this.state.username;
 		} catch(e) {
 			this.setState({loginFailed: true})
 		}

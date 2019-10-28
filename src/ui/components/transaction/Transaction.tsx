@@ -5,7 +5,10 @@ import classNames from "classnames";
 import { TransactionDisplayProps, TransactionType } from "../../../util/types/TransactionTypes";
 
 import "../../tailwind.css";
+import { observer } from "mobx-react";
+import ApplicationStore from "../../../stores/ApplicationStore";
 
+@observer
 export default class Transaction extends Component<
 	TransactionDisplayProps,
 	{}
@@ -17,10 +20,14 @@ export default class Transaction extends Component<
 	render() {
 
 		const transactionClass = classNames({
-			'border-l-4 border-solid rounded-lg p-2 flex flex-row justify-between shadow-lg': true,
+			'bg-white border-l-4 border-solid rounded-lg p-2 flex flex-row justify-between shadow': true,
 			'border-green-600': this.props.type === TransactionType.INCOME,
 			'border-red-600': this.props.type === TransactionType.EXPENSE,
 		})
+
+
+		const category = ApplicationStore.categories_raw.find((cat_raw) => cat_raw.id === this.props.category);
+		const categoryName = category === undefined ? "": category.name;
 
 		return (
 			<div className={transactionClass}>
@@ -29,7 +36,7 @@ export default class Transaction extends Component<
 					<div className="font-semibold text-xs text-gray-900">{this.props.account}</div>
 				</div>
 				<div>
-					<div className="font-bold text-black text-xs">{this.props.category}</div>
+					<div className="font-bold text-black text-xs">{categoryName}</div>
 					<div className="font-semibold text-gray-900 text-xs">{this.props.description}</div>
 				</div>
 			</div>

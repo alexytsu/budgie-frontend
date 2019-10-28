@@ -11,17 +11,19 @@ import Transaction from "../components/transaction/Transaction";
 @observer
 export default class LedgerScene extends Component {
 	render() {
-		return ApplicationStore.transactions_raw.map(tr_raw => {
-			const tr: TransactionDisplayProps = {
-				account: "Test",
-				amount: tr_raw.amount,
-				category: tr_raw.category.toString(),
-				type: tr_raw.operation,
-				date: new Date(tr_raw.date),
-				description: ""
-			};
+		return (
+			<>
+				<h1 className="text-xl">Transactions</h1>
+				<div className="max-w-md">
+					{ApplicationStore.transactions_raw.map(tr_raw => {
+						const tr = apiHelpers.convertTransaction(tr_raw);
 
-			return <Transaction {...tr}></Transaction>;
-		});
+						return (<div className="my-1">
+							<Transaction key={tr.id} {...tr}></Transaction>
+						</div>);
+					})}
+				</div>
+			</>
+		);
 	}
 }
