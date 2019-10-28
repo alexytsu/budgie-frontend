@@ -12,7 +12,7 @@ export default { title: "Budgets" };
 
 const emptyBudgetProps: BudgetDisplayProps = {
   category: "Eating Out",
-  endDate: new Date(2019, 9, 30),
+  endDate: new Date(2019, 10, 10),
   limit: 500,
   spent: 0,
   startDate: new Date(2019, 9, 1),
@@ -25,7 +25,7 @@ export const emptyBudget = () => (
 
 const underSpentBudgetProps: BudgetDisplayProps = {
   category: "Eating Out",
-  endDate: new Date(2019, 9, 30),
+  endDate: new Date(2019, 10, 10),
   limit: 500,
   spent: 240,
   startDate: new Date(2019, 9, 1),
@@ -38,9 +38,9 @@ export const underSpentBudget = () => (
 
 const overSpentBudgetProps: BudgetDisplayProps = {
   category: "Eating Out",
-  endDate: new Date(2019, 9, 30),
+  endDate: new Date(2019, 10, 10),
   limit: 500,
-  spent: 499,
+  spent: 480,
   startDate: new Date(2019, 9, 1),
   type: BudgetType.LIMIT
 }
