@@ -40,7 +40,7 @@ const overSpentBudgetProps: BudgetDisplayProps = {
   category: "Eating Out",
   endDate: new Date(2019, 9, 30),
   limit: 500,
-  spent: 460,
+  spent: 499,
   startDate: new Date(2019, 9, 1),
   type: BudgetType.LIMIT
 }

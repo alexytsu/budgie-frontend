@@ -3,12 +3,15 @@ import { Component } from "react";
 
 import "../../tailwind.css";
 import apiHelpers from "../../../util/api-helpers";
+import { observer } from "mobx-react";
+import UserStore from "../../../stores/UserStore";
 
 interface CreateCategoryState {
   category: string;
   warning: boolean;
 }
 
+@observer
 export default class CreateCategory extends Component<{},CreateCategoryState> {
 
   constructor(props) {
@@ -31,7 +34,7 @@ export default class CreateCategory extends Component<{},CreateCategoryState> {
     } else {
       this.setState({warning: false})
       await apiHelpers.loginUser("joe", "password");
-      await apiHelpers.createCategory(this.state.category);
+      await apiHelpers.createCategory(UserStore.token, this.state.category);
     }
   }
 

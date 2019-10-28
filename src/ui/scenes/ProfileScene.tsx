@@ -26,11 +26,11 @@ export default class ProfileScene extends Component<{}, ProfileSceneState> {
 	};
 
 	retrieveCategories = async () => {
-		ApplicationStore.categories_raw = await apiHelpers.getAllCategories();
+		ApplicationStore.categories_raw = await apiHelpers.getAllCategories(UserStore.token);
 	};
 
 	retrieveTransactions = async () => {
-		ApplicationStore.transactions_raw = await apiHelpers.getAllTransactions();
+		ApplicationStore.transactions_raw = await apiHelpers.getAllTransactions(UserStore.token);
 	};
 
 	render() {

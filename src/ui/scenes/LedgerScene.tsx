@@ -3,6 +3,7 @@ import { Component } from "react";
 import { observer } from "mobx-react";
 
 import apiHelpers from "../../util/api-helpers";
+import UserStore from "../../stores/UserStore";
 
 @observer
 export default class LedgerScene extends Component {
@@ -18,17 +19,22 @@ export default class LedgerScene extends Component {
 				</button>
 				<button
 					onClick={async () => {
-						apiHelpers.createCategory("testCategory");
+						await apiHelpers.createCategory(UserStore.token, "testCategory");
 					}}
 				>
 					Create Category
 				</button>
 				<button
 					onClick={async () => {
-            this.setState({categories: apiHelpers.getAllCategories()}, () => console.log(this.state));
+						this.setState(
+							{
+								categories: await apiHelpers.getAllCategories(UserStore.token)
+							},
+							() => console.log(this.state)
+						);
 					}}
 				>
-          Retrieve Categories
+					Retrieve Categories
 				</button>
 			</div>
 		);

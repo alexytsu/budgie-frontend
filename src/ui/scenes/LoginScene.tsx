@@ -5,10 +5,12 @@ import { observer } from "mobx-react";
 import apiHelpers from "../../util/api-helpers";
 import "../tailwind.css";
 import UserStore from "../../stores/UserStore";
+import classNames = require("classnames");
 
 interface LoginSceneState {
 	username: string;
 	password: string;
+	loginFailed: boolean;
 }
 
 @observer
@@ -19,6 +21,7 @@ export default class LoginScene extends Component<{},LoginSceneState> {
 		this.state = {
 			username: "",
 			password: "",
+			loginFailed: false,
 		};
 	}
 
@@ -29,18 +32,27 @@ export default class LoginScene extends Component<{},LoginSceneState> {
 	}
 
 	attemptLogin = async() => {
-		const token = await apiHelpers.loginUser(this.state.username, this.state.password);
-		console.log("Received token", token);
-		UserStore.token = token;
-		UserStore.username = this.state.username;
+		try{
+			const loginResp = await apiHelpers.loginUser(this.state.username, this.state.password);
+			UserStore.token = loginResp.token;
+			UserStore.username = this.state.username;
+		} catch(e) {
+			this.setState({loginFailed: true})
+		}
 	}
 
 	render() {
+
+		const fieldDynamicClass = classNames({
+			"shadow appearance-none bg-gray-100 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline": true,
+			"border-2 border-red-400": this.state.loginFailed,
+		});
+
 		return (
 			<div className="bg-gray-200 h-screen w-screen">
 				<div className="container mx-auto h-full flex justify-center items-center">
-					<div className="w-1/2 shadow-md px-8 rounded-lg bg-white">
-						<h1 className="font-sans text-5xl font-semibold mt-6 mb-8 text-gray-800 text-center">
+					<div className="w-1/2 shadow-md px-8 rounded-lg bg-white border-t-4 border-solid border-blue-600">
+						<h1 className="font-sans text-5xl font-semibold mt-6 mb-8 text-blue-900 text-center">
 							Budgie
 						</h1>
 						<div className="mb-4">
@@ -51,7 +63,7 @@ export default class LoginScene extends Component<{},LoginSceneState> {
 								Username
 							</label>
 							<input
-								className="shadow appearance-none border bg-gray-100 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+								className={fieldDynamicClass}
 								id="username"
 								type="text"
 								placeholder="Username"
@@ -65,7 +77,7 @@ export default class LoginScene extends Component<{},LoginSceneState> {
 								Password
 							</label>
 							<input
-								className="shadow appearance-none border bg-gray-100 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+								className={fieldDynamicClass}
 								id="password"
 								type="password"
 								placeholder="Password"
@@ -74,11 +86,14 @@ export default class LoginScene extends Component<{},LoginSceneState> {
 							></input>
 						</div>
 						<button 
-							className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 mb-5 rounded focus:outline-none focus:shadow-outline"
+							className="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-1 px-2 mb-5 rounded shadow focus:outline-none focus:shadow-outline"
 							onClick={this.attemptLogin}
 						>
 							Login
 						</button>
+						<div className="font-bold text-sm mb-4">
+							{this.state.loginFailed ? "Login Failed":null}
+						</div>
 					</div>
 				</div>
 			</div>
