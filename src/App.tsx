@@ -8,6 +8,8 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import LedgerScene from "./ui/scenes/LedgerScene";
 import apiHelpers from "./util/api-helpers";
 import ApplicationStore from "./stores/ApplicationStore";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDove } from "@fortawesome/free-solid-svg-icons";
 
 const DEBUG = true;
 
@@ -33,30 +35,57 @@ export default class App extends Component {
 		}
 
 		return (
-			<div className="bg-gray-100 h-screen">
-			<Router>
-				<div className="bg-blue-900 mb-6 shadow">
-					<div className="container mx-auto flex justify-between py-4">
-						<Link className="text-white" to="/">
-							Home
-						</Link>
-						<Link className="text-white" to="/transactions">
-							Ledger
-						</Link>
+			<div className="bg-purple-800 h-screen flex">
+				<Router>
+					<div className="shadow text-white flex-column justify-between p-6">
+						<div className="flex">
+							<FontAwesomeIcon
+								className="self-center"
+								icon={faDove}
+							></FontAwesomeIcon>
+							<h1 className="text-xl font-bold mx-2">Budgie</h1>
+						</div>
+						<div className="mt-6">
+							<Link className="text-sm self-center mx-1" to="/">
+								Home
+							</Link>
+						</div>
+						<div className="my-2">
+							<Link className="text-sm self-center mx-1" to="/transactions">
+								Ledger
+							</Link>
+						</div>
+						<div className="my-2">
+							<Link className="text-sm self-center mx-1" to="/budgets">
+								Budgets
+							</Link>
+						</div>
+						<div className="my-2">
+							<Link className="text-sm self-center mx-1" to="/categories">
+								Categories
+							</Link>
+						</div>
+						<div className="my-2">
+							<Link className="text-sm self-center mx-1" to="/accounts">
+								Accounts
+							</Link>
+						</div>
 					</div>
-				</div>
 
-				<div className="container mx-auto">
-					<Switch>
-						<Route path="/transactions">
-							<LedgerScene></LedgerScene>
-						</Route>
-						<Route path="/">
-							<ProfileScene></ProfileScene>
-						</Route>
-					</Switch>
-				</div>
-			</Router>
+					<div className="bg-gray-300 rounded-lg rounded-r-none w-full pt-6 px-8">
+						<div className="container mx-auto">
+						<Switch>
+							<Route path="/transactions">
+								<LedgerScene></LedgerScene>
+							</Route>
+							<Route path="/">
+								<ProfileScene></ProfileScene>
+							</Route>
+						</Switch>
+
+						</div>
+					</div>
+				</Router>
 			</div>
 		);
 	}

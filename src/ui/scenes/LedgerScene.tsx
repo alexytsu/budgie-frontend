@@ -14,14 +14,20 @@ export default class LedgerScene extends Component {
 		return (
 			<>
 				<h1 className="text-xl">Transactions</h1>
-				<div className="max-w-md">
-					{ApplicationStore.transactions_raw.map(tr_raw => {
-						const tr = apiHelpers.convertTransaction(tr_raw);
-
-						return (<div className="my-1">
-							<Transaction key={tr.id} {...tr}></Transaction>
-						</div>);
-					})}
+				<div className="flex">
+					<div className="w-full">
+						{ApplicationStore.transactions_raw.map(tr_raw => {
+							const tr = apiHelpers.convertTransaction(tr_raw);
+							return (
+								<div className="my-2">
+									<Transaction key={tr.id} {...tr}></Transaction>
+								</div>
+							);
+						})}
+					</div>
+					<div className="w-full">
+						<div>Mlem</div>
+					</div>
 				</div>
 			</>
 		);
