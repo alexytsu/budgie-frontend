@@ -4,9 +4,17 @@ export interface TransactionProps {
     category_id: number;
 }
 
+export interface TranscationResp {
+    amount: number;
+    date: string;
+    operation: TransactionType;
+    category: number;
+    user: number;
+}
+
 export enum TransactionType {
-    INCOME,
-    EXPENSE,
+    INCOME = "IN",
+    EXPENSE = "OUT",
 }
 
 export interface TransactionDisplayProps {

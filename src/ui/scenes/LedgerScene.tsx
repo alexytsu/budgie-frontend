@@ -4,39 +4,24 @@ import { observer } from "mobx-react";
 
 import apiHelpers from "../../util/api-helpers";
 import UserStore from "../../stores/UserStore";
+import ApplicationStore from "../../stores/ApplicationStore";
+import { TransactionDisplayProps } from "../../util/types/TransactionTypes";
+import Transaction from "../components/transaction/Transaction";
 
 @observer
 export default class LedgerScene extends Component {
 	render() {
-		return (
-			<div>
-				<button
-					onClick={async () => {
-						apiHelpers.loginUser("Joe", "password");
-					}}
-				>
-					Login Request
-				</button>
-				<button
-					onClick={async () => {
-						await apiHelpers.createCategory(UserStore.token, "testCategory");
-					}}
-				>
-					Create Category
-				</button>
-				<button
-					onClick={async () => {
-						this.setState(
-							{
-								categories: await apiHelpers.getAllCategories(UserStore.token)
-							},
-							() => console.log(this.state)
-						);
-					}}
-				>
-					Retrieve Categories
-				</button>
-			</div>
-		);
+		return ApplicationStore.transactions_raw.map(tr_raw => {
+			const tr: TransactionDisplayProps = {
+				account: "Test",
+				amount: tr_raw.amount,
+				category: tr_raw.category.toString(),
+				type: tr_raw.operation,
+				date: new Date(tr_raw.date),
+				description: ""
+			};
+
+			return <Transaction {...tr}></Transaction>;
+		});
 	}
 }

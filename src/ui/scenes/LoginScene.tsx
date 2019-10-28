@@ -6,6 +6,7 @@ import apiHelpers from "../../util/api-helpers";
 import "../tailwind.css";
 import UserStore from "../../stores/UserStore";
 import classNames = require("classnames");
+import ApplicationStore from "../../stores/ApplicationStore";
 
 interface LoginSceneState {
 	username: string;
@@ -36,9 +37,12 @@ export default class LoginScene extends Component<{},LoginSceneState> {
 			const loginResp = await apiHelpers.loginUser(this.state.username, this.state.password);
 			UserStore.token = loginResp.token;
 			UserStore.username = this.state.username;
+			ApplicationStore.transactions_raw = await apiHelpers.getAllTransactions(UserStore.token);
+			ApplicationStore.categories_raw = await apiHelpers.getAllCategories(UserStore.token);
 		} catch(e) {
 			this.setState({loginFailed: true})
 		}
+
 	}
 
 	render() {
