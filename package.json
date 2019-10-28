@@ -9,6 +9,7 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.6.4",
+		"@tailwindcss/custom-forms": "^0.2.1",
 		"@types/classnames": "^2.2.9",
 		"@types/react-dom": "^16.0.9",
 		"awesome-typescript-loader": "^5.2.1",

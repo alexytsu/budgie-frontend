@@ -1,20 +1,16 @@
 import * as React from "react";
 import { Component } from "react";
-import axios from "axios";
+import classNames from "classnames";
 
 import {
 	TransactionType,
-	TransactionDisplayProps,
 	CreateTransactionReq
 } from "../../../util/types/TransactionTypes";
 
 import "../../styles.css";
 import "../../tailwind.css";
-import { API_URL } from "../../../util/config";
-import { runInThisContext } from "vm";
 import ApplicationStore from "../../../stores/ApplicationStore";
 import UserStore from "../../../stores/UserStore";
-import Transaction from "./Transaction";
 
 export default class TransactionForm extends Component<{}, any> {
 	constructor(props) {
@@ -26,7 +22,8 @@ export default class TransactionForm extends Component<{}, any> {
 			date: new Date(),
 			category: "",
 			account: "",
-			type: TransactionType.EXPENSE
+			type: TransactionType.EXPENSE,
+			warning: false
 		};
 	}
 
@@ -36,7 +33,7 @@ export default class TransactionForm extends Component<{}, any> {
 
 	submitHandler = async e => {
 		e.preventDefault(); // suppress the form being posted
-		this.setState({ date: new Date() });
+		this.setState({ date: new Date(), warning: false });
 		console.log(this.state);
 
 		const newTransaction: CreateTransactionReq = {
@@ -46,17 +43,37 @@ export default class TransactionForm extends Component<{}, any> {
 			operation: this.state.type
 		};
 
-		await ApplicationStore.createTransaction(UserStore.token, newTransaction);
+		try {
+			await ApplicationStore.createTransaction(UserStore.token, newTransaction);
+			const blankState = {
+				amount: "",
+				description: "",
+				date: new Date(),
+				category: "",
+				account: "",
+				type: TransactionType.EXPENSE,
+				warning: false
+			};
+			this.setState({
+				...blankState
+			});
+		} catch {
+			this.setState({ warning: true });
+		}
 	};
 
 	render() {
 		const { amount, description, category, account, type } = this.state;
+
+		const formStyle = classNames({
+			"w-full bg-white border-2 border-solid shadow-md rounded-lg p-8": true,
+			"border-purple-200": !this.state.warning,
+			"border-red-400": this.state.warning
+		});
+
 		return (
 			<div className="flex justify-center items-center w-full">
-				<form
-					className="w-full bg-white border-2 border-solid border-purple-200 shadow-md rounded-lg p-8"
-					onSubmit={this.submitHandler}
-				>
+				<form className={formStyle} onSubmit={this.submitHandler}>
 					<input
 						className="border-2 border-solid rounded my-2 py-1 px-2 text-sm"
 						type="number"
@@ -89,6 +106,7 @@ export default class TransactionForm extends Component<{}, any> {
 					<div className="flex justify-between">
 						<div className="">
 							<input
+								className="form-radio"
 								type="radio"
 								id="expense"
 								name="Expense"
@@ -97,11 +115,14 @@ export default class TransactionForm extends Component<{}, any> {
 									this.setState({ type: TransactionType.EXPENSE });
 								}}
 							/>
-							<label htmlFor="expense">Expense</label>
+							<label className="ml-2" htmlFor="expense">
+								Expense
+							</label>
 						</div>
 
 						<div>
 							<input
+								className="form-radio"
 								type="radio"
 								id="income"
 								name="Income"
@@ -110,7 +131,9 @@ export default class TransactionForm extends Component<{}, any> {
 									this.setState({ type: TransactionType.INCOME });
 								}}
 							/>
-							<label htmlFor="income">Income</label>
+							<label className="ml-2" htmlFor="income">
+								Income
+							</label>
 						</div>
 					</div>
 
