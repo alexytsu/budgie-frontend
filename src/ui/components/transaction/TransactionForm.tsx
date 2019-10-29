@@ -109,7 +109,7 @@ export default class TransactionForm extends Component<{}, any> {
 								className="form-radio"
 								type="radio"
 								id="expense"
-								name="Expense"
+								name="type"
 								value={TransactionType.EXPENSE}
 								onChange={e => {
 									this.setState({ type: TransactionType.EXPENSE });
@@ -125,7 +125,7 @@ export default class TransactionForm extends Component<{}, any> {
 								className="form-radio"
 								type="radio"
 								id="income"
-								name="Income"
+								name="type"
 								value={TransactionType.INCOME}
 								onChange={e => {
 									this.setState({ type: TransactionType.INCOME });

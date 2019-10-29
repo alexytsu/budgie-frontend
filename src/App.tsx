@@ -72,7 +72,7 @@ export default class App extends Component {
 						</div>
 					</div>
 
-					<div className="bg-gray-300 rounded-lg rounded-r-none w-full pt-6 px-8">
+					<div className="bg-gray-200 rounded-lg rounded-r-none w-full pt-6 px-8">
 						<div className="container mx-auto">
 						<Switch>
 							<Route path="/transactions">
