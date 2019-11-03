@@ -27,6 +27,16 @@ class ApplicationStore {
 		this.transactions_raw.push(tr);
 		return tr;
 	};
+
+	getAllCategories = async(token: string) => {
+		const cat = await apiHelpers.getAllCategories(token);
+		this.categories_raw.push(cat);
+		return cat;
+	}
+
+	deleteCategory = async (token: string, id: string) => {
+		await apiHelpers.deleteCategory(token, id);
+	}
 }
 
 export default new ApplicationStore();
