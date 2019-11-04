@@ -26,14 +26,15 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 	render() {
 		return (
 			<div className="flex">
-				<div className="w-1/3">
+				<div className="w-1/2">
 					<h1 className="text-xl mb-4">Budgets</h1>
+					<AddNewBudgetModal></AddNewBudgetModal>
 					{ApplicationStore.budgets_raw.map(b_raw => {
 						const b = apiHelpers.convertBudget(b_raw);
 						return (
-							<div key={b.id}>
-								<div className="text-xs font-bold">
-									Category: {b.category}
+							<div className="mb-8" key={b.id}>
+								<div className="font-semibold text-green-800">
+									{b.category}
 								</div>
 								<Budget {...b}></Budget>
 							</div>
@@ -41,7 +42,6 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 					})}
 				</div>
 				<div className="w-full ml-8">
-					<AddNewBudgetModal></AddNewBudgetModal>
 				</div>
 			</div>
 		);
