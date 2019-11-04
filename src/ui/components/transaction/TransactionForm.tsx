@@ -2,6 +2,8 @@ import * as React from "react";
 import { Component } from "react";
 import classNames from "classnames";
 
+import { SingleDatePicker } from "react-dates";
+
 import {
 	TransactionType,
 	CreateTransactionReq
@@ -11,47 +13,66 @@ import "../../styles.css";
 import "../../tailwind.css";
 import ApplicationStore from "../../../stores/ApplicationStore";
 import UserStore from "../../../stores/UserStore";
+import moment = require("moment");
 
-export default class TransactionForm extends Component<{}, any> {
+interface TransactionFormState {
+	amount: number;
+	description: string;
+	date: moment.Moment;
+	category: number;
+	account: number;
+	type: TransactionType;
+	warning: boolean;
+	datePickerFocused: any;
+}
+
+export default class TransactionForm extends Component<
+	{},
+	TransactionFormState
+> {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			amount: "",
+			amount: 0,
 			description: "",
-			date: new Date(),
-			category: "",
-			account: "",
+			date: moment(),
+			category: 1,
+			account: 1,
 			type: TransactionType.EXPENSE,
-			warning: false
+			warning: false,
+			datePickerFocused: false
 		};
 	}
 
 	changeHandler = e => {
-		this.setState({ [e.target.name]: e.target.value });
+		console.log(e);
+		const stateCopy = this.state;
+		stateCopy[e.target.name] = e.target.value;
+		this.setState({ ...stateCopy });
 	};
 
 	submitHandler = async e => {
 		e.preventDefault(); // suppress the form being posted
-		this.setState({ date: new Date(), warning: false });
 
 		const newTransaction: CreateTransactionReq = {
-			amount: parseFloat(this.state.amount),
-			category: 1,
-			date: "2019-10-3",
+			amount: this.state.amount,
+			category: this.state.category,
+			date: this.state.date.format("YYYY-MM-DD"),
 			operation: this.state.type
 		};
 
 		try {
 			await ApplicationStore.createTransaction(UserStore.token, newTransaction);
 			const blankState = {
-				amount: "",
+				amount: 0,
 				description: "",
-				date: new Date(),
-				category: "",
-				account: "",
+				date: moment(),
+				category: 1,
+				account: 1,
 				type: TransactionType.EXPENSE,
-				warning: false
+				warning: false,
+				datePickerFocused: false
 			};
 			this.setState({
 				...blankState
@@ -74,38 +95,46 @@ export default class TransactionForm extends Component<{}, any> {
 			<div className="flex justify-center items-center w-full">
 				<form className={formStyle} onSubmit={this.submitHandler}>
 					<input
-						className="border-2 border-solid rounded my-2 py-1 px-2 text-sm"
+						className="border-2 border-solid rounded my-2 py-1 px-2 text-sm block"
 						type="number"
 						name="amount"
 						value={amount}
 						placeholder="Amount"
 						onChange={this.changeHandler}
 					/>
-					<br />
 					<input
-						className="border-2 border-solid rounded my-2 py-1 px-2 text-sm"
+						className="border-2 border-solid rounded my-2 py-1 px-2 text-sm block"
 						name="description"
 						value={description}
 						placeholder="Description"
 						onChange={this.changeHandler}
 					/>
-					<br />
-					<select className="my-2 p-2 text-sm rounded bg-purple-100 shadow">
-						{ApplicationStore.categories_raw.map((cat)=> {
-							return(
-								<option>{cat.name}</option>
-							)
+					<select
+						onChange={this.changeHandler}
+						name="category"
+						className="my-2 p-2 text-sm rounded bg-purple-100 shadow block"
+					>
+						{ApplicationStore.categories_raw.map(cat => {
+							return (
+								<option key={cat.id} value={cat.id}>
+									{cat.name}
+								</option>
+							);
 						})}
 					</select>
-					<br />
-					<select className="my-2 p-2 text-sm rounded bg-purple-100 shadow">
-						{ApplicationStore.categories_raw.map((acc)=> {
-							return(
-								<option>{acc.name}</option>
-							)
+					<select
+						onChange={this.changeHandler}
+						name="account"
+						className="my-2 p-2 text-sm rounded bg-purple-100 shadow block"
+					>
+						{ApplicationStore.categories_raw.map(acc => {
+							return (
+								<option key={acc.id} value={acc.id}>
+									{acc.name}
+								</option>
+							);
 						})}
 					</select>
-					<br />
 
 					<div className="flex justify-between">
 						<div className="">
@@ -140,8 +169,18 @@ export default class TransactionForm extends Component<{}, any> {
 							</label>
 						</div>
 					</div>
+					<div className="my-4">
+						<SingleDatePicker
+							date={this.state.date}
+							onDateChange={(date: moment.Moment) => this.setState({ date })}
+							focused={this.state.datePickerFocused}
+							onFocusChange={datePickerFocused =>
+								this.setState({ datePickerFocused })
+							}
+							id="transaction_date"
+						></SingleDatePicker>
+					</div>
 
-					<br />
 					<button
 						className="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-1 px-2 mb-5 rounded shadow focus:outline-none focus:shadow-outline"
 						type="submit"

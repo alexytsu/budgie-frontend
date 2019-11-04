@@ -125,6 +125,14 @@ class ApiHelper {
 		});
 	};
 
+	deleteTransaction = async (token: string, id: number) => {
+		const resp = await axios.delete(API_URL + "/transactions/" + id, {
+			headers: {
+				Authorization: "Token " + token
+			}
+		});
+	};
+
 	updateCategory = async(token: string, id: string, catName: string) => {
 		const resp = await axios.patch(
 			API_URL + "/categories/" + id,

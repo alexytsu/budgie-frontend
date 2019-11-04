@@ -7,6 +7,7 @@ import { TransactionDisplayProps, TransactionType } from "../../../util/types/Tr
 import "../../tailwind.css";
 import { observer } from "mobx-react";
 import ApplicationStore from "../../../stores/ApplicationStore";
+import moment = require("moment");
 
 @observer
 export default class Transaction extends Component<
@@ -37,7 +38,7 @@ export default class Transaction extends Component<
 				</div>
 				<div>
 					<div className="font-bold text-black text-xs">{categoryName}</div>
-					<div className="font-semibold text-gray-900 text-xs">{this.props.description}</div>
+					<div className="font-semibold text-gray-900 text-xs">{moment(this.props.date).format("YYYY-MM-DD")}</div>
 				</div>
 			</div>
 		);

@@ -66,6 +66,12 @@ class ApplicationStore {
 		const cat = await apiHelpers.updateCategory(token, id, catName);
 		this.categories_raw = await apiHelpers.getAllCategories(token)
 	}
+
+	deleteTransaction = async(token: string, id: number) => {
+		await apiHelpers.deleteTransaction(token, id);
+		const loc = this.transactions_raw.findIndex(tr => tr.id === id);
+		this.transactions_raw.splice(loc, 1);
+	}
 }
 
 export default new ApplicationStore();
