@@ -46,7 +46,6 @@ export default class CreateCategory extends Component<{}, CreateCategoryState> {
 	};
 
 	submit = async () => {
-		console.log('called')
 		if (this.state.category.name.length < 1) {
 			this.setState({ warning: true });
 			this.setState({ created: false });

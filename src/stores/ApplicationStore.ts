@@ -13,9 +13,13 @@ class ApplicationStore {
 	@observable
 	categories_raw: CategoryResp[] = [];
 
+	@observable
+	selected: string = "";
+
 	createCategory = async (token: string, category: CreateCategoryReq) => {
 		const cat = await apiHelpers.createCategory(token, category);
-		this.categories_raw.push(cat);
+		//this.categories_raw.push(cat);
+		this.categories_raw = await apiHelpers.getAllCategories(token)
 		return cat;
 	};
 
@@ -34,8 +38,15 @@ class ApplicationStore {
 		return this.categories_raw;
 	}
 
-	deleteCategory = async (token: string, id: string) => {
+	deleteCategory = async (token: string, id: string) => { 
 		await apiHelpers.deleteCategory(token, id);
+		this.categories_raw = await apiHelpers.getAllCategories(token)
+		this.selected = ""
+	}
+
+	updateCategory = async (token: string, id: string, catName: string) => {
+		const cat = await apiHelpers.updateCategory(token, id, catName);
+		this.categories_raw = await apiHelpers.getAllCategories(token)
 	}
 }
 
