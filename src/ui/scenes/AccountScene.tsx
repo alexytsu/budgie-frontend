@@ -1,21 +1,22 @@
 import * as React from "react";
 import { Component } from "react";
-import { observer } from "mobx-react";
 
-import apiHelpers from "../../util/api-helpers";
+import BudgetGraph, { BudgetGraphProps } from "../components/budget/BudgetGraph";
+import ApplicationStore from "../../stores/ApplicationStore";
 
-export default class AccountScene extends Component<{},{}> {
-    constructor(props) {
-        super(props)
-        this.state = {
-            AccountComponents: []
-        }
-    }
+/**
+ * Currently no accounts. Shows list of all transactions in Store
+ */
+export default class AccountScene extends Component <{}, any>{ 
 
     render() {
+        const expenseGraph: BudgetGraphProps = {
+            transactions: ApplicationStore.transactions_raw
+        }
+          
         return (
-            <div>
-                
+            <div className="">
+                <BudgetGraph {...expenseGraph}></BudgetGraph>
             </div>
         );
     }

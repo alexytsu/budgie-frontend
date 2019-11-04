@@ -92,14 +92,19 @@ export default class TransactionForm extends Component<{}, any> {
 					/>
 					<br />
 					<select className="my-2 p-2 text-sm rounded bg-purple-100 shadow">
-						<option>Category1</option>
-						<option>Category2</option>
-						<option>Category3</option>
+						{ApplicationStore.categories_raw.map((cat)=> {
+							return(
+								<option>{cat.name}</option>
+							)
+						})}
 					</select>
 					<br />
 					<select className="my-2 p-2 text-sm rounded bg-purple-100 shadow">
-						<option>Account1</option>
-						<option>Account2</option>
+						{ApplicationStore.categories_raw.map((acc)=> {
+							return(
+								<option>{acc.name}</option>
+							)
+						})}
 					</select>
 					<br />
 
