@@ -29,9 +29,9 @@ class ApplicationStore {
 	};
 
 	getAllCategories = async(token: string) => {
-		const cat = await apiHelpers.getAllCategories(token);
-		this.categories_raw.push(cat);
-		return cat;
+		//const cat = await apiHelpers.getAllCategories(token);
+		//this.categories_raw.push(cat);
+		return this.categories_raw;
 	}
 
 	deleteCategory = async (token: string, id: string) => {

@@ -2,10 +2,8 @@ import * as React from "react";
 import { Component } from "react";
 
 import "../../tailwind.css";
-import apiHelpers from "../../../util/api-helpers";
 import UserStore from "../../../stores/UserStore";
 import ApplicationStore from "../../../stores/ApplicationStore";
-import { userInfo } from "os";
 
 interface ViewAllCategoriesState {
     categories: any[];
@@ -19,13 +17,13 @@ export default class ViewAllCategories extends Component <{}, ViewAllCategoriesS
         this.state = {
             categories: [],
             selected: ""
-        };
+        };    
     }
 
     async componentDidMount() {
-        const response = await ApplicationStore.getAllCategories(
-            UserStore.token
-        );
+        //await apiHelpers.loginUser("joe", "password");
+        const response = await ApplicationStore.getAllCategories(UserStore.token)
+        //const response = await apiHelpers.getAllCategories(UserStore.token);
         this.setState({categories: response})
     }
 
@@ -52,7 +50,7 @@ export default class ViewAllCategories extends Component <{}, ViewAllCategoriesS
         
         return (
           <div className="bg-white rounded-lg shadow-md p-8">
-            <label className="font-sans text-3xl font-semibold mt-6 mb-4 text-gray-800 text-left">
+            <label className="font-sans text-5xl font-semibold mt-6 mb-8 text-gray-800 text-left" htmlFor="category">
                 Categories
             </label>
             {this.state.categories.map((cat) => {
@@ -60,7 +58,7 @@ export default class ViewAllCategories extends Component <{}, ViewAllCategoriesS
                     <div>{
                         <button value={cat.id}
                                 onClick={(value)=>this.select(value)}
-                                className="bg-teal-500 rounded-full focus:bg-red-500 text-white mt-1 py-1 px-4 rounded">
+                                className="bg-teal-500 focus:bg-red-500 text-white mt-1 py-1 px-4 rounded">
                             {cat.name}
                         </button>}
                     </div>
@@ -69,7 +67,7 @@ export default class ViewAllCategories extends Component <{}, ViewAllCategoriesS
             )}
             {this.state.selected === "" ? null :
                 <button
-                    className="whitespace-pre bg-teal-500 text-white mt-6 ml-2 py-1 px-4 rounded"
+                    className="whitespace-pre bg-teal-500 text-white mt-3 py-1 px-4 rounded"
                     onClick={()=>this.delete()}>
                     Delete
                 </button>}

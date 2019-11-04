@@ -2,7 +2,6 @@ import * as React from "react";
 import { Component } from "react";
 
 import "../../tailwind.css";
-import apiHelpers from "../../../util/api-helpers";
 import { observer } from "mobx-react";
 import UserStore from "../../../stores/UserStore";
 import { CreateCategoryReq } from "../../../util/types/CategoryTypes";
@@ -69,10 +68,12 @@ export default class CreateCategory extends Component<{}, CreateCategoryState> {
 				<label className="font-sans text-3xl font-semibold mt-6 mb-4 text-gray-800 text-left">
 					Create a Category
 				</label>
+				<br></br>
 				<input
 					id="category"
 					placeholder="Category"
 					value={this.state.category.name}
+					maxLength={30}
 					onChange={event => this.onInputChanged(event)}
 					className="rounded-l-lg p-2 border-t mr-0 text-gray-800 border-gray-200 bg-white"
 				/>
