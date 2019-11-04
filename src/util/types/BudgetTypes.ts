@@ -21,7 +21,7 @@ export interface BudgetResp {
 	id: number;
 	startDate: string;
 	endDate: string;
-	categoryId: number;
+	category: number;
 	amount: number;
 }
 

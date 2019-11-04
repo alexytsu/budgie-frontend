@@ -33,14 +33,14 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 						return (
 							<div key={b.id}>
 								<div className="text-xs font-bold">
-									{b.category}
+									Category: {b.category}
 								</div>
 								<Budget {...b}></Budget>
 							</div>
 						);
 					})}
 				</div>
-				<div className="w-full">
+				<div className="w-full ml-8">
 					<AddNewBudgetModal></AddNewBudgetModal>
 				</div>
 			</div>

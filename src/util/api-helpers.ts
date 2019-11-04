@@ -152,12 +152,13 @@ class ApiHelper {
 	}
 
 	convertBudget = (b_raw: BudgetResp): BudgetDisplayProps => {
-		let category = ApplicationStore.categories_raw.filter(
-			cat_raw => cat_raw.id === b_raw.categoryId
-		)[0];
+		let category = ApplicationStore.categories_raw.find(
+			cat_raw => cat_raw.id === b_raw.category
+		);
 
 		const transactions = ApplicationStore.transactions_raw
-			.filter(tr_raw => tr_raw.category === b_raw.categoryId)
+			.filter(tr_raw => tr_raw.category === b_raw.category)
+			.filter(tr_raw => moment(tr_raw.date).isBetween(b_raw.startDate, b_raw.endDate))
 			.map(tr_raw => this.convertTransaction(tr_raw));
 
 		const spent = transactions.reduce((sum: number, transaction) => {
@@ -166,7 +167,7 @@ class ApiHelper {
 
 		const b: BudgetDisplayProps = {
 			id: b_raw.id,
-			category: "",
+			category: category === undefined ? "Foreign Key Error" : category.name,
 			endDate: moment(b_raw.endDate, "YYYY-MM-DD").toDate(),
 			startDate: moment(b_raw.startDate, "YYYY-MM-DD").toDate(),
 			limit: b_raw.amount,

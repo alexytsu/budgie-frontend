@@ -109,7 +109,7 @@ function DevOptions(props) {
 
 function ShowCategories(props) {
 	return props.categories.map(cat => (
-		<div>
+		<div key={cat.id}>
 			{cat.id}: {cat.name}
 		</div>
 	));
@@ -119,7 +119,7 @@ function ShowTransactions(props) {
 	return props.transactions.map(tr_raw => {
 		const tr = apiHelpers.convertTransaction(tr_raw);
 		return (
-			<div>
+			<div key={tr_raw.id}>
 				<div>{tr_raw.date}</div>
 				<Transaction {...tr} />
 			</div>
