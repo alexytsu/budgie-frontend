@@ -10,6 +10,7 @@ import apiHelpers from "./util/api-helpers";
 import ApplicationStore from "./stores/ApplicationStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDove } from "@fortawesome/free-solid-svg-icons";
+import BudgetScene from "./ui/scenes/BudgetScene";
 
 const DEBUG = true;
 
@@ -77,6 +78,9 @@ export default class App extends Component {
 						<Switch>
 							<Route path="/transactions">
 								<LedgerScene></LedgerScene>
+							</Route>
+							<Route path="/budgets">
+								<BudgetScene></BudgetScene>
 							</Route>
 							<Route path="/">
 								<ProfileScene></ProfileScene>

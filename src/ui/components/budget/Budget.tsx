@@ -44,13 +44,13 @@ export default class extends Component<BudgetDisplayProps, {}> {
 					<div style={{ width: dateProgress + "%" }} className={dateProgressStyle}></div>
 				</div>
 				<div className="flex flex-row justify-between">
-				<div className="mt-2 text-xs font-bold">
+				<div className="mt-2 text-xs">
 						{startDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
 					</div>
-				<div className="mt-2 text-xs font-bold">
+				<div className="mt-2 text-xs">
 						{midDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
 					</div>
-				<div className="mt-2 text-xs font-bold">
+				<div className="mt-2 text-xs">
 						{endDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
 					</div>
 				</div>

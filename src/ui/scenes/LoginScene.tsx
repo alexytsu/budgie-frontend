@@ -43,12 +43,7 @@ export default class LoginScene extends Component<{}, LoginSceneState> {
 				this.state.username,
 				this.state.password
 			);
-			ApplicationStore.transactions_raw = await apiHelpers.getAllTransactions(
-				loginResp.token
-			);
-			ApplicationStore.categories_raw = await apiHelpers.getAllCategories(
-				loginResp.token
-			);
+			await ApplicationStore.init(loginResp.token);
 			UserStore.token = loginResp.token;
 			UserStore.username = this.state.username;
 		} catch (e) {

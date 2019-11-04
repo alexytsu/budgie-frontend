@@ -8,6 +8,13 @@ import {
 } from "./types/TransactionTypes";
 import ApplicationStore from "../stores/ApplicationStore";
 import { CreateCategoryReq, CategoryResp } from "./types/CategoryTypes";
+import {
+	BudgetResp,
+	BudgetDisplayProps,
+	BudgetType,
+	CreateBudgetReq
+} from "./types/BudgetTypes";
+import CategoryStories from "../test/Category.stories";
 
 export interface LoginResp {
 	id: number;
@@ -34,7 +41,10 @@ class ApiHelper {
 		return data;
 	}
 
-	createCategory = async (token: string, category: CreateCategoryReq): Promise<CategoryResp> => {
+	createCategory = async (
+		token: string,
+		category: CreateCategoryReq
+	): Promise<CategoryResp> => {
 		const resp = await axios.post(
 			API_URL + "/categories/",
 			{ name: category.name, operation: category.operation },
@@ -46,16 +56,19 @@ class ApiHelper {
 		);
 
 		const new_category: CategoryResp = {
-			... resp.data
-		}
+			...resp.data
+		};
 
 		return new_category;
 	};
 
-	createTransaction = async(token: string, transaction: CreateTransactionReq): Promise<TransactionResp> => {
+	createTransaction = async (
+		token: string,
+		transaction: CreateTransactionReq
+	): Promise<TransactionResp> => {
 		const resp = await axios.post(
 			API_URL + "/transactions/",
-			{ ... transaction },
+			{ ...transaction },
 			{
 				headers: {
 					Authorization: "Token " + token
@@ -64,10 +77,33 @@ class ApiHelper {
 		);
 
 		const new_transaction: TransactionResp = {
-			... resp.data
-		}
+			...resp.data
+		};
 
 		return new_transaction;
+	};
+
+	createBudget = async (
+		token: string,
+		budget: CreateBudgetReq
+	): Promise<BudgetResp> => {
+		const resp = await this.authenticatedPost(token, "savingplans", budget);
+		return resp.data;
+	};
+
+	async authenticatedPost(token: string, resource: string, data: any) {
+		const endpoint = "/" + resource + "/";
+		const resp = await axios.post(
+			API_URL + endpoint,
+			{ ...data },
+			{
+				headers: {
+					Authorization: "Token " + token
+				}
+			}
+		);
+
+		return resp;
 	}
 
 	getAllCategories = async (token: string) => {
@@ -81,12 +117,11 @@ class ApiHelper {
 	};
 
 	deleteCategory = async (token: string, id: string) => {
-		const resp = await axios.delete(
-			API_URL + "/categories/" + id, {
-				headers: {
-					Authorization: "Token " + token
-				}
-		})
+		const resp = await axios.delete(API_URL + "/categories/" + id, {
+			headers: {
+				Authorization: "Token " + token
+			}
+		});
 	};
 
 	getAllTransactions = async (token: string) => {
@@ -99,9 +134,50 @@ class ApiHelper {
 		return resp.data;
 	};
 
-	convertTransaction = (
-		tr_raw: TransactionResp
-	): TransactionDisplayProps => {
+	getAllBudgets = async (token: string) => {
+		const resp = await this.authenticatedGetAll(token, "savingplans");
+		return resp.data;
+	};
+
+	async authenticatedGetAll(token: string, resource: string) {
+		const endpoint = "/" + resource + "/";
+		const resp = await axios.get(API_URL + endpoint, {
+			headers: {
+				Authorization: "Token " + token
+			}
+		});
+
+		return resp;
+	}
+
+	convertBudget = (b_raw: BudgetResp): BudgetDisplayProps => {
+		let category = ApplicationStore.categories_raw.filter(
+			cat_raw => cat_raw.id === b_raw.categoryId
+		)[0];
+
+		const transactions = ApplicationStore.transactions_raw
+			.filter(tr_raw => tr_raw.category === b_raw.categoryId)
+			.map(tr_raw => this.convertTransaction(tr_raw));
+
+		const spent = transactions.reduce((sum: number, transaction) => {
+			return sum + transaction.amount;
+		}, 0);
+
+		const b: BudgetDisplayProps = {
+			id: b_raw.id,
+			category: category.name,
+			endDate: b_raw.endDate,
+			startDate: b_raw.startDate,
+			limit: b_raw.amount,
+			spent,
+			transactions,
+			type: BudgetType.LIMIT
+		};
+
+		return b;
+	};
+
+	convertTransaction = (tr_raw: TransactionResp): TransactionDisplayProps => {
 		// must be called from within a render function
 
 		const category_name = ApplicationStore.categories_raw.filter(
@@ -115,7 +191,7 @@ class ApiHelper {
 			type: tr_raw.operation,
 			date: new Date(tr_raw.date),
 			description: "",
-			id: tr_raw.id,
+			id: tr_raw.id
 		};
 
 		return tr;
