@@ -6,6 +6,7 @@ import apiHelpers from "../../util/api-helpers";
 import "../tailwind.css";
 import UserStore from "../../stores/UserStore";
 import ApplicationStore from "../../stores/ApplicationStore";
+import Transaction from "../components/transaction/Transaction";
 
 interface ProfileSceneState {
 	showDev: boolean;
@@ -39,86 +40,89 @@ export default class ProfileScene extends Component<{}, ProfileSceneState> {
 
 	render() {
 		return (
-			<>
-				<h1 className="text-xl">
-					{UserStore.username}
-				</h1>
+			<div className="flex">
+				<div>
+					<h1 className="text-xl">{UserStore.username}</h1>
 
-				<div className="font-bold my-4">Show developer options</div>
-				<button
-					onClick={this.toggleDev}
-					className="bg-red-600 text-white py-2 px-8 rounded my-4"
-				>
-					{this.state.showDev ? "Hide" : "Show"}
-				</button>
-				{this.state.showDev ? (
-					<DevOptions token={UserStore.token}></DevOptions>
-				) : null}
+					<div className="font-bold my-4">Show developer options</div>
+					<button
+						onClick={this.toggleDev}
+						className="bg-red-600 text-white py-2 px-8 rounded m-4"
+					>
+						{this.state.showDev ? "Hide" : "Show"}
+					</button>
 
-				<div className="font-bold my-4 text-lg">User Data</div>
+					{this.state.showDev ? (
+						<DevOptions store={UserStore}></DevOptions>
+					) : null}
 
-				<div className="flex flex-row justify-between">
-					<div>
-						<button
-							onClick={this.retrieveCategories}
-							className="bg-teal-600 text-white py-2 px-8 rounded my-4"
-						>
-							Refresh Categories
-						</button>
-						<ShowCategories
-							categories={ApplicationStore.categories_raw}
-						></ShowCategories>
-					</div>
-					<div>
-						<button
-							onClick={this.retrieveTransactions}
-							className="bg-teal-600 text-white py-2 px-8 rounded my-4"
-						>
-							Refresh Transactions
-						</button>
-						<ShowTransactions
-							transactions={ApplicationStore.transactions_raw}
-						/>
-					</div>
-					<div>
-						<button
-							onClick={this.retrieveCategories}
-							className="bg-teal-600 text-white py-2 px-8 rounded my-4"
-						>
-							Refresh Categories
-						</button>
-						<ShowCategories
-							categories={ApplicationStore.categories_raw}
-						></ShowCategories>
+					<button
+						className="bg-red-600 text-white py-2 px-8 rounded m-4"
+						onClick={() => UserStore.logout()}
+					>
+						Logout
+					</button>
+				</div>
+
+				<div className="h-full">
+					<h2 className="font-bold my-4 text-lg">User Data</h2>
+
+					<div className="flex flex-row justify-between h-full">
+						<div>
+							<button
+								onClick={this.retrieveCategories}
+								className="bg-teal-600 text-white py-2 px-8 rounded my-4"
+							>
+								Refresh Categories
+							</button>
+							<ShowCategories
+								categories={ApplicationStore.categories_raw}
+							></ShowCategories>
+						</div>
+						<div className="h-full">
+							<button
+								onClick={this.retrieveTransactions}
+								className="bg-teal-600 text-white py-2 px-8 rounded my-4"
+							>
+								Refresh Transactions
+							</button>
+							<div className="overflow-y-scroll h-full">
+								<ShowTransactions
+									transactions={ApplicationStore.transactions_raw}
+								/>
+							</div>
+						</div>
 					</div>
 				</div>
-				<button
-					className="bg-red-600 text-white py-2 px-8 rounded my-4"
-					onClick={() => UserStore.logout()}
-				>
-					Logout
-				</button>
-			</>
+			</div>
 		);
 	}
 }
 
 function DevOptions(props) {
-	return <div>Token: {props.token}</div>;
+	return (
+		<div>
+			<div>Token: {props.store.token}</div>
+		</div>
+	);
 }
 
 function ShowCategories(props) {
 	return props.categories.map(cat => (
-		<div>
+		<div key={cat.id}>
 			{cat.id}: {cat.name}
 		</div>
 	));
 }
 
 function ShowTransactions(props) {
-	return props.transactions.map(tr => (
-		<div>
-			{tr.id}: {tr.amount}
-		</div>
-	));
+	return props.transactions.map(tr_raw => {
+		const tr = apiHelpers.convertTransaction(tr_raw);
+		return (
+			<div key={tr_raw.id}>
+				<div>{tr_raw.date}</div>
+				<Transaction {...tr} />
+			</div>
+		);
+	});
 }

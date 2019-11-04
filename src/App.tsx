@@ -10,6 +10,7 @@ import apiHelpers from "./util/api-helpers";
 import ApplicationStore from "./stores/ApplicationStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDove } from "@fortawesome/free-solid-svg-icons";
+import BudgetScene from "./ui/scenes/BudgetScene";
 
 const DEBUG = true;
 
@@ -20,12 +21,7 @@ export default class App extends Component {
 			const loginResp = await apiHelpers.loginUser("joe", "password");
 			UserStore.token = loginResp.token;
 			UserStore.username = "Joe";
-			ApplicationStore.transactions_raw = await apiHelpers.getAllTransactions(
-				UserStore.token
-			);
-			ApplicationStore.categories_raw = await apiHelpers.getAllCategories(
-				UserStore.token
-			);
+			ApplicationStore.init(loginResp.token);
 		}
 	}
 
@@ -72,11 +68,14 @@ export default class App extends Component {
 						</div>
 					</div>
 
-					<div className="bg-gray-300 rounded-lg rounded-r-none w-full pt-6 px-8">
+					<div className="bg-gray-200 rounded-lg rounded-r-none w-full pt-6 px-8">
 						<div className="container mx-auto">
 						<Switch>
 							<Route path="/transactions">
 								<LedgerScene></LedgerScene>
+							</Route>
+							<Route path="/budgets">
+								<BudgetScene></BudgetScene>
 							</Route>
 							<Route path="/">
 								<ProfileScene></ProfileScene>

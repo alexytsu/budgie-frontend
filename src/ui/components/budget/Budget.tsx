@@ -37,20 +37,20 @@ export default class extends Component<BudgetDisplayProps, {}> {
 		})
 
 		return (
-			<div className="w-full px-4">
+			<div className="w-full">
 				<div className="text-xs font-bold object-right text-right">${limit}</div>
-				<div className="rounded-lg shadow-lg relative h-10">
+				<div className="rounded-lg shadow-lg relative h-10 bg-white">
 					<div style={{ width: spendingProgress + "%"}} className={spendingProgressStyle} />
 					<div style={{ width: dateProgress + "%" }} className={dateProgressStyle}></div>
 				</div>
 				<div className="flex flex-row justify-between">
-				<div className="mt-2 text-xs font-bold">
+				<div className="mt-2 text-xs">
 						{startDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
 					</div>
-				<div className="mt-2 text-xs font-bold">
+				<div className="mt-2 text-xs">
 						{midDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
 					</div>
-				<div className="mt-2 text-xs font-bold">
+				<div className="mt-2 text-xs">
 						{endDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
 					</div>
 				</div>
