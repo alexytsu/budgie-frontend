@@ -1,4 +1,5 @@
 import { TransactionDisplayProps } from "./TransactionTypes";
+import moment = require("moment");
 
 export enum BudgetType {
 	LIMIT,
@@ -18,15 +19,15 @@ export interface BudgetDisplayProps {
 
 export interface BudgetResp {
 	id: number;
-	startDate: Date;
-	endDate: Date;
+	startDate: string;
+	endDate: string;
 	categoryId: number;
 	amount: number;
 }
 
 export interface CreateBudgetReq {
-	startDate: Date;
-	endDate: Date;
-	categoryId: number;
+	startDate: string;
+	endDate: string;
+	category: number;
 	amount: number;
 }

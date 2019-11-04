@@ -20,14 +20,13 @@ class ApplicationStore {
 	token: string = "";
 
 	init = async(token: string) => {
-		this.token = token;
 		this.categories_raw = await apiHelpers.getAllCategories(token);
 		this.budgets_raw = await apiHelpers.getAllBudgets(token);
 		this.transactions_raw = await apiHelpers.getAllTransactions(token);
 	}
 
-	createBudget = async (budget: CreateBudgetReq) => {
-		const b = await apiHelpers.createBudget(this.token, budget);
+	createBudget = async (token: string, budget: CreateBudgetReq) => {
+		const b = await apiHelpers.createBudget(token, budget);
 		this.budgets_raw.push(b);
 		return b;
 	}

@@ -1,4 +1,5 @@
 import axios from "axios";
+import * as moment from "moment";
 
 import { API_URL } from "./config";
 import {
@@ -165,9 +166,9 @@ class ApiHelper {
 
 		const b: BudgetDisplayProps = {
 			id: b_raw.id,
-			category: category.name,
-			endDate: b_raw.endDate,
-			startDate: b_raw.startDate,
+			category: "",
+			endDate: moment(b_raw.endDate, "YYYY-MM-DD").toDate(),
+			startDate: moment(b_raw.startDate, "YYYY-MM-DD").toDate(),
 			limit: b_raw.amount,
 			spent,
 			transactions,

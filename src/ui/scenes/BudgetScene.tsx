@@ -7,6 +7,7 @@ import "../tailwind.css";
 import UserStore from "../../stores/UserStore";
 import ApplicationStore from "../../stores/ApplicationStore";
 import Budget from "../components/budget/Budget";
+import AddNewBudgetModal from "../components/budget/AddNewBudgetModal";
 
 interface BudgetSceneState {
 	selectedBudgetId: number;
@@ -25,17 +26,22 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 	render() {
 		return (
 			<div className="flex">
-				<div className="w-1/6">
+				<div className="w-1/3">
 					<h1 className="text-xl mb-4">Budgets</h1>
-						{ApplicationStore.budgets_raw.map(b_raw => {
-							const b = apiHelpers.convertBudget(b_raw);
-							return( <div>
-								<div className="text-xs font-bold">{b.category}</div>
-								<Budget key={b.id} {...b}></Budget>
-								</div>);
-						})}
+					{ApplicationStore.budgets_raw.map(b_raw => {
+						const b = apiHelpers.convertBudget(b_raw);
+						return (
+							<div key={b.id}>
+								<div className="text-xs font-bold">
+									{b.category}
+								</div>
+								<Budget {...b}></Budget>
+							</div>
+						);
+					})}
 				</div>
 				<div className="w-full">
+					<AddNewBudgetModal></AddNewBudgetModal>
 				</div>
 			</div>
 		);

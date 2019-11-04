@@ -118,7 +118,6 @@ function ShowCategories(props) {
 function ShowTransactions(props) {
 	return props.transactions.map(tr_raw => {
 		const tr = apiHelpers.convertTransaction(tr_raw);
-		console.log(tr_raw.date);
 		return (
 			<div>
 				<div>{tr_raw.date}</div>

@@ -34,7 +34,6 @@ export default class TransactionForm extends Component<{}, any> {
 	submitHandler = async e => {
 		e.preventDefault(); // suppress the form being posted
 		this.setState({ date: new Date(), warning: false });
-		console.log(this.state);
 
 		const newTransaction: CreateTransactionReq = {
 			amount: parseFloat(this.state.amount),

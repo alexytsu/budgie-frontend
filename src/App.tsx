@@ -21,12 +21,7 @@ export default class App extends Component {
 			const loginResp = await apiHelpers.loginUser("joe", "password");
 			UserStore.token = loginResp.token;
 			UserStore.username = "Joe";
-			ApplicationStore.transactions_raw = await apiHelpers.getAllTransactions(
-				UserStore.token
-			);
-			ApplicationStore.categories_raw = await apiHelpers.getAllCategories(
-				UserStore.token
-			);
+			ApplicationStore.init(loginResp.token);
 		}
 	}
 

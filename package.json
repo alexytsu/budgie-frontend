@@ -37,10 +37,12 @@
 		"mobx": "^5.5.2",
 		"mobx-react": "^5.3.5",
 		"mobx-react-devtools": "^6.0.3",
+		"moment": "^2.24.0",
 		"postcss-cli": "^6.1.3",
 		"postcss-loader": "^3.0.0",
 		"react": "^16.5.2",
 		"react-chartjs-2": "^2.8.0",
+		"react-dates": "^21.3.2",
 		"react-dom": "^16.5.2",
 		"react-router-dom": "^5.1.2",
 		"style-loader": "^1.0.0"
