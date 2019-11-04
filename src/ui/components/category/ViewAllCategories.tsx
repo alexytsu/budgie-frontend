@@ -2,56 +2,46 @@ import * as React from "react";
 import { Component } from "react";
 
 import "../../tailwind.css";
-import apiHelpers from "../../../util/api-helpers";
 import UserStore from "../../../stores/UserStore";
-
+import ApplicationStore from "../../../stores/ApplicationStore";
+import { action } from "mobx";
+import { observer } from "mobx-react";
+/*
 interface ViewAllCategoriesState {
     categories: any[];
-    selected: string;
-}
+}*/
 
-export default class ViewAllCategories extends Component <{}, ViewAllCategoriesState>{
-    
+@observer
+export default class ViewAllCategories extends Component <{} /*ViewAllCategoriesState*/>{
+    /*
     constructor(props) {
         super(props);
         this.state = {
-            categories: [],
-            selected: ""
+            categories: []
         };    
-    }
+    }*/
 
-    async componentDidMount() {
-        await apiHelpers.loginUser("joe", "password");
-        const response = await apiHelpers.getAllCategories(UserStore.token);
-        this.setState({categories: response})
-    }
-
+    @action
     select(id){
-        this.setState({selected: id.target.value})
+        /*this.setState({selected: id.target.value})*/
+        console.log(id.target.value + "selected")
+        ApplicationStore.selected = id.target.value
+        console.log("Applicationstore.selected is " + ApplicationStore.selected)
     }
 
     delete = async () => {
-        await apiHelpers.loginUser("joe", "password");
-        await apiHelpers.deleteCategory(UserStore.token, this.state.selected);
-
-        let i;
-        let index;
-        for (i = 0; i < this.state.categories.length; i++) {
-            if (this.state.categories[i].id == this.state.selected){
-                index = i;
-            }
-        }
-        let prev = this.state.categories;
-        prev.splice(index, 1)
-        this.setState({categories: prev})
+        await ApplicationStore.deleteCategory(UserStore.token, ApplicationStore.selected);
+        //this.forceUpdate()
     }
 
     render() {
         
         return (
           <div className="bg-white rounded-lg shadow-md p-8">
-            <label className="font-sans text-5xl font-semibold mt-6 mb-8 text-gray-800 text-left" htmlFor="category">Categories</label>
-            {this.state.categories.map((cat) => {
+            <label className="font-sans text-5xl font-semibold mt-6 mb-8 text-gray-800 text-left" htmlFor="category">
+                Categories
+            </label>
+            {ApplicationStore.categories_raw.map((cat) => {
                 return (
                     <div>{
                         <button value={cat.id}
@@ -61,11 +51,10 @@ export default class ViewAllCategories extends Component <{}, ViewAllCategoriesS
                         </button>}
                     </div>
                 )
-            }
-            )}
-            {this.state.selected === "" ? null :
+            })}
+            {ApplicationStore.selected === "" ? null :
                 <button
-                    className="whitespace-pre bg-teal-500 text-white mt-3 py-1 px-4 rounded"
+                    className="whitespace-pre bg-teal-500 text-white mt-6 ml-2 py-1 px-4 rounded"
                     onClick={()=>this.delete()}>
                     Delete
                 </button>}
@@ -73,3 +62,8 @@ export default class ViewAllCategories extends Component <{}, ViewAllCategoriesS
         )
     }
 }
+/*
+headers: {
+					Authorization: "Token " + token
+				}
+*/

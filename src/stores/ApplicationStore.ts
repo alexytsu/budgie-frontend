@@ -17,6 +17,9 @@ class ApplicationStore {
 	@observable
 	budgets_raw: BudgetResp[] = [];
 
+	@observable
+	selected: string = "";
+	
 	token: string = "";
 
 	init = async(token: string) => {
@@ -30,10 +33,11 @@ class ApplicationStore {
 		this.budgets_raw.push(b);
 		return b;
 	}
-
+	
 	createCategory = async (token: string, category: CreateCategoryReq) => {
 		const cat = await apiHelpers.createCategory(token, category);
-		this.categories_raw.push(cat);
+		//this.categories_raw.push(cat);
+		this.categories_raw = await apiHelpers.getAllCategories(token)
 		return cat;
 	};
 
@@ -45,6 +49,23 @@ class ApplicationStore {
 		this.transactions_raw.push(tr);
 		return tr;
 	};
+
+	getAllCategories = async(token: string) => {
+		//const cat = await apiHelpers.getAllCategories(token);
+		//this.categories_raw.push(cat);
+		return this.categories_raw;
+	}
+
+	deleteCategory = async (token: string, id: string) => { 
+		await apiHelpers.deleteCategory(token, id);
+		this.categories_raw = await apiHelpers.getAllCategories(token)
+		this.selected = ""
+	}
+
+	updateCategory = async (token: string, id: string, catName: string) => {
+		const cat = await apiHelpers.updateCategory(token, id, catName);
+		this.categories_raw = await apiHelpers.getAllCategories(token)
+	}
 }
 
 export default new ApplicationStore();

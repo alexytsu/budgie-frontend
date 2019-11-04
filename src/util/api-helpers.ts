@@ -125,6 +125,17 @@ class ApiHelper {
 		});
 	};
 
+	updateCategory = async(token: string, id: string, catName: string) => {
+		const resp = await axios.patch(
+			API_URL + "/categories/" + id,
+			{name: catName}, {
+				headers: {
+					Authorization: "Token " + token
+				}
+			}
+		)
+	}
+
 	getAllTransactions = async (token: string) => {
 		const resp = await axios.get(API_URL + "/transactions/", {
 			headers: {
