@@ -23,7 +23,7 @@ interface TransactionFormState {
 	account: number;
 	type: TransactionType;
 	warning: boolean;
-	datePickerFocused: any;
+	datePickerFocused: boolean;
 }
 
 export default class TransactionForm extends Component<
@@ -46,7 +46,6 @@ export default class TransactionForm extends Component<
 	}
 
 	changeHandler = e => {
-		console.log(e);
 		const stateCopy = this.state;
 		stateCopy[e.target.name] = e.target.value;
 		this.setState({ ...stateCopy });
@@ -174,10 +173,11 @@ export default class TransactionForm extends Component<
 							date={this.state.date}
 							onDateChange={(date: moment.Moment) => this.setState({ date })}
 							focused={this.state.datePickerFocused}
-							onFocusChange={datePickerFocused =>
-								this.setState({ datePickerFocused })
-							}
+							onFocusChange={(focus) => {
+								this.setState({ datePickerFocused: focus.focused});
+							}}
 							id="transaction_date"
+							numberOfMonths={1}
 						></SingleDatePicker>
 					</div>
 
