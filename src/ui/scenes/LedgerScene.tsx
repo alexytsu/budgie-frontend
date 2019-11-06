@@ -24,9 +24,8 @@ export default class LedgerScene extends Component<{}, LedgerSceneState> {
 
 	render() {
 		return (
-			<div className="flex">
-				<div className="w-full mr-4">
-					<h1 className="text-xl">Ledger</h1>
+			<div className="flex h-full pb-4">
+				<div className="w-full h-full overflow-y-scroll mr-4 shadow rounded-lg px-2 bg-gray-100">
 					{ApplicationStore.transactions_raw
 						.sort((a, b) => {
 							return moment(b.date).diff(a.date);
