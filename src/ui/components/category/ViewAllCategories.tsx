@@ -31,7 +31,7 @@ export default class ViewAllCategories extends Component <{} /*ViewAllCategories
         console.log("Applicationstore.selected is " + ApplicationStore.selected)
     }
 
-    view(){
+    edit(){
         //view category
     }
 
@@ -40,7 +40,6 @@ export default class ViewAllCategories extends Component <{} /*ViewAllCategories
     }
 
     render() {
-        
         return (
           <div className="bg-white rounded-lg shadow-md p-8">
             <label className="font-sans text-5xl font-semibold mt-6 mb-8 text-gray-800 text-left" htmlFor="category">
@@ -66,8 +65,8 @@ export default class ViewAllCategories extends Component <{} /*ViewAllCategories
                 <div>
                     <button
                         className="whitespace-pre bg-teal-500 text-white mt-6 py-1 px-4 mr-4 rounded"
-                        onClick={()=>this.view()}>
-                        View
+                        onClick={()=>this.edit()}>
+                        edit
                     </button>
                     <button
                         className="whitespace-pre bg-teal-500 text-white mt-6 py-1 px-4 rounded"
@@ -87,7 +86,6 @@ export default class ViewAllCategories extends Component <{} /*ViewAllCategories
                     }
 						
                 })
-
             }
           </div>
         )
