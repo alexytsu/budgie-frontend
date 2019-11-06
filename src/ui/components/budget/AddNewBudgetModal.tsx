@@ -3,13 +3,7 @@ import { Component } from "react";
 import { observer } from "mobx-react";
 
 import * as moment from "moment";
-import "react-dates/initialize";
-import "react-dates/lib/css/_datepicker.css";
-import {
-	DateRangePicker,
-	SingleDatePicker,
-	DayPickerRangeController
-} from "react-dates";
+import { DateRangePicker } from "react-dates";
 
 import { CreateBudgetReq } from "../../../util/types/BudgetTypes";
 import apiHelpers from "../../../util/api-helpers";
@@ -24,7 +18,7 @@ interface AddBudgetState {
 	startDate: moment.Moment;
 	error: boolean;
 	showing: boolean;
-	calendarFocused: "startDate"|"endDate"|null;
+	calendarFocused: "startDate" | "endDate" | null;
 }
 
 @observer
@@ -39,7 +33,7 @@ export default class AddNewBudgetModal extends Component<{}, AddBudgetState> {
 			startDate: moment(),
 			error: false,
 			showing: true,
-			calendarFocused: null,
+			calendarFocused: null
 		};
 	}
 
@@ -53,7 +47,7 @@ export default class AddNewBudgetModal extends Component<{}, AddBudgetState> {
 		this.setState({ startDate, endDate });
 	};
 
-	handleFocusChange = (calendarFocused) => {
+	handleFocusChange = calendarFocused => {
 		this.setState({ calendarFocused });
 	};
 
@@ -72,24 +66,30 @@ export default class AddNewBudgetModal extends Component<{}, AddBudgetState> {
 
 	render() {
 		return (
-			<div id="modal container">
-				<div className="text-md">Add a New Budget</div>
+			<div className="w-full bg-white border-2 border-solid shadow-md rounded-lg p-4 border-purple-200 mb-8">
+				<div className="text-gray-600">Category</div>
 				<select
+					className="p-2 my-2 rounded block"
 					name="categoryId"
 					value={this.state.categoryId}
 					onChange={this.changeHandler}
 				>
 					{ApplicationStore.categories_raw.map(cat_raw => (
-						<option key={cat_raw.id} value={cat_raw.id}>{cat_raw.name}</option>
+						<option key={cat_raw.id} value={cat_raw.id}>
+							{cat_raw.name}
+						</option>
 					))}
 				</select>
+				<div className="text-gray-600 my-2">Spending Limit</div>
 				<input
 					name="amount"
+					type="number"
+					step="0.01"
 					value={this.state.amount}
 					onChange={this.changeHandler}
-					className="w-full"
+					className="rounded block my-2 p-2 font-semibold"
 				/>
-				<div>Budget Period</div>
+				<div className="text-gray-600 my-2">Budget Period</div>
 				<DateRangePicker
 					startDate={this.state.startDate}
 					startDateId="startDate"
@@ -102,6 +102,7 @@ export default class AddNewBudgetModal extends Component<{}, AddBudgetState> {
 					numberOfMonths={2}
 				></DateRangePicker>
 				<button
+					className="block p-2 rounded-lg shadow text-white my-4 font-bold bg-blue-600"
 					onClick={async () => {
 						await this.handleSubmit();
 					}}

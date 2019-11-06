@@ -55,7 +55,6 @@ export default class CreateCategory extends Component<{}, CreateCategoryState> {
 				UserStore.token,
 				this.state.category
 			);
-			console.log(submitResponse)
 			this.setState({ response : submitResponse.name })
 			this.setState({ created: true });
 		}

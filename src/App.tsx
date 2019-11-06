@@ -12,6 +12,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDove } from "@fortawesome/free-solid-svg-icons";
 import BudgetScene from "./ui/scenes/BudgetScene";
 
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
+
+
 const DEBUG = true;
 
 @observer
