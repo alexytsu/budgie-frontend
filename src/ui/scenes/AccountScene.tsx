@@ -11,7 +11,8 @@ export default class AccountScene extends Component <{}, any>{
 
     render() {
         const expenseGraph: BudgetGraphProps = {
-            transactions: ApplicationStore.transactions_raw
+            transactions: ApplicationStore.transactions_raw,
+            budget: 10000
         }
           
         return (

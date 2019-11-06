@@ -3,6 +3,8 @@ import { Component } from "react";
 import { observer } from "mobx-react";
 
 import * as moment from "moment";
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
 import { DateRangePicker } from "react-dates";
 
 import { CreateBudgetReq } from "../../../util/types/BudgetTypes";

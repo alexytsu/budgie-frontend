@@ -2,6 +2,8 @@ import * as React from "react";
 import { Component } from "react";
 import classNames from "classnames";
 
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
 import { SingleDatePicker } from "react-dates";
 
 import {
