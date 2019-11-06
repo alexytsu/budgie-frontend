@@ -16,5 +16,4 @@ export default class ViewCategories extends Component <{}, ViewCategoriesState>{
         this.state = {
         }
     }
-
 }

@@ -54,7 +54,10 @@ class ApiHelper {
 					Authorization: "Token " + token
 				}
 			}
-		);
+		)
+		.catch(e => {
+			throw e;
+		});
 
 		const new_category: CategoryResp = {
 			...resp.data

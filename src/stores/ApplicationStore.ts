@@ -35,10 +35,19 @@ class ApplicationStore {
 	}
 	
 	createCategory = async (token: string, category: CreateCategoryReq) => {
-		const cat = await apiHelpers.createCategory(token, category);
-		//this.categories_raw.push(cat);
-		this.categories_raw = await apiHelpers.getAllCategories(token)
-		return cat;
+		
+		try{
+			const cat = await apiHelpers.createCategory(token, category);
+			//this.categories_raw.push(cat);
+			this.categories_raw = await apiHelpers.getAllCategories(token)
+			return cat;
+		} catch (e) {
+			console.log("Hi");
+			const response: CategoryResp = {name: e.response.data.name,
+											id: null,
+											operation: null}
+			return response;
+		}
 	};
 
 	createTransaction = async (

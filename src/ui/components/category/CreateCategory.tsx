@@ -112,10 +112,7 @@ export default class CreateCategory extends Component<{}, CreateCategoryState> {
 				) : null}
 				{this.state.response === "A category with that name and operation already exists." ? (
 					<p className="text-red-600">{this.state.response}</p>
-				) : null}
-				{this.state.created === true ? (
-					<p>{this.state.category.operation === "IN" ? "Income" : "Expense"} category created</p>
-				) : null}
+				) : <p>{this.state.category.operation === "IN" ? "Income" : "Expense"} category created</p>}
 			</div>
 		);
 	}
