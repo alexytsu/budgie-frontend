@@ -21,39 +21,47 @@ export default class extends Component<BudgetDisplayProps, {}> {
 				(endDate.getTime() - startDate.getTime())) *
 			100;
 
-
-		const spendingProgress = (spent * 100 / limit);
+		const spendingProgress = (spent * 100) / limit;
 		const overspent = spendingProgress > dateProgress;
 
-
 		const dateProgressStyle = classNames({
-			'h-full border-green-600 border-solid border-2 rounded-lg bg-green-100': !overspent,
-			'h-full border-red-700 border-solid border-t-2 border-l-2 border-b-2 rounded-lg rounded-r-none bg-green-600 absolute': overspent,
-		})
+			"h-full border-green-600 border-solid border-2 rounded-lg bg-green-100": !overspent,
+			"h-full border-red-700 border-solid border-t-2 border-l-2 border-b-2 rounded-lg rounded-r-none bg-green-600 absolute": overspent
+		});
 
 		const spendingProgressStyle = classNames({
-			'h-full bg-green-600 overflow-visible absolute rounded-l-lg': !overspent,
-			'h-full bg-red-300 border-solid border-2 border-red-700 rounded-lg absolute overflow-visible': overspent,
-		})
+			"h-full bg-green-600 overflow-visible absolute rounded-l-lg": !overspent,
+			"h-full bg-red-300 border-solid border-2 border-red-700 rounded-lg absolute overflow-visible": overspent
+		});
 
 		return (
 			<div className="w-full">
-				<div className="text-xs font-bold object-right text-right">${limit}</div>
+				<div className="text-xs font-bold object-right text-right">
+					${limit}
+				</div>
 				<div className="rounded-lg shadow-lg relative h-10 bg-white">
-					<div style={{ width: spendingProgress + "%"}} className={spendingProgressStyle} />
-					<div style={{ width: dateProgress + "%" }} className={dateProgressStyle}></div>
+					<div
+						style={{ width: spendingProgress + "%" }}
+						className={spendingProgressStyle}
+					/>
+					<div
+						style={{ width: dateProgress + "%" }}
+						className={dateProgressStyle}
+					></div>
 				</div>
-				<div className="flex flex-row justify-between">
-				<div className="mt-2 text-xs">
-						{startDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
+				{this.props.selected !== undefined && this.props.selected ? (
+					<div className="flex flex-row justify-between">
+						<div className="mt-2 text-xs">
+							{startDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
+						</div>
+						<div className="mt-2 text-xs">
+							{midDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
+						</div>
+						<div className="mt-2 text-xs">
+							{endDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
+						</div>
 					</div>
-				<div className="mt-2 text-xs">
-						{midDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
-					</div>
-				<div className="mt-2 text-xs">
-						{endDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
-					</div>
-				</div>
+				) : null}
 			</div>
 		);
 	}
