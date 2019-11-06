@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Component } from "react";
-import { Line } from 'react-chartjs-2';
+import { Line, Bar } from 'react-chartjs-2';
 
 import { TransactionResp, TransactionType } from "../../../util/types/TransactionTypes";
 import { observer } from "mobx-react";
@@ -59,10 +59,11 @@ export default class BudgetGraph extends Component< BudgetGraphProps, any> {
                 return 1
             }
         })
+        
+        
+
         this.setValues(filteredTransactions, sum)
     }
-
-
 
     findWeek() {
         let now = new Date()
@@ -118,7 +119,7 @@ export default class BudgetGraph extends Component< BudgetGraphProps, any> {
         const {stateData, labels, name} = this.state;
         return (
             <div>
-                <Line data = {{
+                < Line data = {{
                         labels: labels,
                         datasets: [
                             {
