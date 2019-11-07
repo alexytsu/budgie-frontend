@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Component } from "react";
 
-import BudgetGraph, { BudgetGraphProps } from "../components/budget/BudgetGraph";
+import Graph, { BudgetGraphProps } from "../components/graph/Graph";
 import ApplicationStore from "../../stores/ApplicationStore";
 
 /**
@@ -12,12 +12,12 @@ export default class AccountScene extends Component <{}, any>{
     render() {
         const expenseGraph: BudgetGraphProps = {
             transactions: ApplicationStore.transactions_raw,
-            budget: 10000
+            budget: 1000
         }
           
         return (
             <div className="">
-                <BudgetGraph {...expenseGraph}></BudgetGraph>
+                <Graph {...expenseGraph}></Graph>
             </div>
         );
     }
