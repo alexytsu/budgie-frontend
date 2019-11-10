@@ -14,6 +14,7 @@ import BudgetScene from "./ui/scenes/BudgetScene";
 
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
+import './custom.css';
 
 
 const DEBUG = true;
@@ -72,7 +73,7 @@ export default class App extends Component {
 						</div>
 					</div>
 
-					<div className="bg-gray-200 rounded-lg rounded-r-none w-full pt-6 px-8 h-full">
+					<div className="bg-gray-100 rounded-lg rounded-r-none w-full pt-6 px-8 h-full">
 						<div className="container mx-auto h-full">
 						<Switch>
 							<Route path="/transactions">

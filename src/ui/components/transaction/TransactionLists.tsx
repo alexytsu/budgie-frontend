@@ -30,8 +30,8 @@ export class TransactionListDateSections extends Component<
 	{}
 > {
 	render() {
-		if(this.props.transactions.length == 0) {
-			return <div className="font-bold text-lg">Empty</div>
+		if (this.props.transactions.length == 0) {
+			return <div className="font-bold text-lg">Empty</div>;
 		}
 
 		const transactions = this.props.transactions
@@ -63,6 +63,7 @@ export class TransactionListDateSections extends Component<
 				{sections.map(tr_group => {
 					return (
 						<TransactionDateGroup
+							key={tr_group[0].date.toDateString()}
 							transactions={tr_group}
 						></TransactionDateGroup>
 					);
@@ -81,7 +82,7 @@ const TransactionDateGroup = (props: {
 			<div className="font-bold my-2">{date.format("DD MMM YYYY")}</div>
 			{props.transactions.map(tr => {
 				return (
-					<div className="py-1">
+					<div key={tr.id} className="py-1">
 						<Transaction {...tr}></Transaction>
 					</div>
 				);

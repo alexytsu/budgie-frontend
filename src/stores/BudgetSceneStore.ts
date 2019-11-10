@@ -38,6 +38,11 @@ class BudgetSceneStore {
 	}
 
 	@computed
+	get currentCategory() {
+		return this.appData.categories_raw.find(cat => cat.id === this.currentCategoryId);
+	}
+
+	@computed
 	get currentCategoryId():number {
 		const budget = this.appData.budgets_raw.find(b => b.id === this.selectedBudgetId);
 
