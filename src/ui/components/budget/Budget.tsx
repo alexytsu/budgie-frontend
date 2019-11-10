@@ -49,7 +49,9 @@ export default class extends Component<BudgetDisplayProps, {}> {
 		});
 
 		const budgetStyle = classNames({
-			"rounded-lg shadow-lg relative h-10 flex": true,
+			"rounded-lg shadow relative h-10 flex": true,
+			"shadow-lg border": this.props.selected,
+			"m-2": !this.props.selected,
 			"bg-white": valid,
 			"bg-red-200 py-2": underBudgeted,
 			"bg-yellow-200": !validDate
@@ -74,23 +76,26 @@ export default class extends Component<BudgetDisplayProps, {}> {
 						</>
 					) : (
 						<div className="w-full flex justify-between px-2">
-							{underBudgeted ? <div className="font-bold text-red-800">Underfunded</div> : null} {underBudgeted ? <button className="text-blue-800">Fix</button>: null}
+							{underBudgeted ? (
+								<div className="font-bold text-red-800">Underfunded</div>
+							) : null}{" "}
+							{underBudgeted ? (
+								<button className="text-blue-800">Fix</button>
+							) : null}
 						</div>
 					)}
 				</div>
-				{this.props.selected !== undefined && this.props.selected ? (
-					<div className="flex flex-row justify-between">
-						<div className="mt-2 text-xs">
-							{startDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
-						</div>
-						<div className="mt-2 text-xs">
-							{midDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
-						</div>
-						<div className="mt-2 text-xs">
-							{endDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
-						</div>
+				<div className="flex flex-row justify-between">
+					<div className="mt-2 text-xs">
+						{startDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
 					</div>
-				) : null}
+					<div className="mt-2 text-xs">
+						{midDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
+					</div>
+					<div className="mt-2 text-xs">
+						{endDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
+					</div>
+				</div>
 			</div>
 		);
 	}
