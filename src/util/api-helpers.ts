@@ -91,7 +91,7 @@ class ApiHelper {
 		token: string,
 		budget: CreateBudgetReq
 	): Promise<BudgetResp> => {
-		const resp = await this.authenticatedPost(token, "savingplans", budget);
+		const resp = await this.authenticatedPost(token, "spendingplans", budget);
 		return resp.data;
 	};
 
@@ -158,7 +158,7 @@ class ApiHelper {
 	};
 
 	getAllBudgets = async (token: string) => {
-		const resp = await this.authenticatedGetAll(token, "savingplans");
+		const resp = await this.authenticatedGetAll(token, "spendingplans");
 		return resp.data;
 	};
 
