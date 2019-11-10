@@ -15,6 +15,7 @@ export interface BudgetDisplayProps {
 	category: string;
 	type: BudgetType;
 	transactions: TransactionDisplayProps[];
+	selected?: boolean;
 }
 
 export interface BudgetResp {

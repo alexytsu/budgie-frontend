@@ -10,6 +10,7 @@ import moment = require("moment");
 import { number } from "prop-types";
 import { triggerAsyncId } from "async_hooks";
 import UserStore from "../../stores/UserStore";
+import { TransactionListDateSections } from "../components/transaction/TransactionLists";
 
 interface LedgerSceneState {
 	selectedTransactionId: number;
@@ -24,49 +25,9 @@ export default class LedgerScene extends Component<{}, LedgerSceneState> {
 
 	render() {
 		return (
-			<div className="flex">
-				<div className="w-full mr-4">
-					<h1 className="text-xl">Ledger</h1>
-					{ApplicationStore.transactions_raw
-						.sort((a, b) => {
-							return moment(b.date).diff(a.date);
-						})
-						.map(tr_raw => {
-							const tr = apiHelpers.convertTransaction(tr_raw);
-
-							if (tr.id === this.state.selectedTransactionId) {
-								return (
-									<div key={tr.id} className="my-2 bg-red-300 p-2 rounded-lg">
-										<Transaction {...tr}></Transaction>
-									</div>
-								);
-							}
-
-							return (
-								<div
-									key={tr.id}
-									onClick={() => {
-										this.setState({ selectedTransactionId: tr.id });
-									}}
-									className="my-2"
-								>
-									<Transaction {...tr}></Transaction>
-								</div>
-							);
-						})}
-					{this.state.selectedTransactionId !== 0 ? (
-						<button
-							className="rounded bg-red-600 text-white p-2 shadow"
-							onClick={() => {
-								ApplicationStore.deleteTransaction(
-									UserStore.token,
-									this.state.selectedTransactionId
-								);
-							}}
-						>
-							Delete
-						</button>
-					) : null}
+			<div className="flex h-full pb-4">
+				<div className="w-full h-full overflow-y-scroll mr-4 rounded-lg px-2">
+					<TransactionListDateSections transactions={ApplicationStore.transactions_raw}></TransactionListDateSections>
 				</div>
 				<div className="w-full ml-4">
 					<h1 className="text-xl">New Transaction</h1>
