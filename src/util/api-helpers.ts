@@ -149,6 +149,18 @@ class ApiHelper {
 			}
 		);
 	};
+	
+	updateBudget = async (token: string, id: number, budgetProps: CreateBudgetReq) =>{
+		const resp = await axios.patch(
+			API_URL + "/spendingplans/" + id + "/",
+			budgetProps,
+			{
+				headers: {
+					Authorization: "Token " + token
+				}
+			}
+		)
+	}
 
 	getAllTransactions = async (token: string) => {
 		const resp = await axios.get(API_URL + "/transactions/", {
@@ -189,7 +201,6 @@ class ApiHelper {
 			.map(tr_raw => this.convertTransaction(tr_raw));
 
 		const spent: number = transactions.reduce((sum: number, transaction) => {
-			console.log(sum, transaction.amount);
 			return sum + transaction.amount;
 		}, 0);
 

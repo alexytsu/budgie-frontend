@@ -87,6 +87,11 @@ class ApplicationStore implements AppStore {
 		this.categories_raw = await apiHelpers.getAllCategories(token);
 	};
 
+	updateBudget = async (token: string, id: number, budgetProps: CreateBudgetReq) => {
+		const cat = await apiHelpers.updateBudget(token, id, budgetProps);
+		this.budgets_raw = await apiHelpers.getAllBudgets(token);
+	}
+
 	deleteTransaction = async (token: string, id: number) => {
 		await apiHelpers.deleteTransaction(token, id);
 		const loc = this.transactions_raw.findIndex(tr => tr.id === id);

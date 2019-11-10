@@ -33,7 +33,7 @@ export default class Transaction extends Component<
 		return (
 			<div className={transactionClass}>
 				<div>
-					<div className="font-bold text-xs text-black">${this.props.amount}</div>
+					<div className="font-bold text-xs text-black">${this.props.amount.toFixed(2)}</div>
 					<div className="font-semibold text-xs text-gray-900">{this.props.account}</div>
 				</div>
 				<div>
