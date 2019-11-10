@@ -112,7 +112,7 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 						</div>
 					</div>
 					<div className="flex flex-col mx-2d flex-1">
-						<Budget {...budget_disp}></Budget>
+						<Budget selected={true} {...budget_disp}></Budget>
 						{fix}
 						<div className="flex font-semibold py-4">
 							<div>${budget_disp.spent.toFixed(2)} / </div>
@@ -142,7 +142,7 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 									BudgetSceneStore.selectedBudgetId = b.id;
 								}}
 							>
-								<div className="font-semibold text-green-800">{b.category}</div>
+								<div className="font-semibold">{b.category}</div>
 								<Budget {...b}></Budget>
 							</div>
 						);
