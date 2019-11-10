@@ -19,6 +19,9 @@ class ApplicationStore {
 
 	@observable
 	selected: string = "";
+
+	@observable
+	selectedTransaction_ledgerScene: number = 0;
 	
 	token: string = "";
 
