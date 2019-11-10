@@ -183,9 +183,11 @@ class ApiHelper {
 			.filter(tr_raw => moment(tr_raw.date).isBetween(b_raw.startDate, b_raw.endDate))
 			.map(tr_raw => this.convertTransaction(tr_raw));
 
-		const spent = transactions.reduce((sum: number, transaction) => {
+		const spent:number = transactions.reduce((sum: number, transaction) => {
+			console.log(sum, transaction.	amount);
 			return sum + transaction.amount;
 		}, 0);
+
 
 		const b: BudgetDisplayProps = {
 			id: b_raw.id,

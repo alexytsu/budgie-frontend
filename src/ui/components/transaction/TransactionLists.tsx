@@ -30,7 +30,10 @@ export class TransactionListDateSections extends Component<
 	{}
 > {
 	render() {
-		console.log("List HERE");
+		if(this.props.transactions.length == 0) {
+			return <div className="font-bold text-lg">Empty</div>
+		}
+
 		const transactions = this.props.transactions
 			.sort((a, b) => moment(b.date).diff(a.date))
 			.map(tr_raw => apiHelpers.convertTransaction(tr_raw));

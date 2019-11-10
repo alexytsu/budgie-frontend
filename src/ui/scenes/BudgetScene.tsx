@@ -37,7 +37,7 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 			const budProps = apiHelpers.convertBudget(bud);
 			dashboard = (
 				<div className="h-full flex">
-					<div className="flex flex-col">
+					<div className="flex flex-col mx-2">
 						<div>All Time Transactions</div>
 						<div className="overflow-y-scroll">
 							{
@@ -47,7 +47,7 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 							}
 						</div>
 					</div>
-					<div className="flex flex-col">
+					<div className="flex flex-col mx-2d">
 						<div>In This Budget</div>
 						<div className="overflow-y-scroll">
 							{
@@ -60,6 +60,7 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 				</div>
 			);
 		}
+
 
 		return (
 			<div className="flex h-full">
