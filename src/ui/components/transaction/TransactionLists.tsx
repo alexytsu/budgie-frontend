@@ -63,7 +63,7 @@ export class TransactionListDateSections extends Component<
 				{sections.map(tr_group => {
 					return (
 						<TransactionDateGroup
-						key={tr_group[0].id}
+							key={tr_group[0].id}
 							transactions={tr_group}
 						></TransactionDateGroup>
 					);
