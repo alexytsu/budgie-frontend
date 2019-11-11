@@ -25,9 +25,9 @@ const DEBUG = true;
 export default class App extends Component {
 	async componentDidMount() {
 		if (DEBUG) {
-			const loginResp = await apiHelpers.loginUser("joe", "password");
+			const loginResp = await apiHelpers.loginUser("userdemo", "password");
 			UserStore.token = loginResp.token;
-			UserStore.username = "Joe";
+			UserStore.username = "userdemo";
 			ApplicationStore.init(loginResp.token);
 		}
 	}
