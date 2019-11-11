@@ -24,7 +24,6 @@ interface TransactionListProps {
 	transactions: TransactionResp[];
 }
 
-@observer
 export class TransactionListDateSections extends Component<
 	TransactionListProps,
 	{}
@@ -46,6 +45,7 @@ export class TransactionListDateSections extends Component<
 			if (currentSection.length == 0) {
 				currentSection.push(tr);
 				currentDate = moment(tr.date);
+				return;
 			}
 
 			const newDate = moment(tr.date);
@@ -63,7 +63,7 @@ export class TransactionListDateSections extends Component<
 				{sections.map(tr_group => {
 					return (
 						<TransactionDateGroup
-							key={tr_group[0].date.toDateString()}
+						key={tr_group[0].id}
 							transactions={tr_group}
 						></TransactionDateGroup>
 					);
