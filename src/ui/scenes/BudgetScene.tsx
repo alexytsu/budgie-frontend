@@ -16,9 +16,12 @@ import moment = require("moment");
 import { ExpenseGraph } from "../components/graph/GraphType";
 import Graph from "../components/graph/Graph";
 import BudgetStories from "../../test/Budget.stories";
+import classNames = require("classnames");
+import { CreateBudgetReq } from "../../util/types/BudgetTypes";
 
 interface BudgetSceneState {
 	selectedBudgetId: number;
+	newAmount: number;
 }
 
 @observer
@@ -27,8 +30,25 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 		super(props);
 
 		this.state = {
-			selectedBudgetId: 1
+			selectedBudgetId: 1,
+			newAmount: 0
 		};
+	}
+
+	changeHandler = e => {
+		const stateCopy = this.state;
+		stateCopy[e.target.name] = e.target.value;
+		this.setState({ ...stateCopy });
+	};
+
+	updateBudget = () => {
+		const newBud: CreateBudgetReq = {
+			amount: this.state.newAmount,
+			category: BudgetSceneStore.currentBudget.category,
+			startDate: BudgetSceneStore.currentBudget.startDate,
+			endDate: BudgetSceneStore.currentBudget.endDate,
+		}
+		ApplicationStore.updateBudget(UserStore.token, BudgetSceneStore.selectedBudgetId, newBud);
 	}
 
 	render() {
@@ -36,14 +56,32 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 			b => b.id === BudgetSceneStore.selectedBudgetId
 		);
 
-		let dashboard = null;
-
+		let dashboard = <></>;
 
 		if (bud !== undefined) {
 			const budget_disp = apiHelpers.convertBudget(bud);
 			const graphData = {
 				transactions: BudgetSceneStore.allTransactionsBudget,
-				budget: budget_disp.limit,	
+				budget: budget_disp.limit
+			};
+
+			let fix = null;
+
+			const buttonClass = classNames({
+				"rounded bg-gray-500 text-white p-2": true,
+				"bg-green-600": this.state.newAmount >= budget_disp.spent,
+			})
+
+			if (budget_disp.limit < budget_disp.spent) {
+				fix = (
+					<div className="rounded p-2 my-2 bg-white shadow flex justify-between">
+						<div>
+							<div>Allocate a New Amount:</div>
+						<input name="newAmount" type="number" value={this.state.newAmount} onChange={this.changeHandler}></input>
+						</div>
+						<button  onClick={()=>this.updateBudget()} className={buttonClass}>Save Changes</button>
+					</div>
+				);
 			}
 
 			dashboard = (
@@ -75,6 +113,7 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 					</div>
 					<div className="flex flex-col mx-2d flex-1">
 						<Budget {...budget_disp}></Budget>
+						{fix}
 						<div className="flex font-semibold py-4">
 							<div>${budget_disp.spent.toFixed(2)} / </div>
 							<div>${budget_disp.limit.toFixed(2)}</div>
@@ -101,7 +140,6 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 								key={b.id}
 								onClick={() => {
 									BudgetSceneStore.selectedBudgetId = b.id;
-									console.log(b.id);
 								}}
 							>
 								<div className="font-semibold text-green-800">{b.category}</div>
