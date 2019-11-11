@@ -7,9 +7,9 @@ export enum BudgetType {
 }
 
 export enum BudgetPeriod {
-	PAST,
-	CURRENT,
-	FUTURE
+	PAST = "Past",
+	CURRENT= "Current",
+	FUTURE = "Future"
 }
 
 export interface BudgetDisplayProps {

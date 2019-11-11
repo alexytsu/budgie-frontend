@@ -74,7 +74,7 @@ export default class App extends Component {
 					</div>
 
 					<div className="bg-gray-100 rounded-lg rounded-r-none w-full pt-6 px-8 h-full">
-						<div className="container mx-auto h-full">
+						<div className="mx-auto h-full">
 						<Switch>
 							<Route path="/transactions">
 								<LedgerScene></LedgerScene>
