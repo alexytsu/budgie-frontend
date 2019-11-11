@@ -42,18 +42,9 @@ export default class BudgetOverTimeGraph extends Component<{}, {}> {
 			return acc;
 		}, initial);
 
-		console.log(dayByDayNetWorth);
-
-		const netWorthData = {
-			type: "line",
-			label: "Net Worth",
-			data: dayByDayNetWorth.map(da => {
-				return { x: da.date.toDate(), y: da.amount };
-			}),
-			options: {
-				type: "time"
-			}
-		};
+		const dayByDayBudgeted = dayByDayNetWorth.map(da => {
+			return ApplicationStore.getAmountBudgetdOn(da.date);
+		});
 
 		const dataSets: ChartData<any> = {
 			labels: dayByDayNetWorth.map(da => da.date),
@@ -63,25 +54,33 @@ export default class BudgetOverTimeGraph extends Component<{}, {}> {
 					type: "line",
 					data: dayByDayNetWorth.map(da => da.amount),
 					borderColor: "#004497",
-					cubicInterpolationMode: "monotone",
+					cubicInterpolationMode: "monotone"
+				},
+				{
+					label: "Budgeted",
+					type: "line",
+					data: dayByDayBudgeted,
+					borderColor: "#974400",
+					cubicInterpolationMode: "monotone"
 				}
 			]
 		};
 
 		const options = {
 			scales: {
-				xAxes: [{
-					title: "time",
-					type: "time",
-				}]
-			}	
-		}
+				xAxes: [
+					{
+						title: "time",
+						type: "time"
+					}
+				]
+			}
+		};
 
 		const chartProps: ChartComponentProps = {
 			data: dataSets,
-			options,
+			options
 		};
-
 
 		return <Line {...chartProps}></Line>;
 	}

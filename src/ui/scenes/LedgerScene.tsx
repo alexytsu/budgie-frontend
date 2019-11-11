@@ -34,7 +34,7 @@ export default class LedgerScene extends Component<{}, LedgerSceneState> {
 			showing: true,
 			error: false,
 			endDate: moment(),
-			startDate: moment().startOf('month'),
+			startDate: moment().startOf("month"),
 			filteringDate: false
 		};
 	}
@@ -69,8 +69,8 @@ export default class LedgerScene extends Component<{}, LedgerSceneState> {
 
 		return (
 			<div className="flex h-full pb-4">
-				<div className="w-full h-full flex flex-col overflow-y-scroll mr-4 rounded-lg px-2">
-					<div className="flex">
+				<div className="flex flex-col w-full h-full">
+					<div className="flex justify-between">
 						<DateRangePicker
 							startDate={this.state.startDate}
 							startDateId="startDate"
@@ -82,20 +82,24 @@ export default class LedgerScene extends Component<{}, LedgerSceneState> {
 							isOutsideRange={() => false}
 							numberOfMonths={2}
 						></DateRangePicker>
-						<button
-							onClick={() => {
-								this.setState((prevState, props) => {
-									return { filteringDate: !prevState.filteringDate };
-								});
-							}}
-							className={filterButtonStyle}
-						>
-							Filter
-						</button>
+						<div>
+							<button
+								onClick={() => {
+									this.setState((prevState, props) => {
+										return { filteringDate: !prevState.filteringDate };
+									});
+								}}
+								className={filterButtonStyle}
+							>
+								Filter
+							</button>
+						</div>
 					</div>
-					<TransactionListDateSections
-						transactions={shownTransactions}
-					></TransactionListDateSections>
+					<div className="w-full h-full flex flex-col overflow-y-scroll mt-4 mr-4 rounded-lg shadow-lg">
+						<TransactionListDateSections
+							transactions={shownTransactions}
+						></TransactionListDateSections>
+					</div>
 				</div>
 				<div className="w-full ml-4">
 					<h1 className="text-xl">New Transaction</h1>

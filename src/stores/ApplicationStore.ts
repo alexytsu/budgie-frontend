@@ -77,9 +77,12 @@ class ApplicationStore implements AppStore {
 
 	getAmountBudgetdOn = computedFn(function getAmountBudgetdOn(date: moment.Moment) {
 		const budgets = this.budgets_raw.filter(b => date.isBetween(moment(b.startDate), moment(b.endDate), "day", "[]"));
-		return budgets.reduce((sum, b) => {
+		
+		const budgeted =  budgets.reduce((sum, b) => {
 			return sum += b.amount;
 		}, 0);
+
+		return budgeted;
 	});
 
 	createCategory = async (token: string, category: CreateCategoryReq) => {

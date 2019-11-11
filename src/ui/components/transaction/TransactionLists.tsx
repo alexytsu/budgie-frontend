@@ -84,30 +84,30 @@ const TransactionDateGroup = observer((props: {
 	const date = moment(props.transactions[0].date);
 	return (
 		<>
-			<div className="font-bold my-2">{date.format("DD MMM YYYY")}</div>
+			<div className="font-semibold w-full bg-purple-900 text-pink-100 p-2 shadow">{date.format("DD MMM YYYY")}</div>
 			{props.transactions.map(tr => {
 				return (
 					<div key={tr.id}>
 						<Transaction {...tr}></Transaction>
 						{tr.id === ApplicationStore.selectedTransactionId ? (
-							<>
+							<div className="flex justify-end" >
 								<button
-								className="m-1 bg-red-600 text-white rounded p-1 text-xs"
-									onClick={() => {
-										ApplicationStore.deleteSelectedTransaction(UserStore.token);
-									}}
-								>
-									Delete
-								</button>
-								<button
-								className="m-1 mt-2 bg-teal-600 text-white rounded p-1 text-xs"
+								className="m-1 text-blue-400 p-1 px-2 text-xs"
 									onClick={() => {
 										ApplicationStore.clearSelectedTransaction();
 									}}
 								>
 									Clear
 								</button>
-							</>
+								<button
+								className="m-1 bg-red-600 text-white p-1 px-2 text-xs"
+									onClick={() => {
+										ApplicationStore.deleteSelectedTransaction(UserStore.token);
+									}}
+								>
+									Delete
+								</button>
+							</div>
 						) : null}
 					</div>
 				);
