@@ -34,5 +34,6 @@ export interface TransactionResp {
     operation: TransactionType;
     category: number;
     user: number;
+    description: string;
 }
 

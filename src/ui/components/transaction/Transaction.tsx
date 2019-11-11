@@ -26,7 +26,7 @@ export default class Transaction extends Component<
 		const selected = this.props.id === ApplicationStore.selectedTransactionId;
 
 		const transactionClass = classNames({
-			"bg-white border-l-4 border-solid rounded-lg p-2 flex flex-row justify-between shadow": true,
+			"bg-white border-l-4 border-solid p-1 px-2 flex flex-row justify-between shadow": true,
 			"border-green-600 bg-green-100":
 				this.props.type === TransactionType.INCOME && !selected,
 			"border-red-600": this.props.type === TransactionType.EXPENSE && !selected,
@@ -54,9 +54,9 @@ export default class Transaction extends Component<
 					</div>
 				</div>
 				<div>
-					<div className="font-bold text-black text-xs">{categoryName}</div>
-					<div className="font-semibold text-gray-900 text-xs">
-						{moment(this.props.date).format("YYYY-MM-DD")}
+					<div className="font-bold text-black text-xs text-right">{categoryName}</div>
+					<div className="font-semibold text-gray-900 text-xs text-right">
+						{moment(this.props.date).format("DD MMM YY")}
 					</div>
 				</div>
 			</div>

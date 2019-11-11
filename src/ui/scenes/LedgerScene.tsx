@@ -34,7 +34,7 @@ export default class LedgerScene extends Component<{}, LedgerSceneState> {
 			showing: true,
 			error: false,
 			endDate: moment(),
-			startDate: moment().subtract(1, "year"),
+			startDate: moment().startOf('month'),
 			filteringDate: false
 		};
 	}

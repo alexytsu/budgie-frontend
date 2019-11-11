@@ -13,7 +13,7 @@ export interface AppStore {
 	transactions_raw: TransactionResp[];
 	categories_raw: CategoryResp[];
 	budgets_raw: BudgetResp[];
-	selected: string;
+	selectedCategoryId: number;
 }
 
 class ApplicationStore implements AppStore {
@@ -27,7 +27,7 @@ class ApplicationStore implements AppStore {
 	budgets_raw: BudgetResp[] = [];
 
 	@observable
-	selected: string = "";
+	selectedCategoryId: number = 0;
 
 	@observable
 	selectedTransactionId: number = 0;
@@ -113,10 +113,10 @@ class ApplicationStore implements AppStore {
 		return this.categories_raw;
 	};
 
-	deleteCategory = async (token: string, id: string) => {
+	deleteCategory = async (token: string, id: number) => {
 		await apiHelpers.deleteCategory(token, id);
 		this.categories_raw = await apiHelpers.getAllCategories(token);
-		this.selected = "";
+		this.selectedCategoryId = 0;
 	};
 
 	updateCategory = async (token: string, id: string, catName: string) => {

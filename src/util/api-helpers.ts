@@ -124,7 +124,7 @@ class ApiHelper {
 		return resp.data;
 	};
 
-	deleteCategory = async (token: string, id: string) => {
+	deleteCategory = async (token: string, id: number) => {
 		const resp = await axios.delete(API_URL + "/categories/" + id, {
 			headers: {
 				Authorization: "Token " + token
@@ -250,7 +250,7 @@ class ApiHelper {
 			amount: tr_raw.amount,
 			category: tr_raw.category,
 			date: new Date(tr_raw.date),
-			description: "",
+			description: tr_raw.description,
 			id: tr_raw.id,
 			type,
 		};
