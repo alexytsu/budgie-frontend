@@ -16,6 +16,7 @@ import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import './custom.css';
 import CategoryScene from "./ui/scenes/CategoryScene";
+import BudgetOverTimeGraph from "./ui/components/budget/BudgetOverTimeGraph";
 
 
 const DEBUG = true;
@@ -86,11 +87,13 @@ export default class App extends Component {
 							<Route path="/categories">
 								<CategoryScene/>
 							</Route>
+							<Route path="/accounts">
+								<BudgetOverTimeGraph></BudgetOverTimeGraph>
+							</Route>
 							<Route path="/">
 								<ProfileScene></ProfileScene>
 							</Route>
 						</Switch>
-
 						</div>
 					</div>
 				</Router>

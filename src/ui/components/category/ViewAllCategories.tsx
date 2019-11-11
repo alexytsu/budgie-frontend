@@ -36,9 +36,7 @@ export default class ViewAllCategories extends Component <{}, ViewAllCategoriesS
 
     @action
     select(id){
-        console.log(id.target.value + "selected")
         ApplicationStore.selected = id.target.value
-        console.log("Applicationstore.selected is " + ApplicationStore.selected)
     }
 
     edit(){

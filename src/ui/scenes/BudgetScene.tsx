@@ -18,6 +18,7 @@ import Graph from "../components/graph/Graph";
 import BudgetStories from "../../test/Budget.stories";
 import classNames = require("classnames");
 import { CreateBudgetReq, BudgetPeriod } from "../../util/types/BudgetTypes";
+import BudgetOverTimeGraph from "../components/budget/BudgetOverTimeGraph";
 
 interface BudgetSceneState {
 	selectedBudgetId: number;
