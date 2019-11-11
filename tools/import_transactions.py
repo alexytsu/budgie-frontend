@@ -3,8 +3,9 @@ import pandas as pd
 
 df = pd.read_csv('ledger.csv')
 
-URL = 'http://localhost:8000'
-USERNAME = 'joe'
+# URL = 'http://localhost:8000'
+URL = 'http://cs4920.herokuapp.com'
+USERNAME = 'testuser'
 PASSWORD = 'password'
 
 register = requests.post(URL + '/users/', data={"username": USERNAME, "password": PASSWORD, "email": "joe@email.com"})
