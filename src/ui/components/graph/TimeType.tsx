@@ -1,3 +1,4 @@
+
 interface TimeType {
     generateDates();
     generateDatesToString();
@@ -57,7 +58,7 @@ export class Week implements TimeType {
                     new Date(trans.date).getDate() === date.getDate() &&
                     new Date(trans.date).getMonth() === date.getMonth() &&
                     new Date(trans.date).getFullYear() === date.getFullYear()){
-                        tmpValue += Number(graphType.generateData(trans, budget))
+                        tmpValue += Number(graphType.generateData(trans))
                     }
 
                 })
@@ -162,4 +163,75 @@ export class Year implements TimeType {
     }
 }
 
+
+export class DateRange implements TimeType  {
+
+    startDate = null
+    endDate = null
+
+    constructor(start, end) {
+        this.startDate = start
+        if (end === null) {
+            this.endDate = start
+        } else {
+            this.endDate = end
+        }
+    }
+
+    generateDates() {
+        let days = []
+        let now = new Date(this.startDate)
+        let end = new Date(this.endDate)
+
+        days.push(this.startDate)
+
+        while(now < end) {
+            days.push(now)
+            now = new Date(now.setDate(now.getDate() + 1))
+        }
+
+        return days
+    }
+
+    generateDatesToString() {
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        let days = this.generateDates()
+        let daysString = []
+        days.forEach((date) => {
+            if (days[0] === date && days[0].getDate() != 1) {
+                daysString.push(date.getDate() + monthNames[date.getMonth()])
+            }
+            if (date.getDate() === 1) {
+                daysString.push(date.getDate() + monthNames[date.getMonth()])
+            } else {
+                daysString.push(date.getDate())
+            }
+        })
+        return daysString
+    }
+
+    generateData(transactions, graphType, budget) {
+        let months = this.generateDates()
+        let data = []
+
+        if (graphType.isBalance()) {
+            return graphType.calculateBalance(transactions, months, budget)
+        } else {
+            months.map((date) => {
+                let tmpValue = 0
+                transactions.map((trans) => {
+                    if (
+                    new Date(trans.date).getDate() === date.getDate() &&
+                    new Date(trans.date).getMonth() === date.getMonth() &&
+                    new Date(trans.date).getFullYear() === date.getFullYear()){
+                        tmpValue += graphType.generateData(trans)
+                    }
+                })
+                data.push(tmpValue)
+            })
+        }
+        
+        return data
+    }
+}
 

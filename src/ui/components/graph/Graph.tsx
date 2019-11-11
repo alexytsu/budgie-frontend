@@ -1,10 +1,15 @@
 import * as React from "react";
 import { Component } from "react";
 import { ExpenseGraph, IncomeGraph, BalanceGraph } from './GraphType'
-import { Week, Month, Year } from './TimeType'
+import { Week, Month, Year, DateRange } from './TimeType'
+
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
+import { DateRangePicker } from "react-dates";
 
 import { TransactionResp } from "../../../util/types/TransactionTypes";
 import { observer } from "mobx-react";
+import { endBatch } from "mobx/lib/internal";
 
 export interface BudgetGraphProps {
     transactions: TransactionResp[];
@@ -20,7 +25,12 @@ export default class Graph extends Component< BudgetGraphProps, any> {
             transactions: this.props.transactions,
             budget: this.props.budget,
             graphtype: new BalanceGraph(),
-            timeline: new Week()
+            timeline: new Week(),
+
+            startDate: null,
+            endDate: null,
+            focusedInput: null
+
         }
     }
 
@@ -31,7 +41,6 @@ export default class Graph extends Component< BudgetGraphProps, any> {
             this.setState({timeline: new Month()})
         } else if (type === "year") {
             this.setState({timeline: new Year()})
-
         }
     }
 
@@ -45,13 +54,26 @@ export default class Graph extends Component< BudgetGraphProps, any> {
         }
     }
 
+    setRange(start, end) {
+        console.log("start and end")
+        console.log(start._d)
+        if (end != null) {
+            console.log(end._d)
+            this.setState({timeline: new DateRange(start._d, end._d)})
+        }
+        
+        this.setState({startDate: start})
+        this.setState({endDate: end})
+
+    }
+
     render() {
         const {timeline, graphtype, transactions, budget} = this.state;
         return (
             <div>
                 {graphtype.render(timeline.generateDatesToString(), timeline.generateData(transactions, graphtype, budget))}
                 
-                <div className="inline-block relative w-64 ml-10">
+                <div className="inline-block relative w-64 ml-14">
                     <select className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-2 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                     onChange={(e) => {
                         this.setTimelineStrategy(e.target.value)
@@ -59,12 +81,29 @@ export default class Graph extends Component< BudgetGraphProps, any> {
                         <option value="week">Week</option>
                         <option value="month">Month</option>
                         <option value="year">Year</option>
+                        
                     </select>
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                         <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                     </div>
                 </div>
-                <div className="inline-block relative w-64 ml-20">
+
+                <div className="ml-14">
+                    <DateRangePicker
+                    isOutsideRange={() => false}
+                    startDateId="startDateID"
+                    endDateId="endDateID"
+                    startDate={this.state.startDate}
+                    endDate={this.state.endDate}
+                    onDatesChange={({ startDate, endDate }) => {
+                        this.setRange(startDate, endDate)
+                    }}
+                    focusedInput={this.state.focusedInput}
+                    onFocusChange={focusedInput => this.setState({ focusedInput })} 
+                    />
+                </div>
+
+                <div className="inline-block relative w-64 ml-14">
                     <select className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-2 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                     onChange={(e) => {
                         this.setGraphStrategy(e.target.value)
@@ -72,6 +111,7 @@ export default class Graph extends Component< BudgetGraphProps, any> {
                         <option value="balance">Balance</option>
                         <option value="expense">Expense</option>
                         <option value="income">Income</option>
+                        
                     </select>
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                         <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
