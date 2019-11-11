@@ -57,10 +57,10 @@ export default class TransactionForm extends Component<
 		e.preventDefault(); // suppress the form being posted
 
 		const newTransaction: CreateTransactionReq = {
-			amount: this.state.amount,
+			amount: this.state.amount * (this.state.type === TransactionType.INCOME ? -1: 1),
 			category: this.state.category,
 			date: this.state.date.format("YYYY-MM-DD"),
-			operation: this.state.type
+			description: this.state.description,
 		};
 
 		try {
@@ -180,6 +180,7 @@ export default class TransactionForm extends Component<
 							}}
 							id="transaction_date"
 							numberOfMonths={1}
+							isOutsideRange={()=>false}
 						></SingleDatePicker>
 					</div>
 

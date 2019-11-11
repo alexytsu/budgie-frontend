@@ -24,6 +24,7 @@ interface TransactionListProps {
 	transactions: TransactionResp[];
 }
 
+@observer
 export class TransactionListDateSections extends Component<
 	TransactionListProps,
 	{}

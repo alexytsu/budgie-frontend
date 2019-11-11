@@ -15,6 +15,7 @@ import BudgetScene from "./ui/scenes/BudgetScene";
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import './custom.css';
+import CategoryScene from "./ui/scenes/CategoryScene";
 
 
 const DEBUG = true;
@@ -81,6 +82,9 @@ export default class App extends Component {
 							</Route>
 							<Route path="/budgets">
 								<BudgetScene></BudgetScene>
+							</Route>
+							<Route path="/categories">
+								<CategoryScene/>
 							</Route>
 							<Route path="/">
 								<ProfileScene></ProfileScene>
