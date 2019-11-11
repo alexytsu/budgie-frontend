@@ -125,7 +125,12 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 								.format("DD MMM")
 								.toUpperCase()}
 						</div>
-						<div className={period_colour_bg + " overflow-y-scroll mb-4 h-full rounded-lg shadow px-4"}>
+						<div
+							className={
+								period_colour_bg +
+								" overflow-y-scroll mb-4 h-full rounded-lg shadow px-4"
+							}
+						>
 							{BudgetSceneStore.allTransactionsBudget.length === 0 ? (
 								<div className="my-2">
 									No transactions recorded in this budget
@@ -159,6 +164,7 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 						<AddNewBudgetModal></AddNewBudgetModal>
 					</div>
 					<div className="overflow-y-scroll">
+						{ApplicationStore.getNetWorthOn(moment()) + "/" + ApplicationStore.getAmountBudgetdOn(moment())}
 						{ApplicationStore.budgets_raw.map(b_raw => {
 							const b = apiHelpers.convertBudget(b_raw);
 							if (b.id === BudgetSceneStore.selectedBudgetId) {
