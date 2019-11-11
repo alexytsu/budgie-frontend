@@ -17,7 +17,7 @@ import { ExpenseGraph } from "../components/graph/GraphType";
 import Graph from "../components/graph/Graph";
 import BudgetStories from "../../test/Budget.stories";
 import classNames = require("classnames");
-import { CreateBudgetReq } from "../../util/types/BudgetTypes";
+import { CreateBudgetReq, BudgetPeriod } from "../../util/types/BudgetTypes";
 
 interface BudgetSceneState {
 	selectedBudgetId: number;
@@ -46,10 +46,14 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 			amount: this.state.newAmount,
 			category: BudgetSceneStore.currentBudget.category,
 			startDate: BudgetSceneStore.currentBudget.startDate,
-			endDate: BudgetSceneStore.currentBudget.endDate,
-		}
-		ApplicationStore.updateBudget(UserStore.token, BudgetSceneStore.selectedBudgetId, newBud);
-	}
+			endDate: BudgetSceneStore.currentBudget.endDate
+		};
+		ApplicationStore.updateBudget(
+			UserStore.token,
+			BudgetSceneStore.selectedBudgetId,
+			newBud
+		);
+	};
 
 	render() {
 		const bud = ApplicationStore.budgets_raw.find(
@@ -69,28 +73,50 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 
 			const buttonClass = classNames({
 				"rounded bg-gray-500 text-white p-2": true,
-				"bg-green-600": this.state.newAmount >= budget_disp.spent,
-			})
+				"bg-green-600": this.state.newAmount >= budget_disp.spent
+			});
 
-			if (budget_disp.limit < budget_disp.spent) {
-				fix = (
-					<div className="rounded p-2 my-2 bg-white shadow flex justify-between">
-						<div>
-							<div>Allocate a New Amount:</div>
-						<input name="newAmount" type="number" value={this.state.newAmount} onChange={this.changeHandler}></input>
-						</div>
-						<button  onClick={()=>this.updateBudget()} className={buttonClass}>Save Changes</button>
+			fix = (
+				<div className="rounded p-2 my-2 bg-white shadow flex justify-between">
+					<div>
+						<div>Allocate a New Amount:</div>
+						<input
+							name="newAmount"
+							type="number"
+							value={this.state.newAmount}
+							onChange={this.changeHandler}
+						></input>
 					</div>
-				);
-			}
+					<button onClick={() => this.updateBudget()} className={buttonClass}>
+						Save Changes
+					</button>
+				</div>
+			);
+
+			const period_colour = classNames({
+				"font-bold": true,
+				"text-blue-500": budget_disp.period === BudgetPeriod.PAST,
+				"text-green-500": budget_disp.period === BudgetPeriod.CURRENT,
+				"text-yellow-500": budget_disp.period === BudgetPeriod.FUTURE
+			});
+
+			const period_colour_bg = classNames({
+				"bg-blue-100": budget_disp.period === BudgetPeriod.PAST,
+				"bg-green-100": budget_disp.period === BudgetPeriod.CURRENT,
+				"bg-yellow-1	00": budget_disp.period === BudgetPeriod.FUTURE
+			});
+
+			let period_message = (
+				<div className={period_colour}>{budget_disp.period.toUpperCase()}</div>
+			);
 
 			dashboard = (
 				<div className="h-full flex">
-					<div style={{ minWidth: 250 }} className="flex flex-col mx-2">
+					<div style={{ minWidth: 300 }} className="flex flex-col mx-2">
 						<div className="font-bold text-4xl">
 							{BudgetSceneStore.currentCategory.name}
 						</div>
-						<div className="my-4 font-bold text-lg text-gray-600">
+						<div className="my-4">
 							{moment(bud.startDate)
 								.format("DD MMM")
 								.toUpperCase()}{" "}
@@ -99,7 +125,7 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 								.format("DD MMM")
 								.toUpperCase()}
 						</div>
-						<div className="overflow-y-scroll mb-4 bg-gray-300 h-full rounded-lg shadow px-4">
+						<div className={period_colour_bg + " overflow-y-scroll mb-4 h-full rounded-lg shadow px-4"}>
 							{BudgetSceneStore.allTransactionsBudget.length === 0 ? (
 								<div className="my-2">
 									No transactions recorded in this budget
@@ -111,7 +137,8 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 							)}
 						</div>
 					</div>
-					<div className="flex flex-col mx-2d flex-1">
+					<div className="flex flex-col mx-2 flex-1">
+						{period_message}
 						<Budget selected={true} {...budget_disp}></Budget>
 						{fix}
 						<div className="flex font-semibold py-4">
@@ -126,27 +153,31 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 
 		return (
 			<div className="flex h-full">
-				<div>
-					<h1 className="text-xl mb-4">Budgets</h1>
-					<AddNewBudgetModal></AddNewBudgetModal>
-					{ApplicationStore.budgets_raw.map(b_raw => {
-						const b = apiHelpers.convertBudget(b_raw);
-						if (b.id === BudgetSceneStore.selectedBudgetId) {
-							b.selected = true;
-						}
-						return (
-							<div
-								className="mb-8"
-								key={b.id}
-								onClick={() => {
-									BudgetSceneStore.selectedBudgetId = b.id;
-								}}
-							>
-								<div className="font-semibold">{b.category}</div>
-								<Budget {...b}></Budget>
-							</div>
-						);
-					})}
+				<div className="flex flex-col">
+					<div>
+						<h1 className="text-xl mb-4">Budgets</h1>
+						<AddNewBudgetModal></AddNewBudgetModal>
+					</div>
+					<div className="overflow-y-scroll">
+						{ApplicationStore.budgets_raw.map(b_raw => {
+							const b = apiHelpers.convertBudget(b_raw);
+							if (b.id === BudgetSceneStore.selectedBudgetId) {
+								b.selected = true;
+							}
+							return (
+								<div
+									className="mb-8"
+									key={b.id}
+									onClick={() => {
+										BudgetSceneStore.selectedBudgetId = b.id;
+									}}
+								>
+									<div className="font-semibold">{b.category}</div>
+									<Budget {...b}></Budget>
+								</div>
+							);
+						})}
+					</div>
 				</div>
 				<div className="w-full h-full ml-8">{dashboard}</div>
 			</div>
