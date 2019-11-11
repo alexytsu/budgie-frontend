@@ -38,6 +38,8 @@ export class TransactionListDateSections extends Component<
 			.sort((a, b) => moment(b.date).diff(a.date))
 			.map(tr_raw => apiHelpers.convertTransaction(tr_raw));
 
+		console.log(transactions[0]);
+
 		const sections: TransactionDisplayProps[][] = [];
 		let currentSection: TransactionDisplayProps[] = [];
 		let currentDate = null;
@@ -58,6 +60,8 @@ export class TransactionListDateSections extends Component<
 				currentDate = newDate;
 			}
 		});
+
+		sections.push(currentSection);
 
 		return (
 			<>
@@ -83,7 +87,7 @@ const TransactionDateGroup = observer((props: {
 			<div className="font-bold my-2">{date.format("DD MMM YYYY")}</div>
 			{props.transactions.map(tr => {
 				return (
-					<div key={tr.id} className="py-1">
+					<div key={tr.id}>
 						<Transaction {...tr}></Transaction>
 						{tr.id === ApplicationStore.selectedTransactionId ? (
 							<>
