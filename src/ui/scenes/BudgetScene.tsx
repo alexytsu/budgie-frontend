@@ -101,10 +101,10 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 				"text-yellow-500": budget_disp.period === BudgetPeriod.FUTURE
 			});
 
-			const period_colour_bg = classNames({
-				"bg-blue-100": budget_disp.period === BudgetPeriod.PAST,
-				"bg-green-100": budget_disp.period === BudgetPeriod.CURRENT,
-				"bg-yellow-1	00": budget_disp.period === BudgetPeriod.FUTURE
+			const ledger_styling = classNames({
+				"border-blue-400": budget_disp.period === BudgetPeriod.PAST,
+				"border-green-400": budget_disp.period === BudgetPeriod.CURRENT,
+				"border-yellow-400": budget_disp.period === BudgetPeriod.FUTURE
 			});
 
 			let period_message = (
@@ -128,8 +128,8 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 						</div>
 						<div
 							className={
-								period_colour_bg +
-								" overflow-y-scroll mb-4 h-full rounded-lg shadow px-4"
+								ledger_styling +
+								" border-4 overflow-hidden overflow-y-scroll mb-4 h-full rounded-lg shadow"
 							}
 						>
 							{BudgetSceneStore.allTransactionsBudget.length === 0 ? (
@@ -165,7 +165,9 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 						<AddNewBudgetModal></AddNewBudgetModal>
 					</div>
 					<div className="overflow-y-scroll">
-						{ApplicationStore.getNetWorthOn(moment()) + "/" + ApplicationStore.getAmountBudgetdOn(moment())}
+						{ApplicationStore.getNetWorthOn(moment()) +
+							"/" +
+							ApplicationStore.getAmountBudgetdOn(moment())}
 						{ApplicationStore.budgets_raw.map(b_raw => {
 							const b = apiHelpers.convertBudget(b_raw);
 							if (b.id === BudgetSceneStore.selectedBudgetId) {

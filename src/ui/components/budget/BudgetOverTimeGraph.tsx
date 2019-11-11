@@ -6,6 +6,7 @@ import moment = require("moment");
 import { Line, ChartComponentProps, ChartData } from "react-chartjs-2";
 import ApplicationStore from "../../../stores/ApplicationStore";
 import apiHelpers from "../../../util/api-helpers";
+import { hasListeners } from "mobx/lib/internal";
 
 @observer
 export default class BudgetOverTimeGraph extends Component<{}, {}> {
@@ -50,19 +51,24 @@ export default class BudgetOverTimeGraph extends Component<{}, {}> {
 			labels: dayByDayNetWorth.map(da => da.date),
 			datasets: [
 				{
-					label: "Net Worth",
-					type: "line",
-					data: dayByDayNetWorth.map(da => da.amount),
-					borderColor: "#004497",
-					cubicInterpolationMode: "monotone"
-				},
-				{
 					label: "Budgeted",
 					type: "line",
 					data: dayByDayBudgeted,
 					borderColor: "#974400",
-					cubicInterpolationMode: "monotone"
-				}
+					borderWidth: 1,
+					cubicInterpolationMode: "monotone",
+					pointRadius: 0,
+				},
+				{
+					label: "Net Worth",
+					type: "line",
+					data: dayByDayNetWorth.map(da => da.amount),
+					borderColor: "#004497",
+					backgroundColor: "#eeffff",
+					borderWidth: 1,
+					cubicInterpolationMode: "monotone",
+					pointRadius: 0,
+				},
 			]
 		};
 
@@ -74,7 +80,10 @@ export default class BudgetOverTimeGraph extends Component<{}, {}> {
 						type: "time"
 					}
 				]
-			}
+			},
+			tooltips: {
+				enabled: false,
+			},
 		};
 
 		const chartProps: ChartComponentProps = {
