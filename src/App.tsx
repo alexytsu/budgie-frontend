@@ -11,6 +11,7 @@ import ApplicationStore from "./stores/ApplicationStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDove } from "@fortawesome/free-solid-svg-icons";
 import BudgetScene from "./ui/scenes/BudgetScene";
+import CategoryScene from "./ui/scenes/CategoryScene";
 
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
@@ -81,6 +82,9 @@ export default class App extends Component {
 							</Route>
 							<Route path="/budgets">
 								<BudgetScene></BudgetScene>
+							</Route>
+							<Route path="/categories">
+								<CategoryScene></CategoryScene>
 							</Route>
 							<Route path="/">
 								<ProfileScene></ProfileScene>
