@@ -14,9 +14,11 @@ import {
 	BudgetResp,
 	BudgetDisplayProps,
 	BudgetType,
-	CreateBudgetReq
+	CreateBudgetReq,
+	BudgetPeriod
 } from "./types/BudgetTypes";
 import CategoryStories from "../test/Category.stories";
+import Budget from "../ui/components/budget/Budget";
 
 export interface LoginResp {
 	id: number;
@@ -204,15 +206,30 @@ class ApiHelper {
 			return sum + transaction.amount;
 		}, 0);
 
+
+		// See if the budget is finished, ongoing or upcoming
+		let period = BudgetPeriod.CURRENT;
+
+		const endMoment = moment(b_raw.endDate, "YYYY-MM-DD");
+		const startMoment = moment(b_raw.startDate, "YYYY-MM-DD");
+		const today = moment();
+
+		if (today.isBefore(startMoment, "date")) {
+			period = BudgetPeriod.FUTURE;
+		} else if (today.isAfter(endMoment, "date")) {
+			period = BudgetPeriod.PAST;
+		}
+
 		const b: BudgetDisplayProps = {
 			id: b_raw.id,
 			category: category === undefined ? "Foreign Key Error" : category.name,
-			endDate: moment(b_raw.endDate, "YYYY-MM-DD").toDate(),
-			startDate: moment(b_raw.startDate, "YYYY-MM-DD").toDate(),
+			endDate: endMoment.toDate(),
+			startDate: startMoment.toDate(),
 			limit: b_raw.amount,
 			spent,
 			transactions,
-			type: BudgetType.LIMIT
+			type: BudgetType.LIMIT,
+			period,
 		};
 
 		return b;

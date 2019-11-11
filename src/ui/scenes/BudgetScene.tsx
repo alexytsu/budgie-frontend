@@ -72,7 +72,6 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 				"bg-green-600": this.state.newAmount >= budget_disp.spent,
 			})
 
-			if (budget_disp.limit < budget_disp.spent) {
 				fix = (
 					<div className="rounded p-2 my-2 bg-white shadow flex justify-between">
 						<div>
@@ -82,7 +81,6 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 						<button  onClick={()=>this.updateBudget()} className={buttonClass}>Save Changes</button>
 					</div>
 				);
-			}
 
 			dashboard = (
 				<div className="h-full flex">
@@ -126,9 +124,13 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 
 		return (
 			<div className="flex h-full">
-				<div>
+				<div className="flex flex-col">
+					<div>
 					<h1 className="text-xl mb-4">Budgets</h1>
 					<AddNewBudgetModal></AddNewBudgetModal>
+
+					</div>
+					<div className="overflow-y-scroll">
 					{ApplicationStore.budgets_raw.map(b_raw => {
 						const b = apiHelpers.convertBudget(b_raw);
 						if (b.id === BudgetSceneStore.selectedBudgetId) {
@@ -147,6 +149,8 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 							</div>
 						);
 					})}
+
+					</div>
 				</div>
 				<div className="w-full h-full ml-8">{dashboard}</div>
 			</div>
