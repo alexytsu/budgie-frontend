@@ -22,7 +22,7 @@ export default class Transaction extends Component<
 
 		const transactionClass = classNames({
 			'bg-white border-l-4 border-solid rounded-lg p-2 flex flex-row justify-between shadow': true,
-			'border-green-600': this.props.type === TransactionType.INCOME,
+			'border-green-600 bg-green-100': this.props.type === TransactionType.INCOME,
 			'border-red-600': this.props.type === TransactionType.EXPENSE,
 		})
 
@@ -33,7 +33,7 @@ export default class Transaction extends Component<
 		return (
 			<div className={transactionClass}>
 				<div>
-					<div className="font-bold text-xs text-black">${this.props.amount.toFixed(2)}</div>
+					<div className="font-bold text-xs text-black">${Math.abs(this.props.amount).toFixed(2)}</div>
 					<div className="font-semibold text-xs text-gray-900">{this.props.account}</div>
 				</div>
 				<div>
