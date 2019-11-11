@@ -74,7 +74,7 @@ export class TransactionListDateSections extends Component<
 	}
 }
 
-const TransactionDateGroup = (props: {
+const TransactionDateGroup = observer((props: {
 	transactions: TransactionDisplayProps[];
 }) => {
 	const date = moment(props.transactions[0].date);
@@ -85,9 +85,29 @@ const TransactionDateGroup = (props: {
 				return (
 					<div key={tr.id} className="py-1">
 						<Transaction {...tr}></Transaction>
+						{tr.id === ApplicationStore.selectedTransactionId ? (
+							<>
+								<button
+								className="m-1 bg-red-600 text-white rounded p-1 text-xs"
+									onClick={() => {
+										ApplicationStore.deleteSelectedTransaction(UserStore.token);
+									}}
+								>
+									Delete
+								</button>
+								<button
+								className="m-1 mt-2 bg-teal-600 text-white rounded p-1 text-xs"
+									onClick={() => {
+										ApplicationStore.clearSelectedTransaction();
+									}}
+								>
+									Clear
+								</button>
+							</>
+						) : null}
 					</div>
 				);
 			})}
 		</>
 	);
-};
+});

@@ -100,24 +100,6 @@ export default class LedgerScene extends Component<{}, LedgerSceneState> {
 				<div className="w-full ml-4">
 					<h1 className="text-xl">New Transaction</h1>
 					<TransactionForm></TransactionForm>
-					{ApplicationStore.transactionIsSelected ? (
-						<>
-							<button
-								onClick={() => {
-									ApplicationStore.deleteSelectedTransaction(UserStore.token);
-								}}
-							>
-								Delete
-							</button>
-							<button
-								onClick={() => {
-									ApplicationStore.clearSelectedTransaction();
-								}}
-							>
-								Clear
-							</button>
-						</>
-					) : null}
 				</div>
 			</div>
 		);
