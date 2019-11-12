@@ -22,8 +22,8 @@ export interface TransactionDisplayProps {
 export interface CreateTransactionReq {
     amount: number;
     date: string;
-    operation: TransactionType;
     category: number;
+    description: string;
 }
 
 
@@ -34,5 +34,6 @@ export interface TransactionResp {
     operation: TransactionType;
     category: number;
     user: number;
+    description: string;
 }
 

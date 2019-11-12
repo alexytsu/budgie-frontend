@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import Budget from "../ui/components/budget/Budget";
-import { BudgetDisplayProps, BudgetType } from "../util/types/BudgetTypes";
+import { BudgetDisplayProps, BudgetType, BudgetPeriod } from "../util/types/BudgetTypes";
 import BudgetScene from "../ui/scenes/BudgetScene";
 import AddNewBudgetModal from "../ui/components/budget/AddNewBudgetModal";
 
@@ -16,6 +16,7 @@ const emptyBudgetProps: BudgetDisplayProps = {
   startDate: new Date(2019, 9, 1),
   type: BudgetType.LIMIT,
   transactions: [],
+  period: BudgetPeriod.CURRENT,
 }
 
 export const emptyBudget = () => (
@@ -31,6 +32,7 @@ const underSpentBudgetProps: BudgetDisplayProps = {
   startDate: new Date(2019, 9, 1),
   type: BudgetType.LIMIT,
   transactions: [],
+  period: BudgetPeriod.CURRENT,
 }
 
 export const underSpentBudget = () => (
@@ -46,6 +48,7 @@ const overSpentBudgetProps: BudgetDisplayProps = {
   startDate: new Date(2019, 9, 1),
   type: BudgetType.LIMIT,
   transactions: [],
+  period: BudgetPeriod.CURRENT,
 }
 
 export const overSpentBudget = () => (

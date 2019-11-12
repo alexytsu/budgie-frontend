@@ -16,6 +16,8 @@ import CategoryScene from "./ui/scenes/CategoryScene";
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import './custom.css';
+import CategoryScene from "./ui/scenes/CategoryScene";
+import BudgetOverTimeGraph from "./ui/components/budget/BudgetOverTimeGraph";
 
 
 const DEBUG = true;
@@ -24,9 +26,9 @@ const DEBUG = true;
 export default class App extends Component {
 	async componentDidMount() {
 		if (DEBUG) {
-			const loginResp = await apiHelpers.loginUser("joe", "password");
+			const loginResp = await apiHelpers.loginUser("userdemo", "password");
 			UserStore.token = loginResp.token;
-			UserStore.username = "Joe";
+			UserStore.username = "userdemo";
 			ApplicationStore.init(loginResp.token);
 		}
 	}
@@ -75,7 +77,7 @@ export default class App extends Component {
 					</div>
 
 					<div className="bg-gray-100 rounded-lg rounded-r-none w-full pt-6 px-8 h-full">
-						<div className="container mx-auto h-full">
+						<div className="mx-auto h-full">
 						<Switch>
 							<Route path="/transactions">
 								<LedgerScene></LedgerScene>
@@ -86,11 +88,13 @@ export default class App extends Component {
 							<Route path="/categories">
 								<CategoryScene></CategoryScene>
 							</Route>
+							<Route path="/accounts">
+								<BudgetOverTimeGraph></BudgetOverTimeGraph>
+							</Route>
 							<Route path="/">
 								<ProfileScene></ProfileScene>
 							</Route>
 						</Switch>
-
 						</div>
 					</div>
 				</Router>

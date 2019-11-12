@@ -38,6 +38,8 @@ export class TransactionListDateSections extends Component<
 			.sort((a, b) => moment(b.date).diff(a.date))
 			.map(tr_raw => apiHelpers.convertTransaction(tr_raw));
 
+		console.log(transactions[0]);
+
 		const sections: TransactionDisplayProps[][] = [];
 		let currentSection: TransactionDisplayProps[] = [];
 		let currentDate = null;
@@ -46,6 +48,7 @@ export class TransactionListDateSections extends Component<
 			if (currentSection.length == 0) {
 				currentSection.push(tr);
 				currentDate = moment(tr.date);
+				return;
 			}
 
 			const newDate = moment(tr.date);
@@ -58,12 +61,14 @@ export class TransactionListDateSections extends Component<
 			}
 		});
 
+		sections.push(currentSection);
+
 		return (
 			<>
 				{sections.map(tr_group => {
 					return (
 						<TransactionDateGroup
-							key={tr_group[0].date.toDateString()}
+							key={tr_group[0].id}
 							transactions={tr_group}
 						></TransactionDateGroup>
 					);
@@ -73,20 +78,40 @@ export class TransactionListDateSections extends Component<
 	}
 }
 
-const TransactionDateGroup = (props: {
+const TransactionDateGroup = observer((props: {
 	transactions: TransactionDisplayProps[];
 }) => {
 	const date = moment(props.transactions[0].date);
 	return (
 		<>
-			<div className="font-bold my-2">{date.format("DD MMM YYYY")}</div>
+			<div className="font-semibold w-full bg-purple-900 text-pink-100 p-2 shadow">{date.format("DD MMM YYYY")}</div>
 			{props.transactions.map(tr => {
 				return (
-					<div key={tr.id} className="py-1">
+					<div key={tr.id}>
 						<Transaction {...tr}></Transaction>
+						{tr.id === ApplicationStore.selectedTransactionId ? (
+							<div className="flex justify-end" >
+								<button
+								className="m-1 text-blue-400 p-1 px-2 text-xs"
+									onClick={() => {
+										ApplicationStore.clearSelectedTransaction();
+									}}
+								>
+									Clear
+								</button>
+								<button
+								className="m-1 bg-red-600 text-white p-1 px-2 text-xs"
+									onClick={() => {
+										ApplicationStore.deleteSelectedTransaction(UserStore.token);
+									}}
+								>
+									Delete
+								</button>
+							</div>
+						) : null}
 					</div>
 				);
 			})}
 		</>
 	);
-};
+});
