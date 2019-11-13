@@ -13,6 +13,9 @@ class BudgetSceneStore {
 	@observable
 	selectedBudgetId:number = 1;
 
+	@observable
+	modalOpen: boolean = false;
+
 	constructor() {
 		this.appData = ApplicationStore;
 	}
@@ -20,6 +23,14 @@ class BudgetSceneStore {
 	@computed
 	get allTransactionsCategory() {
 		return this.appData.transactions_raw.filter(tr => tr.category === this.currentCategoryId);
+	}
+
+	openModal() {
+		this.modalOpen = true;
+	}
+
+	closeModal() {
+		this.modalOpen = false;
 	}
 
 	@computed

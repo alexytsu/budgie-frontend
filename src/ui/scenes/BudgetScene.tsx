@@ -1,6 +1,9 @@
 import * as React from "react";
 import { Component } from "react";
 import { observer } from "mobx-react";
+import * as ReactModal from "react-modal";
+
+ReactModal.setAppElement("#root");
 
 import apiHelpers from "../../util/api-helpers";
 import "../tailwind.css";
@@ -111,16 +114,19 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 						<div className="font-bold text-4xl">
 							{BudgetSceneStore.currentCategory.name}
 						</div>
-						<div className="my-4">
+						<div className="font-semibold text-gray-700 mt-4">
+						TRANSACTIONS
+						</div>
+						<div className="mb-2">
 							{moment(bud.startDate)
 								.format("DD MMM")
 								.toUpperCase()}{" "}
 							-{" "}
 							{moment(bud.endDate)
 								.format("DD MMM")
-								.toUpperCase()}
+								.toUpperCase()} 
 						</div>
-						<div className="bg-white overflow-hidden overflow-y-scroll mb-4 h-full rounded-lg shadow">
+						<div className="overflow-hidden overflow-y-scroll mb-4 h-full">
 							{BudgetSceneStore.allTransactionsBudget.length === 0 ? (
 								<div className="my-2">
 									No transactions recorded in this budget
@@ -148,15 +154,25 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 
 		return (
 			<div className="flex h-full">
-				<div className="flex flex-col">
+				<ReactModal
+					isOpen={BudgetSceneStore.modalOpen}
+					onRequestClose={() => BudgetSceneStore.closeModal()}
+				>
+					<AddNewBudgetModal></AddNewBudgetModal>
+					<BudgetOverTimeGraph></BudgetOverTimeGraph>
+				</ReactModal>
+				<div style={{ minWidth: 250 }} className="flex flex-col mr-8">
 					<div>
 						<h1 className="text-xl mb-4">Budgets</h1>
-						<AddNewBudgetModal></AddNewBudgetModal>
 					</div>
+					<AmountBudgetedSummary date={moment()}></AmountBudgetedSummary>
+					<button
+						className="p-1 rounded bg-green-700 text-white my-4 font-semibold"
+						onClick={() => BudgetSceneStore.openModal()}
+					>
+						Add Budget
+					</button>
 					<div className="overflow-y-scroll">
-						{ApplicationStore.getNetWorthOn(moment()) +
-							"/" +
-							ApplicationStore.getAmountBudgetdOn(moment())}
 						{ApplicationStore.budgets_raw.map(b_raw => {
 							const b = apiHelpers.convertBudget(b_raw);
 							if (b.id === BudgetSceneStore.selectedBudgetId) {
@@ -182,3 +198,52 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 		);
 	}
 }
+
+const AmountBudgetedSummary = observer((props: { date: moment.Moment }) => {
+	return (
+		<div className="text-sm rounded border px-2">
+			<table className="my-2 table-auto text-right text-sm w-full">
+				<thead>
+					<tr className="text-gray-700">
+						<th className="text-left pb-2">Date</th>
+						<th className="pb-2">Budgeted</th>
+						<th className="pb-2">Net Worth</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td className="text-left">Today</td>
+						<td>{ApplicationStore.getAmountBudgetdOn(moment())}</td>
+						<td>{ApplicationStore.getNetWorthOn(moment())}</td>
+					</tr>
+					<tr>
+						<td className="text-left py-2">Last Month</td>
+						<td className="py-2">
+							{ApplicationStore.getAmountBudgetdOn(
+								moment()
+									.subtract(1, "month")
+									.startOf("month")
+							)}
+						</td>
+						<td className="py-2">
+							{ApplicationStore.getNetWorthOn(
+								moment()
+									.subtract(1, "month")
+									.startOf("month")
+							)}
+						</td>
+					</tr>
+					{moment().isSame(props.date, "day") ? null : (
+						<tr>
+							<td className="text-left py-2">
+								Selected Date: {props.date.format("(DD MMM)")}
+							</td>
+							<td className="py-2">{ApplicationStore.getAmountBudgetdOn(moment())}</td>
+							<td className="py-2">{ApplicationStore.getNetWorthOn(moment())}</td>
+						</tr>
+					)}
+				</tbody>
+			</table>
+		</div>
+	);
+});

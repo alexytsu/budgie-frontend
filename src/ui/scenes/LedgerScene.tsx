@@ -95,7 +95,7 @@ export default class LedgerScene extends Component<{}, LedgerSceneState> {
 							</button>
 						</div>
 					</div>
-					<div className="w-full h-full flex flex-col overflow-y-scroll mt-4 mr-4 rounded-lg shadow-lg">
+					<div className="w-full h-full flex flex-col overflow-y-scroll mt-4 mr-4 rounded-lg px-2 bg-white">
 						<TransactionListDateSections
 							transactions={shownTransactions}
 						></TransactionListDateSections>

@@ -84,7 +84,7 @@ const TransactionDateGroup = observer((props: {
 	const date = moment(props.transactions[0].date);
 	return (
 		<>
-			<div className="font-semibold w-full bg-purple-900 text-pink-100 p-2 shadow">{date.format("DD MMM YYYY")}</div>
+			<div className="font-semibold w-full text-gray-700 py-2">{date.format("DD MMM YYYY")}</div>
 			{props.transactions.map(tr => {
 				return (
 					<div key={tr.id}>

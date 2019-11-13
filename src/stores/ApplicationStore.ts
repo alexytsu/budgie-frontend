@@ -66,13 +66,13 @@ class ApplicationStore implements AppStore {
 		this.selectedTransactionId = 0;
 	}
 
-	getNetWorthOn = computedFn(function getNetWorthOn(date: moment.Moment) {
+	getNetWorthOn = computedFn(function getNetWorthOn(date: moment.Moment): number {
 		const transactions = this.transactions_raw.filter(tr =>
 			moment(tr.date).isSameOrBefore(date)
 		);
 		return transactions.reduce((sum, tr) => {
-			return sum -= tr.amount;
-		}, 0);
+			return sum -= tr.amount.toFixed(2);
+		}, 0).toFixed(2);
 	});
 
 	getAmountBudgetdOn = computedFn(function getAmountBudgetdOn(date: moment.Moment) {
@@ -82,7 +82,7 @@ class ApplicationStore implements AppStore {
 			return sum += b.amount;
 		}, 0);
 
-		return budgeted;
+		return budgeted.toFixed(2);
 	});
 
 	createCategory = async (token: string, category: CreateCategoryReq) => {

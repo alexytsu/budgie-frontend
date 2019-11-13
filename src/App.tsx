@@ -38,7 +38,7 @@ class App extends Component {
 		}
 
 		return (
-			<div className="bg-purple-800 h-screen flex">
+			<div className="bg-blue-900 h-screen flex">
 				<Router>
 					<div className="shadow text-white flex-column justify-between p-6">
 						<div className="flex">
