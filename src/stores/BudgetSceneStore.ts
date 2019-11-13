@@ -22,6 +22,9 @@ class BudgetSceneStore {
 	@observable
 	newBudget: CreateBudgetReq;
 
+	@observable
+	newBudgetDatePickerFocus : "startDate" | "endDate" | null = null;
+
 	constructor() {
 		this.appData = ApplicationStore;
 	}
