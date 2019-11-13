@@ -8,12 +8,16 @@ import apiHelpers from "../util/api-helpers";
 import { BudgetResp, CreateBudgetReq } from "../util/types/BudgetTypes";
 import { computedFn } from "mobx-utils";
 import moment = require("moment");
+import Budget from "../ui/components/budget/Budget";
 
 export interface AppStore {
 	transactions_raw: TransactionResp[];
 	categories_raw: CategoryResp[];
 	budgets_raw: BudgetResp[];
 	selectedCategoryId: number;
+
+	createBudget(token: string, budget:CreateBudgetReq): Promise<BudgetResp>;
+	updateBudget(token: string, id: number, budget: CreateBudgetReq): Promise<BudgetResp>;
 }
 
 class ApplicationStore implements AppStore {
@@ -40,11 +44,12 @@ class ApplicationStore implements AppStore {
 		this.transactions_raw = await apiHelpers.getAllTransactions(token);
 	};
 
-	createBudget = async (token: string, budget: CreateBudgetReq) => {
+	createBudget = async (token: string, budget: CreateBudgetReq):Promise<BudgetResp> => {
 		const b = await apiHelpers.createBudget(token, budget);
 		this.budgets_raw.push(b);
 		return b;
 	};
+
 
 	@computed
 	get netWorth() {
@@ -131,9 +136,11 @@ class ApplicationStore implements AppStore {
 		token: string,
 		id: number,
 		budgetProps: CreateBudgetReq
-	) => {
-		const cat = await apiHelpers.updateBudget(token, id, budgetProps);
-		this.budgets_raw = await apiHelpers.getAllBudgets(token);
+	): Promise<BudgetResp> => {
+		const bud = await apiHelpers.updateBudget(token, id, budgetProps);
+		this.budgets_raw = this.budgets_raw.filter(b => b.id !== id);
+		this.budgets_raw.push(bud);
+		return bud;
 	};
 
 	deleteTransaction = async (token: string, id: number) => {

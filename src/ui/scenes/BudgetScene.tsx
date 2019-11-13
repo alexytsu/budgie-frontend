@@ -20,8 +20,14 @@ import { ExpenseGraph } from "../components/graph/GraphType";
 import Graph from "../components/graph/Graph";
 import BudgetStories from "../../test/Budget.stories";
 import classNames = require("classnames");
-import { CreateBudgetReq, BudgetPeriod } from "../../util/types/BudgetTypes";
+import {
+	CreateBudgetReq,
+	BudgetPeriod,
+	BudgetDisplayProps,
+	BudgetResp
+} from "../../util/types/BudgetTypes";
 import BudgetOverTimeGraph from "../components/budget/BudgetOverTimeGraph";
+import { number } from "prop-types";
 
 interface BudgetSceneState {
 	selectedBudgetId: number;
@@ -64,94 +70,6 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 			b => b.id === BudgetSceneStore.selectedBudgetId
 		);
 
-		let dashboard = <></>;
-
-		if (bud !== undefined) {
-			const budget_disp = apiHelpers.convertBudget(bud);
-			const graphData = {
-				transactions: BudgetSceneStore.allTransactionsBudget,
-				budget: budget_disp.limit
-			};
-
-			let fix = null;
-
-			const buttonClass = classNames({
-				"rounded bg-gray-500 text-white p-2": true,
-				"bg-green-600": this.state.newAmount >= budget_disp.spent
-			});
-
-			fix = (
-				<div className="rounded p-2 my-2 bg-white shadow flex justify-between">
-					<div>
-						<div>Allocate a New Amount:</div>
-						<input
-							name="newAmount"
-							type="number"
-							value={this.state.newAmount}
-							onChange={this.changeHandler}
-						></input>
-					</div>
-					<button onClick={() => this.updateBudget()} className={buttonClass}>
-						Save Changes
-					</button>
-				</div>
-			);
-
-			const period_colour = classNames({
-				"font-bold": true,
-				"text-blue-500": budget_disp.period === BudgetPeriod.PAST,
-				"text-green-500": budget_disp.period === BudgetPeriod.CURRENT,
-				"text-yellow-500": budget_disp.period === BudgetPeriod.FUTURE
-			});
-
-			let period_message = (
-				<div className={period_colour}>{budget_disp.period.toUpperCase()}</div>
-			);
-
-			dashboard = (
-				<div className="h-full flex">
-					<div style={{ minWidth: 300 }} className="flex flex-col mx-2">
-						<div className="font-bold text-4xl">
-							{BudgetSceneStore.currentCategory.name}
-						</div>
-						<div className="font-semibold text-gray-700 mt-4">
-						TRANSACTIONS
-						</div>
-						<div className="mb-2">
-							{moment(bud.startDate)
-								.format("DD MMM")
-								.toUpperCase()}{" "}
-							-{" "}
-							{moment(bud.endDate)
-								.format("DD MMM")
-								.toUpperCase()} 
-						</div>
-						<div className="overflow-hidden overflow-y-scroll mb-4 h-full">
-							{BudgetSceneStore.allTransactionsBudget.length === 0 ? (
-								<div className="my-2">
-									No transactions recorded in this budget
-								</div>
-							) : (
-								<TransactionListDateSections
-									transactions={BudgetSceneStore.allTransactionsBudget}
-								></TransactionListDateSections>
-							)}
-						</div>
-					</div>
-					<div className="flex flex-col mx-2 flex-1">
-						{period_message}
-						<Budget selected={true} {...budget_disp}></Budget>
-						{fix}
-						<div className="flex font-semibold py-4">
-							<div>${budget_disp.spent.toFixed(2)} / </div>
-							<div>${budget_disp.limit.toFixed(2)}</div>
-						</div>
-						<Graph {...graphData}></Graph>
-					</div>
-				</div>
-			);
-		}
-
 		return (
 			<div className="flex h-full">
 				<ReactModal
@@ -167,10 +85,10 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 					</div>
 					<AmountBudgetedSummary date={moment()}></AmountBudgetedSummary>
 					<button
-						className="p-1 rounded bg-green-700 text-white my-4 font-semibold"
+						className="p-1 rounded bg-blue-800 text-white my-4 font-semibold"
 						onClick={() => BudgetSceneStore.openModal()}
 					>
-						Add Budget
+						Manage...
 					</button>
 					<div className="overflow-y-scroll">
 						{ApplicationStore.budgets_raw.map(b_raw => {
@@ -183,7 +101,7 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 									className="mb-8"
 									key={b.id}
 									onClick={() => {
-										BudgetSceneStore.selectedBudgetId = b.id;
+										BudgetSceneStore.selectBudget(b_raw);
 									}}
 								>
 									<div className="font-semibold">{b.category}</div>
@@ -193,7 +111,14 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 						})}
 					</div>
 				</div>
-				<div className="w-full h-full ml-8">{dashboard}</div>
+				<div className="w-full h-full ml-8">
+					{bud !== undefined ? (
+						<Dashboard
+							budget={bud}
+							budget_disp={apiHelpers.convertBudget(bud)}
+						></Dashboard>
+					) : null}
+				</div>
 			</div>
 		);
 	}
@@ -238,12 +163,114 @@ const AmountBudgetedSummary = observer((props: { date: moment.Moment }) => {
 							<td className="text-left py-2">
 								Selected Date: {props.date.format("(DD MMM)")}
 							</td>
-							<td className="py-2">{ApplicationStore.getAmountBudgetdOn(moment())}</td>
-							<td className="py-2">{ApplicationStore.getNetWorthOn(moment())}</td>
+							<td className="py-2">
+								{ApplicationStore.getAmountBudgetdOn(moment())}
+							</td>
+							<td className="py-2">
+								{ApplicationStore.getNetWorthOn(moment())}
+							</td>
 						</tr>
 					)}
 				</tbody>
 			</table>
+		</div>
+	);
+});
+
+interface DashboardProps {
+	budget: BudgetResp;
+	budget_disp: BudgetDisplayProps;
+}
+
+const Dashboard = observer((props: DashboardProps) => {
+	// sync some store state to the current budget
+
+	const buttonClass = classNames({
+		"rounded bg-gray-500 text-white p-2": true,
+		"bg-green-600": BudgetSceneStore.newBudget.amount >= props.budget_disp.spent
+	});
+	const graphData = {
+		transactions: BudgetSceneStore.allTransactionsBudget,
+		budget: props.budget_disp.limit
+	};
+	const period_colour = classNames({
+		"font-bold": true,
+		"text-blue-500": props.budget_disp.period === BudgetPeriod.PAST,
+		"text-green-500": props.budget_disp.period === BudgetPeriod.CURRENT,
+		"text-yellow-500": props.budget_disp.period === BudgetPeriod.FUTURE
+	});
+	let period_message = (
+		<div className={period_colour}>
+			{props.budget_disp.period.toUpperCase()}
+		</div>
+	);
+
+	const Edit = (
+		<div className="p-2 my-2 bg-white shadow flex justify-between">
+			<label htmlFor="newAmount">Amount: </label>
+			<input
+				name="newAmount"
+				className="rounded bg-gray-200 px-4 text-right"
+				type="number"
+				value={BudgetSceneStore.newBudget.amount}
+				onChange={e => {
+					const newAmount = parseFloat(e.target.value);
+					BudgetSceneStore.newBudget.amount = isNaN(newAmount)
+						? undefined
+					: apiHelpers.round(newAmount, 2);
+				}}
+			></input>
+			<button
+				onClick={() => BudgetSceneStore.updateBudget(UserStore.token)}
+				className={buttonClass}
+			>
+				Save Budget
+			</button>
+		</div>
+	);
+
+	return (
+		<div className="h-full flex">
+			<div style={{ minWidth: 500 }} className="flex flex-col">
+				<div className="font-bold text-4xl">
+					{BudgetSceneStore.currentCategory.name}
+				</div>
+				<div className="font-semibold text-gray-700 mt-4">TRANSACTIONS</div>
+				<div className="mb-2">
+					{moment(props.budget_disp.startDate)
+						.format("DD MMM")
+						.toUpperCase()}{" "}
+					-{" "}
+					{moment(props.budget_disp.endDate)
+						.format("DD MMM")
+						.toUpperCase()}
+				</div>
+				<div className="overflow-hidden overflow-y-scroll mb-4 h-full">
+					{BudgetSceneStore.allTransactionsBudget.length === 0 ? (
+						<div className="my-2">No transactions recorded in this budget</div>
+					) : (
+						<TransactionListDateSections
+							transactions={BudgetSceneStore.allTransactionsBudget}
+						></TransactionListDateSections>
+					)}
+				</div>
+			</div>
+			<div className="flex flex-col mx-2 flex-1">
+				{period_message}
+				<Budget
+					selected={true}
+					{...apiHelpers.convertBudget({
+						id: props.budget.id,
+						...BudgetSceneStore.newBudget
+					})}
+				></Budget>
+				{Edit}
+				<div className="flex font-semibold py-4">
+					<div>${props.budget_disp.spent.toFixed(2)} / </div>
+					<div>${props.budget_disp.limit.toFixed(2)}</div>
+				</div>
+				<Graph {...graphData}></Graph>
+			</div>
 		</div>
 	);
 });

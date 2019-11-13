@@ -4,6 +4,8 @@ import ApiHelper from "../util/api-helpers";
 import ApplicationStore, { AppStore } from "./ApplicationStore";
 import Budget from "../ui/components/budget/Budget";
 import moment = require("moment");
+import { CreateBudgetReq, BudgetResp } from "../util/types/BudgetTypes";
+import apiHelpers from "../util/api-helpers";
 
 
 class BudgetSceneStore {
@@ -15,6 +17,9 @@ class BudgetSceneStore {
 
 	@observable
 	modalOpen: boolean = false;
+
+	@observable
+	newBudget: CreateBudgetReq;
 
 	constructor() {
 		this.appData = ApplicationStore;
@@ -58,6 +63,20 @@ class BudgetSceneStore {
 		const budget = this.appData.budgets_raw.find(b => b.id === this.selectedBudgetId);
 
 		return budget === undefined ? 0:budget.category;
+	}
+
+	selectBudget(b: BudgetResp) {
+		this.selectedBudgetId = b.id;
+		this.newBudget = {
+			amount: b.amount,
+			category: b.category,
+			endDate: b.endDate,
+			startDate: b.startDate,
+		}
+	}
+
+	updateBudget(token: string) {
+		this.appData.updateBudget(token, this.selectedBudgetId, this.newBudget);
 	}
 
 
