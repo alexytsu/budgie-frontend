@@ -39,8 +39,14 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 	constructor(props) {
 		super(props);
 
+		let firstId = 0;
+
+		if (ApplicationStore.budgets_raw.length > 0) {
+			firstId = ApplicationStore.budgets_raw[0].id;
+		}
+
 		this.state = {
-			selectedBudgetId: 1,
+			selectedBudgetId: firstId,
 			newAmount: 0
 		};
 	}
@@ -206,27 +212,30 @@ const Dashboard = observer((props: DashboardProps) => {
 	);
 
 	const Edit = (
-		<div className="p-2 my-2 bg-white shadow flex justify-between">
-			<label htmlFor="newAmount">Amount: </label>
-			<input
-				name="newAmount"
-				className="rounded bg-gray-200 px-4 text-right"
-				type="number"
-				value={BudgetSceneStore.newBudget.amount}
-				onChange={e => {
-					const newAmount = parseFloat(e.target.value);
-					BudgetSceneStore.newBudget.amount = isNaN(newAmount)
-						? undefined
-					: apiHelpers.round(newAmount, 2);
-				}}
-			></input>
-			<button
-				onClick={() => BudgetSceneStore.updateBudget(UserStore.token)}
-				className={buttonClass}
-			>
-				Save Budget
-			</button>
-		</div>
+		<div className="p-2 my-2 bg-white shadow">
+				<div>
+					<div>Amount:</div>
+					<input
+						id="newAmount"
+						name="newAmount"
+						className="rounded bg-gray-200 p-2 text-right"
+						type="number"
+						value={BudgetSceneStore.newBudget.amount}
+						onChange={e => {
+							const newAmount = parseFloat(e.target.value);
+							BudgetSceneStore.newBudget.amount = isNaN(newAmount)
+								? undefined
+								: apiHelpers.round(newAmount, 2);
+						}}
+					></input>
+				</div>
+				<button
+					onClick={() => BudgetSceneStore.updateBudget(UserStore.token)}
+					className={buttonClass}
+				>
+					Save Budget
+				</button>
+			</div>
 	);
 
 	return (

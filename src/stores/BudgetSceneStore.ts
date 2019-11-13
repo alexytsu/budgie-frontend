@@ -10,6 +10,7 @@ import apiHelpers from "../util/api-helpers";
 
 class BudgetSceneStore {
 
+	@observable
 	appData: AppStore;
 
 	@observable
