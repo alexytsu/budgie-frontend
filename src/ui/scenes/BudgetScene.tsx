@@ -101,12 +101,6 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 				"text-yellow-500": budget_disp.period === BudgetPeriod.FUTURE
 			});
 
-			const ledger_styling = classNames({
-				"border-blue-400": budget_disp.period === BudgetPeriod.PAST,
-				"border-green-400": budget_disp.period === BudgetPeriod.CURRENT,
-				"border-yellow-400": budget_disp.period === BudgetPeriod.FUTURE
-			});
-
 			let period_message = (
 				<div className={period_colour}>{budget_disp.period.toUpperCase()}</div>
 			);
@@ -126,12 +120,7 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 								.format("DD MMM")
 								.toUpperCase()}
 						</div>
-						<div
-							className={
-								ledger_styling +
-								" border-4 overflow-hidden overflow-y-scroll mb-4 h-full rounded-lg shadow"
-							}
-						>
+						<div className="bg-white overflow-hidden overflow-y-scroll mb-4 h-full rounded-lg shadow">
 							{BudgetSceneStore.allTransactionsBudget.length === 0 ? (
 								<div className="my-2">
 									No transactions recorded in this budget

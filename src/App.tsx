@@ -4,7 +4,7 @@ import LoginScene from "./ui/scenes/LoginScene";
 import UserStore from "./stores/UserStore";
 import ProfileScene from "./ui/scenes/ProfileScene";
 import { observer } from "mobx-react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, withRouter } from "react-router-dom";
 import LedgerScene from "./ui/scenes/LedgerScene";
 import apiHelpers from "./util/api-helpers";
 import ApplicationStore from "./stores/ApplicationStore";
@@ -22,7 +22,7 @@ import BudgetOverTimeGraph from "./ui/components/budget/BudgetOverTimeGraph";
 const DEBUG = true;
 
 @observer
-export default class App extends Component {
+class App extends Component {
 	async componentDidMount() {
 		if (DEBUG) {
 			const loginResp = await apiHelpers.loginUser("userdemo", "password");
@@ -101,3 +101,4 @@ export default class App extends Component {
 		);
 	}
 }
+export default App;
