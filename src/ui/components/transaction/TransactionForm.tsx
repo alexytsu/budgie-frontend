@@ -88,7 +88,7 @@ export default class TransactionForm extends Component<
 
 		const formStyle = classNames({
 			"w-full bg-white border-2 border-solid shadow-md rounded-lg p-8": true,
-			"border-purple-200": !this.state.warning,
+			"border-indigo-200": !this.state.warning,
 			"border-red-400": this.state.warning
 		});
 
@@ -113,7 +113,7 @@ export default class TransactionForm extends Component<
 					<select
 						onChange={this.changeHandler}
 						name="category"
-						className="my-2 p-2 text-sm rounded bg-purple-100 shadow block"
+						className="my-2 p-2 text-sm rounded bg-indigo-100 shadow block"
 					>
 						{ApplicationStore.categories_raw.map(cat => {
 							return (
@@ -126,7 +126,7 @@ export default class TransactionForm extends Component<
 					<select
 						onChange={this.changeHandler}
 						name="account"
-						className="my-2 p-2 text-sm rounded bg-purple-100 shadow block"
+						className="my-2 p-2 text-sm rounded bg-indigo-100 shadow block"
 					>
 						{ApplicationStore.categories_raw.map(acc => {
 							return (

@@ -3,33 +3,27 @@ import { Component } from "react";
 import { observer } from "mobx-react";
 import * as ReactModal from "react-modal";
 import { DateRangePicker } from "react-dates";
-
-ReactModal.setAppElement("#root");
+import classNames = require("classnames");
+import moment = require("moment");
 
 import apiHelpers from "../../util/api-helpers";
-import "../tailwind.css";
 import UserStore from "../../stores/UserStore";
 import ApplicationStore from "../../stores/ApplicationStore";
+import BudgetSceneStore from "../../stores/BudgetSceneStore";
+
 import Budget from "../components/budget/Budget";
 import AddNewBudgetModal from "../components/budget/AddNewBudgetModal";
-import Transaction from "../components/transaction/Transaction";
-import BudgetSceneStore from "../../stores/BudgetSceneStore";
 import { TransactionListDateSections } from "../components/transaction/TransactionLists";
-
-import moment = require("moment");
-import { ExpenseGraph } from "../components/graph/GraphType";
 import Graph from "../components/graph/Graph";
-import BudgetStories from "../../test/Budget.stories";
-import classNames = require("classnames");
 import {
 	CreateBudgetReq,
 	BudgetPeriod,
 	BudgetDisplayProps,
 	BudgetResp
 } from "../../util/types/BudgetTypes";
-import BudgetOverTimeGraph from "../components/budget/BudgetOverTimeGraph";
-import { number } from "prop-types";
-import { start } from "repl";
+import NetWorthVsBudgetedGraph from "../components/graphs/NetWorthVsBudgetedGraph";
+
+ReactModal.setAppElement("#root");
 
 interface BudgetSceneState {
 	selectedBudgetId: number;
@@ -85,7 +79,7 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 					onRequestClose={() => BudgetSceneStore.closeModal()}
 				>
 					<AddNewBudgetModal></AddNewBudgetModal>
-					<BudgetOverTimeGraph></BudgetOverTimeGraph>
+					<NetWorthVsBudgetedGraph></NetWorthVsBudgetedGraph>
 				</ReactModal>
 				<div style={{ minWidth: 250 }} className="flex flex-col mr-8">
 					<div>
@@ -245,16 +239,16 @@ const Dashboard = observer((props: DashboardProps) => {
 						...BudgetSceneStore.newBudget
 					})}
 				></Budget>
+				<div className="flex font-semibold py-4">
+					<div>${props.budget_disp.spent.toFixed(2)} / </div>
+					<div>${props.budget_disp.limit.toFixed(2)}</div>
+				</div>
 				<Edit
 					budget_disp={apiHelpers.convertBudget({
 						id: props.budget.id,
 						...BudgetSceneStore.newBudget
 					})}
 				/>
-				<div className="flex font-semibold py-4">
-					<div>${props.budget_disp.spent.toFixed(2)} / </div>
-					<div>${props.budget_disp.limit.toFixed(2)}</div>
-				</div>
 				<Graph {...graphData}></Graph>
 			</div>
 		</div>
@@ -263,13 +257,13 @@ const Dashboard = observer((props: DashboardProps) => {
 
 const Edit = observer((props: { budget_disp: BudgetDisplayProps }) => {
 	const buttonColor = classNames({
-		"bg-green-600":
+		"text-green-600":
 			BudgetSceneStore.newBudget.amount >= props.budget_disp.spent,
-		"bg-red-600": BudgetSceneStore.newBudget.amount < props.budget_disp.spent
+		"text-red-600": BudgetSceneStore.newBudget.amount < props.budget_disp.spent
 	});
 	return (
-		<div className="my-2 bg-white shadow flex justify-between">
-			<div className="bg-blue-900 p-6">
+		<div className="my-2 bg-white shadow flex justify-between rounded">
+			<div className="bg-blue-900 p-6 rounded-l">
 				<h2 className="font-semibold text-blue-100 text-lg">
 					Edit this budget
 				</h2>
@@ -279,19 +273,25 @@ const Edit = observer((props: { budget_disp: BudgetDisplayProps }) => {
 			</div>
 			<div className="p-6">
 				<div>Amount</div>
-				<input
-					id="newAmount"
-					name="newAmount"
-					className="rounded bg-gray-200 p-2 text-right mb-2"
-					type="number"
-					value={BudgetSceneStore.newBudget.amount}
-					onChange={e => {
-						const newAmount = parseFloat(e.target.value);
-						BudgetSceneStore.newBudget.amount = isNaN(newAmount)
-							? undefined
-							: apiHelpers.round(newAmount, 2);
-					}}
-				></input>
+				<div className="flex items-center mb-2">
+					<div className="text-sm font-semibold text-gray-600 pr-2">$</div>
+					<div className="bg-gray-200 rounded overflow-hidden flex items-center">
+						<input
+							id="newAmount"
+							name="newAmount"
+							className="bg-gray-200 p-2 w-full"
+							type="number"
+							value={BudgetSceneStore.newBudget.amount}
+							onChange={e => {
+								const newAmount = parseFloat(e.target.value);
+								BudgetSceneStore.newBudget.amount = isNaN(newAmount)
+									? undefined
+									: apiHelpers.round(newAmount, 2);
+							}}
+						/>
+						<div onClick={()=>BudgetSceneStore.autobalance()} className="text-xs bg-gray-200 pr-2 text-blue-500 hover:text-blue-700 cursor-pointer">Autobalance</div>
+					</div>
+				</div>
 				<div>Period</div>
 				<DateRangePicker
 					startDateId="newBudgetStartDate"
@@ -312,14 +312,21 @@ const Edit = observer((props: { budget_disp: BudgetDisplayProps }) => {
 					numberOfMonths={2}
 				/>
 			</div>
-			<div
-				className={buttonColor + " h-full flex flex-col justify-center px-2"}
-			>
+			<div className="h-full flex flex-col justify-center mr-4">
 				<div
 					onClick={() => BudgetSceneStore.updateBudget(UserStore.token)}
-					className="text-white text-center mx-auto"
+					className="text-red-700 text-center mx-auto h-full text-sm font-semibold flex flex-col justify-center"
 				>
-					Save Budget
+					<div>DELETE</div>
+				</div>
+				<div
+					onClick={() => BudgetSceneStore.updateBudget(UserStore.token)}
+					className={
+						buttonColor +
+						" text-white text-center mx-auto h-full text-sm font-semibold flex flex-col justify-center"
+					}
+				>
+					<div>SAVE</div>
 				</div>
 			</div>
 		</div>

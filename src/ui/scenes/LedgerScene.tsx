@@ -49,8 +49,8 @@ export default class LedgerScene extends Component<{}, LedgerSceneState> {
 
 	render() {
 		const filterButtonStyle = classNames({
-			"px-4 my-1 rounded-lg shadow font-semibold mx-auto": true,
-			"bg-green-100": !this.state.filteringDate,
+			"px-4 py-2 rounded-lg shadow font-semibold mx-auto": true,
+			"bg-indigo-100": !this.state.filteringDate,
 			"bg-red-100": this.state.filteringDate
 		});
 
@@ -95,7 +95,7 @@ export default class LedgerScene extends Component<{}, LedgerSceneState> {
 							</button>
 						</div>
 					</div>
-					<div className="w-full h-full flex flex-col overflow-y-scroll mt-4 mr-4 rounded-lg px-2 bg-white">
+					<div className="w-full h-full flex flex-col overflow-y-scroll mt-4 mr-4 rounded-lg px-4 bg-white">
 						<TransactionListDateSections
 							transactions={shownTransactions}
 						></TransactionListDateSections>

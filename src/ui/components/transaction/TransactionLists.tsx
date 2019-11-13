@@ -31,7 +31,7 @@ export class TransactionListDateSections extends Component<
 > {
 	render() {
 		if (this.props.transactions.length == 0) {
-			return <div className="font-bold text-lg">Empty</div>;
+			return <div className="text-lg text-center my-6 text-gray-500">Empty</div>;
 		}
 
 		const transactions = this.props.transactions

@@ -16,7 +16,7 @@ import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import './custom.css';
 import CategoryScene from "./ui/scenes/CategoryScene";
-import BudgetOverTimeGraph from "./ui/components/budget/BudgetOverTimeGraph";
+import NetWorthVsBudgetedGraph from "./ui/components/graphs/NetWorthVsBudgetedGraph";
 
 
 const DEBUG = true;
@@ -88,7 +88,7 @@ class App extends Component {
 								<CategoryScene/>
 							</Route>
 							<Route path="/accounts">
-								<BudgetOverTimeGraph></BudgetOverTimeGraph>
+								<NetWorthVsBudgetedGraph></NetWorthVsBudgetedGraph>
 							</Route>
 							<Route path="/">
 								<ProfileScene></ProfileScene>

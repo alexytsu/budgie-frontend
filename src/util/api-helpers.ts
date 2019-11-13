@@ -21,6 +21,11 @@ import CategoryStories from "../test/Category.stories";
 import Budget from "../ui/components/budget/Budget";
 import { faSortAmountDown } from "@fortawesome/free-solid-svg-icons";
 
+export type MoneyAtMoment = {
+		date: moment.Moment;
+		amount: number;
+}
+
 export interface LoginResp {
 	id: number;
 	token: string;
@@ -153,8 +158,8 @@ class ApiHelper {
 		);
 	};
 
-	round = (value: number, decimals: number):number => {
-		return Math.round((value * 100))/(100);
+	round = (value: number, decimals: number): number => {
+		return Math.round(value * 100) / 100;
 	};
 
 	updateBudget = async (
@@ -274,6 +279,24 @@ class ApiHelper {
 		};
 
 		return tr;
+	};
+
+	transactionRunningSum = (acc: MoneyAtMoment[], tr: TransactionDisplayProps | TransactionResp, granularity: moment.unitOfTime.StartOf) => {
+		const len = acc.length;
+		if (len === 0) {
+			acc.push({
+				date: moment(tr.date),
+				amount: -tr.amount
+			});
+		} else if (acc[len - 1].date.isSame(moment(tr.date), granularity)) {
+			acc[len - 1].amount -= tr.amount;
+		} else {
+			acc.push({
+				date: moment(tr.date),
+				amount: acc[len - 1].amount - tr.amount
+			});
+		}
+		return acc;
 	};
 }
 

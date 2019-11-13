@@ -42,7 +42,7 @@ export default class extends Component<BudgetDisplayProps, {}> {
 		const current = this.props.period === BudgetPeriod.CURRENT;
 
 		const dateProgressStyle = classNames({
-			"h-full border-green-600 border-solid border-2 rounded-lg bg-green-100":
+			"h-full border-green-600 border-solid rounded-lg bg-green-100":
 				!spendingAheadOfSchedule && current,
 			"h-full border-red-700 border-solid border-t-2 border-l-2 border-b-2 rounded-lg rounded-r-none bg-green-600 absolute":
 				spendingAheadOfSchedule && current,
@@ -53,7 +53,7 @@ export default class extends Component<BudgetDisplayProps, {}> {
 		const spendingProgressStyle = classNames({
 			"h-full bg-green-600 overflow-visible absolute rounded-l-lg":
 				!spendingAheadOfSchedule && !spendingExceededLimit && current,
-			"h-full bg-red-300 border-solid border-2 border-red-700 rounded-lg absolute overflow-visible":
+			"h-full bg-red-300 border-solid border-2 border-red-700 rounded-l-lg absolute overflow-visible":
 				spendingAheadOfSchedule && !spendingExceededLimit && current,
 			"h-full bg-blue-600 overflow-visible absolute rounded-l-lg":
 				this.props.period === BudgetPeriod.PAST
