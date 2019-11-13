@@ -38,8 +38,6 @@ export class TransactionListDateSections extends Component<
 			.sort((a, b) => moment(b.date).diff(a.date))
 			.map(tr_raw => apiHelpers.convertTransaction(tr_raw));
 
-		console.log(transactions[0]);
-
 		const sections: TransactionDisplayProps[][] = [];
 		let currentSection: TransactionDisplayProps[] = [];
 		let currentDate = null;

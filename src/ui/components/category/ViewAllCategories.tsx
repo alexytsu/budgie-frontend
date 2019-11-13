@@ -39,7 +39,6 @@ export default class ViewAllCategories extends Component<
 
 	@action
 	select(id) {
-		console.log(id.target.value);
 		ApplicationStore.selectedCategoryId = parseInt(id.target.value);
 	}
 

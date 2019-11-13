@@ -15,8 +15,6 @@ export default class BudgetOverTimeGraph extends Component<{}, {}> {
 			.map(tr => apiHelpers.convertTransaction(tr))
 			.sort((a, b) => moment(a.date).diff(b.date));
 
-		console.log(transactions);
-
 		type dayAmount = {
 			date: moment.Moment;
 			amount: number;
@@ -27,7 +25,6 @@ export default class BudgetOverTimeGraph extends Component<{}, {}> {
 		const dayByDayNetWorth: dayAmount[] = transactions.reduce((acc, tr) => {
 			const len = acc.length;
 			if (len === 0) {
-				console.log(tr.date);
 				acc.push({
 					date: moment(tr.date),
 					amount: -tr.amount
