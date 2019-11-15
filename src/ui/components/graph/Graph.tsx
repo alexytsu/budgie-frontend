@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Component } from "react";
 import { ExpenseGraph, IncomeGraph, BalanceGraph } from './GraphType'
-import { Week, Month, Year, DateRange } from './TimeType'
+import { Month, DateRange } from './TimeType'
 
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
@@ -25,7 +25,7 @@ export default class Graph extends Component< BudgetGraphProps, any> {
             transactions: this.props.transactions,
             budget: this.props.budget,
             graphtype: new BalanceGraph(),
-            timeline: new Week(),
+            timeline: new Month(),
 
             startDate: null,
             endDate: null,
@@ -35,12 +35,9 @@ export default class Graph extends Component< BudgetGraphProps, any> {
     }
 
     setTimelineStrategy(type) {
-        if (type === "week") {
-            this.setState({timeline: new Week()})
-        } else if (type === "month") {
+        
+        if (type === "month") {
             this.setState({timeline: new Month()})
-        } else if (type === "year") {
-            this.setState({timeline: new Year()})
         }
     }
 
@@ -73,7 +70,7 @@ export default class Graph extends Component< BudgetGraphProps, any> {
             <div>
                 {graphtype.render(timeline.generateDatesToString(), timeline.generateData(transactions, graphtype, budget))}
                 
-                <div className="inline-block relative w-64 ml-14">
+                {/* <div className="inline-block relative w-64 ml-14">
                     <select className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-2 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                     onChange={(e) => {
                         this.setTimelineStrategy(e.target.value)
@@ -86,7 +83,7 @@ export default class Graph extends Component< BudgetGraphProps, any> {
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                         <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                     </div>
-                </div>
+                </div> */}
 
                 <div className="ml-14">
                     <DateRangePicker
