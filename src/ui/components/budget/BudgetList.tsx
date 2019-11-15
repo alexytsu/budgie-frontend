@@ -34,7 +34,7 @@ export const BudgetList = observer(() => {
 			if (existingGroup !== undefined) {
 				existingGroup.budgets.push({ disp: budget_disp, raw: budget });
 			} else {
-				groupList.push({
+				const group: BudgetGroup = {
 					currentlySelected: 0,
 					budgets: [
 						{
@@ -44,7 +44,8 @@ export const BudgetList = observer(() => {
 					],
 					name: budget_disp.category,
 					category: budget.category
-				});
+				};
+				groupList.push(group);
 			}
 
 			return groupList;
@@ -62,6 +63,7 @@ export const BudgetList = observer(() => {
 		});
 	});
 
+	// sort alphabetically
 	budgetsGrouped.sort((a, b) => {
 		return a.name.localeCompare(b.name);
 	});
@@ -96,7 +98,11 @@ export const BudgetList = observer(() => {
 				</div>
 				<Slider {...sliderSettings}>
 					{group.budgets.map(bud => (
-						<Budget key={bud.disp.id} {...bud.disp} selected={bud.disp.id === BudgetSceneStore.selectedBudgetId}></Budget>
+						<Budget
+							key={bud.disp.id}
+							{...bud.disp}
+							selected={bud.disp.id === BudgetSceneStore.selectedBudgetId}
+						></Budget>
 					))}
 				</Slider>
 			</div>

@@ -1,12 +1,13 @@
-import * as React from "react";
 import { observable, computed, autorun } from "mobx";
-import ApiHelper from "../util/api-helpers";
 import ApplicationStore, { AppStore } from "./ApplicationStore";
-import Budget from "../ui/components/budget/Budget";
 import moment = require("moment");
-import { CreateBudgetReq, BudgetResp } from "../util/types/BudgetTypes";
+import {
+	CreateBudgetReq,
+	BudgetResp,
+	BudgetPeriod,
+	BudgetSuggestions
+} from "../util/types/BudgetTypes";
 import apiHelpers from "../util/api-helpers";
-import { start } from "repl";
 
 class BudgetSceneStore {
 	@observable
@@ -109,7 +110,7 @@ class BudgetSceneStore {
 				);
 			});
 		}
-		return (this.appData.budgets_raw);
+		return this.appData.budgets_raw;
 	}
 
 	selectBudget(b: BudgetResp) {
@@ -130,19 +131,47 @@ class BudgetSceneStore {
 		this.appData.deleteBudget(token, this.selectedBudgetId);
 	}
 
-	autobalance() {
-		const spent = apiHelpers.convertBudget(this.currentBudget).spent;
-		const ratio =
-			moment().diff(
-				moment(this.currentBudget.startDate, "YYYY-MM-DD"),
-				"days"
-			) /
-			moment(this.currentBudget.endDate, "YYYY-MM-DD").diff(
-				moment(this.currentBudget.startDate, "YYYY-MM-DD"),
-				"days"
-			);
+	getSuggestions(): BudgetSuggestions {
+		const oldStart = moment(this.currentBudget.startDate, "YYYY-MM-DD");
+		const oldEnd = moment(this.currentBudget.endDate, "YYYY-MM-DD");
+		const period = oldEnd.diff(oldStart, "days");
+		const previousStart = moment(this.currentBudget.startDate, "YYYY-MM-DD").subtract(period+1, "days");
 
-		this.newBudget.amount = Math.ceil(spent / ratio);
+		const previousSpent = this.allTransactionsCategory
+			.filter(tr => {
+				return moment(tr.date, "YYYY-MM-DD").isBetween(previousStart, oldStart, "date", "[)")
+			})
+			.reduce((sum, tr) => {
+				return (sum += tr.amount);
+			}, 0);
+
+		const ret: BudgetSuggestions = {
+			previousAmount: previousSpent,
+			previousDateStart: previousStart,
+			previousDateEnd: oldStart.subtract(1, "day"),	
+		};
+
+		return ret;
+	}
+
+	autobalance() {
+		const budget = apiHelpers.convertBudget(this.currentBudget);
+		const spent = budget.spent;
+		if (budget.period === BudgetPeriod.CURRENT) {
+			const ratio =
+				moment().diff(
+					moment(this.currentBudget.startDate, "YYYY-MM-DD"),
+					"days"
+				) /
+				moment(this.currentBudget.endDate, "YYYY-MM-DD").diff(
+					moment(this.currentBudget.startDate, "YYYY-MM-DD"),
+					"days"
+				);
+
+			this.newBudget.amount = Math.ceil(spent / ratio);
+		} else if (budget.period === BudgetPeriod.PAST) {
+			this.newBudget.amount = budget.spent;
+		}
 	}
 }
 

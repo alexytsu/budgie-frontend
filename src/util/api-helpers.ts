@@ -234,9 +234,9 @@ class ApiHelper {
 			)
 			.map(tr_raw => this.convertTransaction(tr_raw));
 
-		const spent: number = transactions.reduce((sum: number, transaction) => {
+		const spent: number = this.round(transactions.reduce((sum: number, transaction) => {
 			return sum + transaction.amount;
-		}, 0);
+		}, 0), 2);
 
 		// See if the budget is finished, ongoing or upcoming
 		let period = BudgetPeriod.CURRENT;
