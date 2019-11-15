@@ -223,7 +223,7 @@ const Dashboard = observer((props: DashboardProps) => {
 						.format("DD MMM")
 						.toUpperCase()}
 				</div>
-				<div className="overflow-hidden overflow-y-scroll mb-4 h-full">
+				<div className="overflow-hidden overflow-y-scroll h-full">
 					{BudgetSceneStore.allTransactionsBudget.length === 0 ? (
 						<div className="my-2">No transactions recorded in this budget</div>
 					) : (

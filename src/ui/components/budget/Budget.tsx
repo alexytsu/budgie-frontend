@@ -7,7 +7,6 @@ import {
 	BudgetDisplayProps,
 	BudgetPeriod
 } from "../../../util/types/BudgetTypes";
-import "../../tailwind.css";
 
 export default class extends Component<BudgetDisplayProps, {}> {
 	render() {
@@ -62,7 +61,7 @@ export default class extends Component<BudgetDisplayProps, {}> {
 		const budgetStyle = classNames({
 			"rounded-lg shadow relative h-10 flex overflow-hidden": true,
 			"shadow-lg border": this.props.selected,
-			"m-2": !this.props.selected,
+			"": !this.props.selected,
 			"bg-white": current,
 			"bg-red-200 py-2": spendingExceededLimit,
 			"bg-yellow-200": this.props.period === BudgetPeriod.FUTURE

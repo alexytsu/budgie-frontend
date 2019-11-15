@@ -3,7 +3,6 @@ import { Component } from "react";
 import { observer } from "mobx-react";
 
 import apiHelpers from "../../util/api-helpers";
-import "../tailwind.css";
 import UserStore from "../../stores/UserStore";
 import ApplicationStore from "../../stores/ApplicationStore";
 import Transaction from "../components/transaction/Transaction";

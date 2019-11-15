@@ -12,7 +12,6 @@ import {
 } from "../../../util/types/TransactionTypes";
 
 import "../../styles.css";
-import "../../tailwind.css";
 import ApplicationStore from "../../../stores/ApplicationStore";
 import UserStore from "../../../stores/UserStore";
 import moment = require("moment");

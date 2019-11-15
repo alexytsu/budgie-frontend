@@ -15,6 +15,7 @@ import BudgetScene from "./ui/scenes/BudgetScene";
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import './custom.css';
+
 import CategoryScene from "./ui/scenes/CategoryScene";
 import NetWorthVsBudgetedGraph from "./ui/components/graphs/NetWorthVsBudgetedGraph";
 

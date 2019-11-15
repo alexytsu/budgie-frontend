@@ -3,7 +3,6 @@ import { Component } from "react";
 import { observer } from "mobx-react";
 
 import apiHelpers from "../../util/api-helpers";
-import "../tailwind.css";
 import UserStore from "../../stores/UserStore";
 import classNames = require("classnames");
 import ApplicationStore from "../../stores/ApplicationStore";

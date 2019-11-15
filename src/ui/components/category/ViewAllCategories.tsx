@@ -6,7 +6,6 @@ import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 import { DateRangePicker } from "react-dates";
 
-import "../../tailwind.css";
 import apiHelpers from "../../../util/api-helpers";
 import UserStore from "../../../stores/UserStore";
 import ApplicationStore from "../../../stores/ApplicationStore";

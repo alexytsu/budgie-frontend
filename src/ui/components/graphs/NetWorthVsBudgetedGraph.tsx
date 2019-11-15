@@ -22,7 +22,10 @@ export default class NetWorthVsBudgetedGraph extends Component<{}, {}> {
 
 		const initial: dayAmount[] = [];
 
-		const dayByDayNetWorth: dayAmount[] = transactions.reduce((acc, tr) => apiHelpers.transactionRunningSum(acc, tr, "date"), initial);
+		const dayByDayNetWorth: dayAmount[] = transactions.reduce(
+			(acc, tr) => apiHelpers.transactionRunningSum(acc, tr, "date"),
+			initial
+		);
 
 		const dayByDayBudgeted = dayByDayNetWorth.map(da => {
 			return ApplicationStore.getAmountBudgetdOn(da.date);
@@ -39,7 +42,7 @@ export default class NetWorthVsBudgetedGraph extends Component<{}, {}> {
 					backgroundColor: "#FED7E2",
 					borderWidth: 2,
 					cubicInterpolationMode: "monotone",
-					pointRadius: 0,
+					pointRadius: 0
 				},
 				{
 					label: "Net Worth",
@@ -49,8 +52,8 @@ export default class NetWorthVsBudgetedGraph extends Component<{}, {}> {
 					backgroundColor: "#c6f6d5",
 					borderWidth: 2,
 					cubicInterpolationMode: "monotone",
-					pointRadius: 0,
-				},
+					pointRadius: 0
+				}
 			]
 		};
 
@@ -64,8 +67,8 @@ export default class NetWorthVsBudgetedGraph extends Component<{}, {}> {
 				]
 			},
 			tooltips: {
-				enabled: false,
-			},
+				enabled: false
+			}
 		};
 
 		const chartProps: ChartComponentProps = {

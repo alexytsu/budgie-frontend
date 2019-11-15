@@ -7,7 +7,6 @@ import {
 	TransactionType
 } from "../../../util/types/TransactionTypes";
 
-import "../../tailwind.css";
 import { observer } from "mobx-react";
 import ApplicationStore from "../../../stores/ApplicationStore";
 import moment = require("moment");
