@@ -1,11 +1,12 @@
 import * as React from "react";
-import { observable, computed } from "mobx";
+import { observable, computed, autorun } from "mobx";
 import ApiHelper from "../util/api-helpers";
 import ApplicationStore, { AppStore } from "./ApplicationStore";
 import Budget from "../ui/components/budget/Budget";
 import moment = require("moment");
 import { CreateBudgetReq, BudgetResp } from "../util/types/BudgetTypes";
 import apiHelpers from "../util/api-helpers";
+import { start } from "repl";
 
 class BudgetSceneStore {
 	@observable
@@ -28,10 +29,12 @@ class BudgetSceneStore {
 		focus: "startDate" | "endDate" | null;
 		startDate: moment.Moment;
 		endDate: moment.Moment;
+		filtering: boolean;
 	} = {
 		focus: null,
 		startDate: moment().subtract(1, "year"),
-		endDate: moment()
+		endDate: moment(),
+		filtering: false
 	};
 
 	constructor() {
@@ -88,22 +91,25 @@ class BudgetSceneStore {
 
 	@computed
 	get filteredBudgets(): BudgetResp[] {
-		return this.appData.budgets_raw.filter(bud => {
-			return (
-				moment(bud.startDate, "YYYY-MM-DD").isBetween(
-					this.sceneDatePicker.startDate,
-					this.sceneDatePicker.endDate,
-					"date",
-					"[]"
-				) ||
-				moment(bud.endDate, "YYYY-MM-DD").isBetween(
-					this.sceneDatePicker.startDate,
-					this.sceneDatePicker.endDate,
-					"date",
-					"[]"
-				)
-			);
-		});
+		if (this.sceneDatePicker.filtering) {
+			return this.appData.budgets_raw.filter(bud => {
+				return (
+					moment(bud.startDate, "YYYY-MM-DD").isBetween(
+						this.sceneDatePicker.startDate,
+						this.sceneDatePicker.endDate,
+						"date",
+						"[]"
+					) ||
+					moment(bud.endDate, "YYYY-MM-DD").isBetween(
+						this.sceneDatePicker.startDate,
+						this.sceneDatePicker.endDate,
+						"date",
+						"[]"
+					)
+				);
+			});
+		}
+		return (this.appData.budgets_raw);
 	}
 
 	selectBudget(b: BudgetResp) {
@@ -118,6 +124,10 @@ class BudgetSceneStore {
 
 	updateBudget(token: string) {
 		this.appData.updateBudget(token, this.selectedBudgetId, this.newBudget);
+	}
+
+	deleteBudget(token: string) {
+		this.appData.deleteBudget(token, this.selectedBudgetId);
 	}
 
 	autobalance() {

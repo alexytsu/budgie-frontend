@@ -9,8 +9,6 @@ import {
 } from "../../../util/types/BudgetTypes";
 import moment = require("moment");
 import Slider, { Settings as SliderSettings } from "react-slick";
-import BudgetScene from "../../scenes/BudgetScene";
-import { solarizedDark } from "react-syntax-highlighter/dist/styles/hljs";
 
 interface BudgetGroup {
 	name: string;
@@ -87,15 +85,18 @@ export const BudgetList = observer(() => {
 				}}
 				className="mb-4 mr-2"
 				style={{ height: 150 }}
+				key={group.category}
 			>
 				<div className="font-semibold text-gray-800">{group.name}</div>
 				<div className="flex justify-between mb-1	">
 					<div className="text-xs"> Budgets: {group.budgets.length}</div>{" "}
-					<div className="text-xs">{group.budgets.length > 1 ? "Swipe to see more" : null}</div>
+					<div className="text-xs text-blue-400">
+						{group.budgets.length > 1 ? "Swipe to see more" : null}
+					</div>
 				</div>
 				<Slider {...sliderSettings}>
 					{group.budgets.map(bud => (
-						<Budget {...bud.disp}></Budget>
+						<Budget key={bud.disp.id} {...bud.disp} selected={bud.disp.id === BudgetSceneStore.selectedBudgetId}></Budget>
 					))}
 				</Slider>
 			</div>

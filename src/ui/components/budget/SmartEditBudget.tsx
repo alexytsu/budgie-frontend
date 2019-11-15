@@ -71,7 +71,7 @@ export const SmartEditBudget = observer((props: { budget_disp: BudgetDisplayProp
 				/>
 				<div className="flex mt-2">
 					<div
-						onClick={() => BudgetSceneStore.updateBudget(UserStore.token)}
+						onClick={() => BudgetSceneStore.deleteBudget(UserStore.token)}
 						className="text-red-700 text-center mx-auto h-full text-sm font-semibold flex flex-col justify-center"
 					>
 						<div>DELETE</div>

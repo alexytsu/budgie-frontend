@@ -22,9 +22,9 @@ import Budget from "../ui/components/budget/Budget";
 import { faSortAmountDown } from "@fortawesome/free-solid-svg-icons";
 
 export type MoneyAtMoment = {
-		date: moment.Moment;
-		amount: number;
-}
+	date: moment.Moment;
+	amount: number;
+};
 
 export interface LoginResp {
 	id: number;
@@ -128,6 +128,14 @@ class ApiHelper {
 		});
 
 		return resp.data;
+	};
+
+	deleteBudget = async (token: string, id: number) => {
+		const resp = await axios.delete(API_URL + "/spendingplans/" + id, {
+			headers: {
+				Authorization: "Token " + token
+			}
+		});
 	};
 
 	deleteCategory = async (token: string, id: number) => {
@@ -281,7 +289,11 @@ class ApiHelper {
 		return tr;
 	};
 
-	transactionRunningSum = (acc: MoneyAtMoment[], tr: TransactionDisplayProps | TransactionResp, granularity: moment.unitOfTime.StartOf) => {
+	transactionRunningSum = (
+		acc: MoneyAtMoment[],
+		tr: TransactionDisplayProps | TransactionResp,
+		granularity: moment.unitOfTime.StartOf
+	) => {
 		const len = acc.length;
 		if (len === 0) {
 			acc.push({

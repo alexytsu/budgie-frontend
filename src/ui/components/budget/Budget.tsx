@@ -67,6 +67,11 @@ export default class extends Component<BudgetDisplayProps, {}> {
 			"bg-yellow-200": this.props.period === BudgetPeriod.FUTURE
 		});
 
+		const dateStyle = classNames({
+			"font-bold": this.props.selected,
+			"font-semibold text-gray-600": !this.props.selected,
+		})
+
 		let bar = (
 			<>
 				<div
@@ -99,7 +104,7 @@ export default class extends Component<BudgetDisplayProps, {}> {
 					${limit}
 				</div>
 				<div className={budgetStyle}>{bar}</div>
-				<div className="flex flex-row justify-between">
+				<div className={dateStyle + " flex flex-row justify-between"}>
 					<div className="mt-2 text-xs">
 						{startDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
 					</div>

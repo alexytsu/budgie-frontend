@@ -18,6 +18,7 @@ export interface AppStore {
 
 	createBudget(token: string, budget:CreateBudgetReq): Promise<BudgetResp>;
 	updateBudget(token: string, id: number, budget: CreateBudgetReq): Promise<BudgetResp>;
+	deleteBudget(token: string, id: number);
 }
 
 class ApplicationStore implements AppStore {
@@ -121,11 +122,18 @@ class ApplicationStore implements AppStore {
 		return this.categories_raw;
 	};
 
+	deleteBudget = async (token: string, id: number) => {
+		await apiHelpers.deleteBudget(token, id);
+		const loc = this.budgets_raw.findIndex(b => b.id === id);
+		this.budgets_raw.splice(loc, 1);
+	}
+
 	deleteCategory = async (token: string, id: number) => {
 		await apiHelpers.deleteCategory(token, id);
 		this.categories_raw = await apiHelpers.getAllCategories(token);
 		this.selectedCategoryId = 0;
 	};
+
 
 	updateCategory = async (token: string, id: string, catName: string) => {
 		const cat = await apiHelpers.updateCategory(token, id, catName);
