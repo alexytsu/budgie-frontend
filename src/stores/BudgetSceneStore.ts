@@ -20,7 +20,12 @@ class BudgetSceneStore {
 	modalOpen: boolean = false;
 
 	@observable
-	newBudget: CreateBudgetReq;
+	newBudget: CreateBudgetReq = {
+		amount: 0,
+		category: 0,
+		endDate: "2000-10-10",
+		startDate: "2000-10-10",
+	};
 
 	@observable
 	newBudgetDatePickerFocus: "startDate" | "endDate" | null = null;

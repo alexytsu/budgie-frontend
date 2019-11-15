@@ -39,8 +39,8 @@ export default class ProfileScene extends Component<{}, ProfileSceneState> {
 
 	render() {
 		return (
-			<div className="flex">
-				<div>
+			<div className="flex h-full">
+				<div className="h-full">
 					<h1 className="text-xl">{UserStore.username}</h1>
 
 					<div className="font-bold my-4">Show developer options</div>
@@ -61,37 +61,6 @@ export default class ProfileScene extends Component<{}, ProfileSceneState> {
 					>
 						Logout
 					</button>
-				</div>
-
-				<div className="h-full">
-					<h2 className="font-bold my-4 text-lg">User Data</h2>
-
-					<div className="flex flex-row justify-between h-full">
-						<div>
-							<button
-								onClick={this.retrieveCategories}
-								className="bg-teal-600 text-white py-2 px-8 rounded my-4"
-							>
-								Refresh Categories
-							</button>
-							<ShowCategories
-								categories={ApplicationStore.categories_raw}
-							></ShowCategories>
-						</div>
-						<div className="h-full">
-							<button
-								onClick={this.retrieveTransactions}
-								className="bg-teal-600 text-white py-2 px-8 rounded my-4"
-							>
-								Refresh Transactions
-							</button>
-							<div className="overflow-y-scroll h-full">
-								<ShowTransactions
-									transactions={ApplicationStore.transactions_raw}
-								/>
-							</div>
-						</div>
-					</div>
 				</div>
 			</div>
 		);
