@@ -112,7 +112,7 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 					>
 						Manage...
 					</button>
-					<div className="overflow-y-scroll">
+					<div style={{maxWidth: 250}} className="overflow-y-scroll">
 						<BudgetList></BudgetList>
 					</div>
 				</div>
@@ -209,7 +209,7 @@ const Dashboard = observer((props: DashboardProps) => {
 
 	return (
 		<div className="h-full flex">
-			<div style={{ minWidth: 500 }} className="flex flex-col">
+			<div className="flex flex-col">
 				<div className="font-bold text-4xl">
 					{BudgetSceneStore.currentCategory.name}
 				</div>
@@ -223,7 +223,7 @@ const Dashboard = observer((props: DashboardProps) => {
 						.format("DD MMM")
 						.toUpperCase()}
 				</div>
-				<div className="overflow-hidden overflow-y-scroll h-full">
+				<div className="overflow-hidden overflow-y-scroll h-full mb-4">
 					{BudgetSceneStore.allTransactionsBudget.length === 0 ? (
 						<div className="my-2">No transactions recorded in this budget</div>
 					) : (

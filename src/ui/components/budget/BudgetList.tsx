@@ -64,14 +64,14 @@ export const BudgetList = observer(() => {
 		});
 	});
 
+	budgetsGrouped.sort((a, b) => {
+		return a.name.localeCompare(b.name);
+	});
+
 	// make each budgetGroup a carousel
 	const budgetCarousels = budgetsGrouped.map(group => {
 		const sliderSettings: SliderSettings = {
-			arrows: true,
-			dots: true,
 			infinite: false,
-			focusOnSelect: true,
-			swipeToSlide: false,
 			afterChange: function(index) {
 				group.currentlySelected = index;
 				const budget = group.budgets[group.currentlySelected].raw;
@@ -81,21 +81,26 @@ export const BudgetList = observer(() => {
 
 		return (
 			<div
-				key={group.category}
 				onClick={() => {
-					BudgetSceneStore.selectBudget(group.budgets[group.currentlySelected].raw);
+					const bud = group.budgets[group.currentlySelected].raw;
+					BudgetSceneStore.selectBudget(bud);
 				}}
-				style={{maxHeight: 250, borderWidth: 1, borderStyle: "solid", borderColor: "red" }}
+				className="mb-4 mr-2"
+				style={{ height: 150 }}
 			>
-				<div>{group.category}</div>
+				<div className="font-semibold text-gray-800">{group.name}</div>
+				<div className="flex justify-between mb-1	">
+					<div className="text-xs"> Budgets: {group.budgets.length}</div>{" "}
+					<div className="text-xs">{group.budgets.length > 1 ? "Swipe to see more" : null}</div>
+				</div>
 				<Slider {...sliderSettings}>
 					{group.budgets.map(bud => (
-							<Budget {...bud.disp}></Budget>
+						<Budget {...bud.disp}></Budget>
 					))}
 				</Slider>
 			</div>
 		);
 	});
 
-	return <>{budgetCarousels}</>;
+	return <div>{budgetCarousels}</div>;
 });
