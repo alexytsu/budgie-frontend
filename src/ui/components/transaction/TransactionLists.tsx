@@ -1,10 +1,8 @@
 import * as React from "react";
 import { Component } from "react";
-import classNames from "classnames";
 
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
-import { SingleDatePicker } from "react-dates";
 
 import {
 	TransactionResp,
@@ -19,6 +17,8 @@ import moment = require("moment");
 import { observer } from "mobx-react";
 import apiHelpers from "../../../util/api-helpers";
 import Transaction from "./Transaction";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 interface TransactionListProps {
 	transactions: TransactionResp[];
@@ -103,6 +103,7 @@ const TransactionDateGroup = observer((props: {
 										ApplicationStore.deleteSelectedTransaction(UserStore.token);
 									}}
 								>
+								<FontAwesomeIcon icon={faTrashAlt} className="mr-1 self-center"/>
 									Delete
 								</button>
 							</div>

@@ -22,6 +22,8 @@ import {
 	BudgetResp
 } from "../../util/types/BudgetTypes";
 import NetWorthVsBudgetedGraph from "../components/graphs/NetWorthVsBudgetedGraph";
+import { SmartEditBudget } from "../components/budget/SmartEditBudget";
+import { BudgetList } from "../components/budget/BudgetList";
 
 ReactModal.setAppElement("#root");
 
@@ -86,31 +88,32 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 						<h1 className="text-xl mb-4">Budgets</h1>
 					</div>
 					<AmountBudgetedSummary date={moment()}></AmountBudgetedSummary>
+					<div className="my-2">
+						<DateRangePicker
+							startDate={BudgetSceneStore.sceneDatePicker.startDate}
+							startDateId={"sceneStart"}
+							endDate={BudgetSceneStore.sceneDatePicker.endDate}
+							endDateId={"sceneEnd"}
+							focusedInput={BudgetSceneStore.sceneDatePicker.focus}
+							onFocusChange={calendarFocus => {
+								BudgetSceneStore.sceneDatePicker.focus = calendarFocus;
+							}}
+							onDatesChange={({ startDate, endDate }) => {
+								BudgetSceneStore.sceneDatePicker.startDate = startDate;
+								BudgetSceneStore.sceneDatePicker.endDate = endDate;
+							}}
+							isOutsideRange={() => false}
+							numberOfMonths={2}
+						></DateRangePicker>
+					</div>
 					<button
-						className="p-1 rounded bg-blue-800 text-white my-4 font-semibold"
+						className="p-1 rounded bg-blue-800 text-white my-2 font-semibold"
 						onClick={() => BudgetSceneStore.openModal()}
 					>
 						Manage...
 					</button>
 					<div className="overflow-y-scroll">
-						{ApplicationStore.budgets_raw.map(b_raw => {
-							const b = apiHelpers.convertBudget(b_raw);
-							if (b.id === BudgetSceneStore.selectedBudgetId) {
-								b.selected = true;
-							}
-							return (
-								<div
-									className="mb-8"
-									key={b.id}
-									onClick={() => {
-										BudgetSceneStore.selectBudget(b_raw);
-									}}
-								>
-									<div className="font-semibold">{b.category}</div>
-									<Budget {...b}></Budget>
-								</div>
-							);
-						})}
+						<BudgetList></BudgetList>
 					</div>
 				</div>
 				<div className="w-full h-full ml-8">
@@ -243,92 +246,14 @@ const Dashboard = observer((props: DashboardProps) => {
 					<div>${props.budget_disp.spent.toFixed(2)} / </div>
 					<div>${props.budget_disp.limit.toFixed(2)}</div>
 				</div>
-				<Edit
+				<SmartEditBudget
 					budget_disp={apiHelpers.convertBudget({
 						id: props.budget.id,
 						...BudgetSceneStore.newBudget
 					})}
 				/>
-				<Graph {...graphData}></Graph>
 			</div>
 		</div>
 	);
 });
 
-const Edit = observer((props: { budget_disp: BudgetDisplayProps }) => {
-	const buttonColor = classNames({
-		"text-green-600":
-			BudgetSceneStore.newBudget.amount >= props.budget_disp.spent,
-		"text-red-600": BudgetSceneStore.newBudget.amount < props.budget_disp.spent
-	});
-	return (
-		<div className="my-2 bg-white shadow flex justify-between rounded">
-			<div className="bg-blue-900 p-6 rounded-l">
-				<h2 className="font-semibold text-blue-100 text-lg">
-					Edit this budget
-				</h2>
-				<div className="text-blue-100">
-					Begin editing values to see a live preview of your changes
-				</div>
-			</div>
-			<div className="p-6">
-				<div>Amount</div>
-				<div className="flex items-center mb-2">
-					<div className="text-sm font-semibold text-gray-600 pr-2">$</div>
-					<div className="bg-gray-200 rounded overflow-hidden flex items-center">
-						<input
-							id="newAmount"
-							name="newAmount"
-							className="bg-gray-200 p-2 w-full"
-							type="number"
-							value={BudgetSceneStore.newBudget.amount}
-							onChange={e => {
-								const newAmount = parseFloat(e.target.value);
-								BudgetSceneStore.newBudget.amount = isNaN(newAmount)
-									? undefined
-									: apiHelpers.round(newAmount, 2);
-							}}
-						/>
-						<div onClick={()=>BudgetSceneStore.autobalance()} className="text-xs bg-gray-200 pr-2 text-blue-500 hover:text-blue-700 cursor-pointer">Autobalance</div>
-					</div>
-				</div>
-				<div>Period</div>
-				<DateRangePicker
-					startDateId="newBudgetStartDate"
-					startDate={moment(BudgetSceneStore.newBudget.startDate, "YYYY-MM-DD")}
-					endDateId="newBudgetEndDate"
-					endDate={moment(BudgetSceneStore.newBudget.endDate, "YYYY-MM-DD")}
-					focusedInput={BudgetSceneStore.newBudgetDatePickerFocus}
-					onDatesChange={({ startDate, endDate }) => {
-						BudgetSceneStore.newBudget.startDate = startDate.format(
-							"YYYY-MM-DD"
-						);
-						BudgetSceneStore.newBudget.endDate = endDate.format("YYYY-MM-DD");
-					}}
-					onFocusChange={calendarFocus => {
-						BudgetSceneStore.newBudgetDatePickerFocus = calendarFocus;
-					}}
-					isOutsideRange={() => false}
-					numberOfMonths={2}
-				/>
-			</div>
-			<div className="h-full flex flex-col justify-center mr-4">
-				<div
-					onClick={() => BudgetSceneStore.updateBudget(UserStore.token)}
-					className="text-red-700 text-center mx-auto h-full text-sm font-semibold flex flex-col justify-center"
-				>
-					<div>DELETE</div>
-				</div>
-				<div
-					onClick={() => BudgetSceneStore.updateBudget(UserStore.token)}
-					className={
-						buttonColor +
-						" text-white text-center mx-auto h-full text-sm font-semibold flex flex-col justify-center"
-					}
-				>
-					<div>SAVE</div>
-				</div>
-			</div>
-		</div>
-	);
-});

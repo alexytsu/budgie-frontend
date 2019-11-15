@@ -23,6 +23,17 @@ class BudgetSceneStore {
 	@observable
 	newBudgetDatePickerFocus: "startDate" | "endDate" | null = null;
 
+	@observable
+	sceneDatePicker: {
+		focus: "startDate" | "endDate" | null;
+		startDate: moment.Moment;
+		endDate: moment.Moment;
+	} = {
+		focus: null,
+		startDate: moment().subtract(1, "year"),
+		endDate: moment()
+	};
+
 	constructor() {
 		this.appData = ApplicationStore;
 	}
@@ -75,6 +86,26 @@ class BudgetSceneStore {
 		return budget === undefined ? 0 : budget.category;
 	}
 
+	@computed
+	get filteredBudgets(): BudgetResp[] {
+		return this.appData.budgets_raw.filter(bud => {
+			return (
+				moment(bud.startDate, "YYYY-MM-DD").isBetween(
+					this.sceneDatePicker.startDate,
+					this.sceneDatePicker.endDate,
+					"date",
+					"[]"
+				) ||
+				moment(bud.endDate, "YYYY-MM-DD").isBetween(
+					this.sceneDatePicker.startDate,
+					this.sceneDatePicker.endDate,
+					"date",
+					"[]"
+				)
+			);
+		});
+	}
+
 	selectBudget(b: BudgetResp) {
 		this.selectedBudgetId = b.id;
 		this.newBudget = {
@@ -92,13 +123,16 @@ class BudgetSceneStore {
 	autobalance() {
 		const spent = apiHelpers.convertBudget(this.currentBudget).spent;
 		const ratio =
-			moment().diff(moment(this.currentBudget.startDate, "YYYY-MM-DD"), "days") /
+			moment().diff(
+				moment(this.currentBudget.startDate, "YYYY-MM-DD"),
+				"days"
+			) /
 			moment(this.currentBudget.endDate, "YYYY-MM-DD").diff(
 				moment(this.currentBudget.startDate, "YYYY-MM-DD"),
 				"days"
 			);
 
-			this.newBudget.amount = Math.ceil(spent/ratio);
+		this.newBudget.amount = Math.ceil(spent / ratio);
 	}
 }
 
