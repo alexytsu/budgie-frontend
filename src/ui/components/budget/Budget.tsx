@@ -3,12 +3,21 @@ import { Component } from "react";
 import classNames from "classnames";
 import moment = require("moment");
 
-import { BudgetDisplayProps } from "../../../util/types/BudgetTypes";
-import "../../tailwind.css";
+import {
+	BudgetDisplayProps,
+	BudgetPeriod
+} from "../../../util/types/BudgetTypes";
 
 export default class extends Component<BudgetDisplayProps, {}> {
 	render() {
-		const { category, limit, spent, startDate, endDate } = this.props;
+		const { category, spent, startDate, endDate } = this.props;
+
+		let { limit } = this.props;
+
+		if (limit === undefined) {
+			limit = 0;
+		}
+
 		const midDate = new Date((startDate.getTime() + endDate.getTime()) / 2);
 		const today = new Date();
 
@@ -17,80 +26,95 @@ export default class extends Component<BudgetDisplayProps, {}> {
 			month: "short"
 		};
 
-		const dateProgress =
+		let dateProgress =
 			((today.getTime() - startDate.getTime()) /
 				(endDate.getTime() - startDate.getTime())) *
 			100;
 
-		const spendingProgress = (spent * 100) / limit;
-		const overspent = spendingProgress > dateProgress;
-		const underBudgeted = spent > limit;
+		dateProgress = Math.min(dateProgress, 100);
 
-		const validDate = moment().isBetween(
-			moment(startDate),
-			moment(endDate),
-			"day",
-			"[]"
-		);
-		const valid = !underBudgeted && validDate;
+		let spendingProgress = (spent * 100) / limit;
+
+		const spendingAheadOfSchedule = spendingProgress > dateProgress;
+		const spendingExceededLimit = spent > limit;
+
+		const current = this.props.period === BudgetPeriod.CURRENT;
 
 		const dateProgressStyle = classNames({
-			"h-full border-green-600 border-solid border-2 rounded-lg bg-green-100":
-				!overspent && valid,
+			"h-full border-green-600 border-solid rounded-lg bg-green-100":
+				!spendingAheadOfSchedule && current,
 			"h-full border-red-700 border-solid border-t-2 border-l-2 border-b-2 rounded-lg rounded-r-none bg-green-600 absolute":
-				overspent && valid
+				spendingAheadOfSchedule && current,
+			"h-full border-blue-600 border-solid border-2 rounded-lg bg-blue-100":
+				this.props.period === BudgetPeriod.PAST
 		});
 
 		const spendingProgressStyle = classNames({
 			"h-full bg-green-600 overflow-visible absolute rounded-l-lg":
-				!overspent && valid,
-			"h-full bg-red-300 border-solid border-2 border-red-700 rounded-lg absolute overflow-visible":
-				overspent && valid
+				!spendingAheadOfSchedule && !spendingExceededLimit && current,
+			"h-full bg-red-300 border-solid border-2 border-red-700 rounded-l-lg absolute overflow-visible":
+				spendingAheadOfSchedule && !spendingExceededLimit && current,
+			"h-full bg-blue-600 overflow-visible absolute rounded-l-lg":
+				this.props.period === BudgetPeriod.PAST
 		});
 
 		const budgetStyle = classNames({
-			"rounded-lg shadow-lg relative h-10 flex": true,
-			"bg-white": valid,
-			"bg-red-200 py-2": underBudgeted,
-			"bg-yellow-200": !validDate
+			"rounded-lg shadow relative h-10 flex overflow-hidden": true,
+			"shadow-lg border": this.props.selected,
+			"m-2": !this.props.selected,
+			"bg-white": current,
+			"bg-red-200 py-2": spendingExceededLimit,
+			"bg-yellow-200": this.props.period === BudgetPeriod.FUTURE
 		});
+
+		const dateStyle = classNames({
+			"font-bold": this.props.selected,
+			"font-semibold text-gray-600": !this.props.selected,
+		})
+
+		let bar = (
+			<>
+				<div
+					style={{ width: spendingProgress + "%" }}
+					className={spendingProgressStyle}
+				/>
+				<div
+					style={{ width: dateProgress + "%" }}
+					className={dateProgressStyle}
+				></div>
+			</>
+		);
+
+		if (spendingExceededLimit) {
+			bar = (
+				<div className="w-full flex justify-between px-2">
+					{spendingExceededLimit ? (
+						<div className="font-bold text-red-800">Underfunded</div>
+					) : null}{" "}
+					{spendingExceededLimit ? (
+						<button className="text-blue-800">Fix</button>
+					) : null}
+				</div>
+			);
+		}
 
 		return (
 			<div className="w-full">
 				<div className="text-xs font-bold object-right text-right">
 					${limit}
 				</div>
-				<div className={budgetStyle}>
-					{valid ? (
-						<>
-							<div
-								style={{ width: spendingProgress + "%" }}
-								className={spendingProgressStyle}
-							/>
-							<div
-								style={{ width: dateProgress + "%" }}
-								className={dateProgressStyle}
-							></div>
-						</>
-					) : (
-						<div className="w-full flex justify-between px-2">
-							{underBudgeted ? <div className="font-bold text-red-800">Underfunded</div> : null} {underBudgeted ? <button className="text-blue-800">Fix</button>: null}
-						</div>
-					)}
-				</div>
-				{this.props.selected !== undefined && this.props.selected ? (
-					<div className="flex flex-row justify-between">
-						<div className="mt-2 text-xs">
-							{startDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
-						</div>
-						<div className="mt-2 text-xs">
-							{midDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
-						</div>
-						<div className="mt-2 text-xs">
-							{endDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
-						</div>
+				<div className={budgetStyle}>{bar}</div>
+				<div className={dateStyle + " flex flex-row justify-between"}>
+					<div className="mt-2 text-xs">
+						{startDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
 					</div>
-				) : null}
+					<div className="mt-2 text-xs">
+						{midDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
+					</div>
+					<div className="mt-2 text-xs">
+						{endDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
+					</div>
+				</div>
 			</div>
 		);
 	}

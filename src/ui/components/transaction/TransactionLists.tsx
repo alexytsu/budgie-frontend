@@ -1,10 +1,8 @@
 import * as React from "react";
 import { Component } from "react";
-import classNames from "classnames";
 
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
-import { SingleDatePicker } from "react-dates";
 
 import {
 	TransactionResp,
@@ -12,13 +10,14 @@ import {
 } from "../../../util/types/TransactionTypes";
 
 import "../../styles.css";
-import "../../tailwind.css";
 import ApplicationStore from "../../../stores/ApplicationStore";
 import UserStore from "../../../stores/UserStore";
 import moment = require("moment");
 import { observer } from "mobx-react";
 import apiHelpers from "../../../util/api-helpers";
 import Transaction from "./Transaction";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 interface TransactionListProps {
 	transactions: TransactionResp[];
@@ -31,7 +30,7 @@ export class TransactionListDateSections extends Component<
 > {
 	render() {
 		if (this.props.transactions.length == 0) {
-			return <div className="font-bold text-lg">Empty</div>;
+			return <div className="text-lg text-center my-6 text-gray-500">Empty</div>;
 		}
 
 		const transactions = this.props.transactions
@@ -46,6 +45,7 @@ export class TransactionListDateSections extends Component<
 			if (currentSection.length == 0) {
 				currentSection.push(tr);
 				currentDate = moment(tr.date);
+				return;
 			}
 
 			const newDate = moment(tr.date);
@@ -58,12 +58,14 @@ export class TransactionListDateSections extends Component<
 			}
 		});
 
+		sections.push(currentSection);
+
 		return (
 			<>
 				{sections.map(tr_group => {
 					return (
 						<TransactionDateGroup
-							key={tr_group[0].date.toDateString()}
+							key={tr_group[0].id}
 							transactions={tr_group}
 						></TransactionDateGroup>
 					);
@@ -73,20 +75,41 @@ export class TransactionListDateSections extends Component<
 	}
 }
 
-const TransactionDateGroup = (props: {
+const TransactionDateGroup = observer((props: {
 	transactions: TransactionDisplayProps[];
 }) => {
 	const date = moment(props.transactions[0].date);
 	return (
 		<>
-			<div className="font-bold my-2">{date.format("DD MMM YYYY")}</div>
+			<div className="font-semibold w-full text-gray-700 py-2">{date.format("DD MMM YYYY")}</div>
 			{props.transactions.map(tr => {
 				return (
-					<div key={tr.id} className="py-1">
+					<div key={tr.id}>
 						<Transaction {...tr}></Transaction>
+						{tr.id === ApplicationStore.selectedTransactionId ? (
+							<div className="flex justify-end" >
+								<button
+								className="m-1 text-blue-400 p-1 px-2 text-xs"
+									onClick={() => {
+										ApplicationStore.clearSelectedTransaction();
+									}}
+								>
+									Clear
+								</button>
+								<button
+								className="m-1 bg-red-600 text-white p-1 px-2 text-xs"
+									onClick={() => {
+										ApplicationStore.deleteSelectedTransaction(UserStore.token);
+									}}
+								>
+								<FontAwesomeIcon icon={faTrashAlt} className="mr-1 self-center"/>
+									Delete
+								</button>
+							</div>
+						) : null}
 					</div>
 				);
 			})}
 		</>
 	);
-};
+});

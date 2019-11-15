@@ -4,7 +4,7 @@ import LoginScene from "./ui/scenes/LoginScene";
 import UserStore from "./stores/UserStore";
 import ProfileScene from "./ui/scenes/ProfileScene";
 import { observer } from "mobx-react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, withRouter } from "react-router-dom";
 import LedgerScene from "./ui/scenes/LedgerScene";
 import apiHelpers from "./util/api-helpers";
 import ApplicationStore from "./stores/ApplicationStore";
@@ -16,16 +16,19 @@ import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import './custom.css';
 
+import CategoryScene from "./ui/scenes/CategoryScene";
+import NetWorthVsBudgetedGraph from "./ui/components/graphs/NetWorthVsBudgetedGraph";
+
 
 const DEBUG = true;
 
 @observer
-export default class App extends Component {
+class App extends Component {
 	async componentDidMount() {
 		if (DEBUG) {
-			const loginResp = await apiHelpers.loginUser("joe", "password");
+			const loginResp = await apiHelpers.loginUser("userdemo", "password");
 			UserStore.token = loginResp.token;
-			UserStore.username = "Joe";
+			UserStore.username = "userdemo";
 			ApplicationStore.init(loginResp.token);
 		}
 	}
@@ -36,7 +39,7 @@ export default class App extends Component {
 		}
 
 		return (
-			<div className="bg-purple-800 h-screen flex">
+			<div className="bg-blue-900 h-screen flex">
 				<Router>
 					<div className="shadow text-white flex-column justify-between p-6">
 						<div className="flex">
@@ -74,7 +77,7 @@ export default class App extends Component {
 					</div>
 
 					<div className="bg-gray-100 rounded-lg rounded-r-none w-full pt-6 px-8 h-full">
-						<div className="container mx-auto h-full">
+						<div className="mx-auto h-full">
 						<Switch>
 							<Route path="/transactions">
 								<LedgerScene></LedgerScene>
@@ -82,11 +85,16 @@ export default class App extends Component {
 							<Route path="/budgets">
 								<BudgetScene></BudgetScene>
 							</Route>
+							<Route path="/categories">
+								<CategoryScene/>
+							</Route>
+							<Route path="/accounts">
+								<NetWorthVsBudgetedGraph></NetWorthVsBudgetedGraph>
+							</Route>
 							<Route path="/">
 								<ProfileScene></ProfileScene>
 							</Route>
 						</Switch>
-
 						</div>
 					</div>
 				</Router>
@@ -94,3 +102,4 @@ export default class App extends Component {
 		);
 	}
 }
+export default App;

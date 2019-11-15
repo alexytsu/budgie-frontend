@@ -52,10 +52,7 @@ export default class Graph extends Component< BudgetGraphProps, any> {
     }
 
     setRange(start, end) {
-        console.log("start and end")
-        console.log(start._d)
         if (end != null) {
-            console.log(end._d)
             this.setState({timeline: new DateRange(start._d, end._d)})
         }
         

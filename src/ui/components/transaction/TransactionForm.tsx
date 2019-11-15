@@ -12,7 +12,6 @@ import {
 } from "../../../util/types/TransactionTypes";
 
 import "../../styles.css";
-import "../../tailwind.css";
 import ApplicationStore from "../../../stores/ApplicationStore";
 import UserStore from "../../../stores/UserStore";
 import moment = require("moment");
@@ -57,10 +56,10 @@ export default class TransactionForm extends Component<
 		e.preventDefault(); // suppress the form being posted
 
 		const newTransaction: CreateTransactionReq = {
-			amount: this.state.amount,
+			amount: this.state.amount * (this.state.type === TransactionType.INCOME ? -1: 1),
 			category: this.state.category,
 			date: this.state.date.format("YYYY-MM-DD"),
-			operation: this.state.type
+			description: this.state.description,
 		};
 
 		try {
@@ -88,7 +87,7 @@ export default class TransactionForm extends Component<
 
 		const formStyle = classNames({
 			"w-full bg-white border-2 border-solid shadow-md rounded-lg p-8": true,
-			"border-purple-200": !this.state.warning,
+			"border-indigo-200": !this.state.warning,
 			"border-red-400": this.state.warning
 		});
 
@@ -113,7 +112,7 @@ export default class TransactionForm extends Component<
 					<select
 						onChange={this.changeHandler}
 						name="category"
-						className="my-2 p-2 text-sm rounded bg-purple-100 shadow block"
+						className="my-2 p-2 text-sm rounded bg-indigo-100 shadow block"
 					>
 						{ApplicationStore.categories_raw.map(cat => {
 							return (
@@ -126,7 +125,7 @@ export default class TransactionForm extends Component<
 					<select
 						onChange={this.changeHandler}
 						name="account"
-						className="my-2 p-2 text-sm rounded bg-purple-100 shadow block"
+						className="my-2 p-2 text-sm rounded bg-indigo-100 shadow block"
 					>
 						{ApplicationStore.categories_raw.map(acc => {
 							return (
@@ -180,6 +179,7 @@ export default class TransactionForm extends Component<
 							}}
 							id="transaction_date"
 							numberOfMonths={1}
+							isOutsideRange={()=>false}
 						></SingleDatePicker>
 					</div>
 

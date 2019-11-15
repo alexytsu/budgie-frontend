@@ -68,7 +68,7 @@ export default class AddNewBudgetModal extends Component<{}, AddBudgetState> {
 
 	render() {
 		return (
-			<div className="w-full bg-white border-2 border-solid shadow-md rounded-lg p-4 border-purple-200 mb-8">
+			<div className="w-full bg-white border-2 border-solid shadow-md rounded-lg p-4 border-indigo-200 mb-8">
 				<div className="text-gray-600">Category</div>
 				<select
 					className="p-2 my-2 rounded block"

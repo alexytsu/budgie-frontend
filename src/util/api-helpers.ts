@@ -14,9 +14,17 @@ import {
 	BudgetResp,
 	BudgetDisplayProps,
 	BudgetType,
-	CreateBudgetReq
+	CreateBudgetReq,
+	BudgetPeriod
 } from "./types/BudgetTypes";
 import CategoryStories from "../test/Category.stories";
+import Budget from "../ui/components/budget/Budget";
+import { faSortAmountDown } from "@fortawesome/free-solid-svg-icons";
+
+export type MoneyAtMoment = {
+	date: moment.Moment;
+	amount: number;
+};
 
 export interface LoginResp {
 	id: number;
@@ -122,7 +130,15 @@ class ApiHelper {
 		return resp.data;
 	};
 
-	deleteCategory = async (token: string, id: string) => {
+	deleteBudget = async (token: string, id: number) => {
+		const resp = await axios.delete(API_URL + "/spendingplans/" + id, {
+			headers: {
+				Authorization: "Token " + token
+			}
+		});
+	};
+
+	deleteCategory = async (token: string, id: number) => {
 		const resp = await axios.delete(API_URL + "/categories/" + id, {
 			headers: {
 				Authorization: "Token " + token
@@ -148,6 +164,36 @@ class ApiHelper {
 				}
 			}
 		);
+	};
+
+	round = (value: number, decimals: number): number => {
+		return Math.round(value * 100) / 100;
+	};
+
+	updateBudget = async (
+		token: string,
+		id: number,
+		budgetProps: CreateBudgetReq
+	): Promise<BudgetResp> => {
+		const resp = await axios.patch(
+			API_URL + "/spendingplans/" + id + "/",
+			budgetProps,
+			{
+				headers: {
+					Authorization: "Token " + token
+				}
+			}
+		);
+
+		const bud: BudgetResp = {
+			amount: resp.data.amount,
+			category: resp.data.category,
+			endDate: resp.data.endDate,
+			startDate: resp.data.startDate,
+			id: resp.data.id
+		};
+
+		return bud;
 	};
 
 	getAllTransactions = async (token: string) => {
@@ -188,20 +234,33 @@ class ApiHelper {
 			)
 			.map(tr_raw => this.convertTransaction(tr_raw));
 
-		const spent: number = transactions.reduce((sum: number, transaction) => {
-			console.log(sum, transaction.amount);
+		const spent: number = this.round(transactions.reduce((sum: number, transaction) => {
 			return sum + transaction.amount;
-		}, 0);
+		}, 0), 2);
+
+		// See if the budget is finished, ongoing or upcoming
+		let period = BudgetPeriod.CURRENT;
+
+		const endMoment = moment(b_raw.endDate, "YYYY-MM-DD");
+		const startMoment = moment(b_raw.startDate, "YYYY-MM-DD");
+		const today = moment();
+
+		if (today.isBefore(startMoment, "date")) {
+			period = BudgetPeriod.FUTURE;
+		} else if (today.isAfter(endMoment, "date")) {
+			period = BudgetPeriod.PAST;
+		}
 
 		const b: BudgetDisplayProps = {
 			id: b_raw.id,
 			category: category === undefined ? "Foreign Key Error" : category.name,
-			endDate: moment(b_raw.endDate, "YYYY-MM-DD").toDate(),
-			startDate: moment(b_raw.startDate, "YYYY-MM-DD").toDate(),
+			endDate: endMoment.toDate(),
+			startDate: startMoment.toDate(),
 			limit: b_raw.amount,
 			spent,
 			transactions,
-			type: BudgetType.LIMIT
+			type: BudgetType.LIMIT,
+			period
 		};
 
 		return b;
@@ -222,12 +281,34 @@ class ApiHelper {
 			amount: tr_raw.amount,
 			category: tr_raw.category,
 			date: new Date(tr_raw.date),
-			description: "",
+			description: tr_raw.description,
 			id: tr_raw.id,
-			type,
+			type
 		};
 
 		return tr;
+	};
+
+	transactionRunningSum = (
+		acc: MoneyAtMoment[],
+		tr: TransactionDisplayProps | TransactionResp,
+		granularity: moment.unitOfTime.StartOf
+	) => {
+		const len = acc.length;
+		if (len === 0) {
+			acc.push({
+				date: moment(tr.date),
+				amount: -tr.amount
+			});
+		} else if (acc[len - 1].date.isSame(moment(tr.date), granularity)) {
+			acc[len - 1].amount -= tr.amount;
+		} else {
+			acc.push({
+				date: moment(tr.date),
+				amount: acc[len - 1].amount - tr.amount
+			});
+		}
+		return acc;
 	};
 }
 

@@ -6,6 +6,12 @@ export enum BudgetType {
 	GOAL
 }
 
+export enum BudgetPeriod {
+	PAST = "Past",
+	CURRENT= "Current",
+	FUTURE = "Future"
+}
+
 export interface BudgetDisplayProps {
 	id: number;
 	limit: number;
@@ -16,6 +22,7 @@ export interface BudgetDisplayProps {
 	type: BudgetType;
 	transactions: TransactionDisplayProps[];
 	selected?: boolean;
+	period:BudgetPeriod;
 }
 
 export interface BudgetResp {
@@ -31,4 +38,12 @@ export interface CreateBudgetReq {
 	endDate: string;
 	category: number;
 	amount: number;
+}
+
+
+export interface BudgetSuggestions {
+	message?: string;
+	previousAmount: number;
+	previousDateStart: moment.Moment;
+	previousDateEnd: moment.Moment;
 }
