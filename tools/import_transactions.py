@@ -5,7 +5,7 @@ df = pd.read_csv('ledger.csv')
 
 # URL = 'http://localhost:8000'
 URL = 'http://cs4920.herokuapp.com'
-USERNAME = 'TestManPersonFace'
+USERNAME = 'alexytsu'
 PASSWORD = 'password'
 
 register = requests.post(URL + '/users/', data={"username": USERNAME, "password": PASSWORD, "email": f"{USERNAME}@email.com", "first_name": "TestMan", "last_name": "PersonFace"})
