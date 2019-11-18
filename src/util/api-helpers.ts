@@ -30,6 +30,23 @@ export interface LoginResp {
 	id: number;
 	token: string;
 }
+
+export interface RegistrationResp {
+	username: string;
+	email: string;
+	id: number;
+	first_name: string;
+	last_name: string;
+}
+
+export interface UserResp {
+	username: string;
+	email: string;
+	id: number;
+	first_name: string;
+	last_name: string;
+}
+
 class ApiHelper {
 	async loginUser(username: string, password: string): Promise<LoginResp> {
 		const resp = await axios
@@ -47,6 +64,32 @@ class ApiHelper {
 		};
 
 		console.log("Logging In", data);
+
+		return data;
+	}
+
+	async registerUser(
+		username: string,
+		password: string,
+		email: string,
+		first_name: string,
+		last_name: string
+	): Promise<RegistrationResp> {
+		const resp = await axios.post(API_URL + "/users/", {
+			username,
+			password,
+			email,
+			first_name,
+			last_name
+		});
+
+		const data: RegistrationResp = {
+			email: resp.data.email,
+			first_name: resp.data.first_name,
+			last_name: resp.data.last_name,
+			id: resp.data.id,
+			username: resp.data.username
+		};
 
 		return data;
 	}
@@ -119,6 +162,24 @@ class ApiHelper {
 
 		return resp;
 	}
+
+	getUserDetails = async (token: string, id: number): Promise<UserResp> => {
+		const resp = await axios.get(API_URL + "/users/" + id, {
+			headers: {
+				Authorization: "Token " + token
+			}
+		});
+
+		const data: UserResp = {
+			email: resp.data.email,
+			first_name: resp.data.first_name,
+			last_name: resp.data.last_name,
+			username: resp.data.username,
+			id: resp.data.id,
+		};
+
+		return data;
+	};
 
 	getAllCategories = async (token: string) => {
 		const resp = await axios.get(API_URL + "/categories/", {
@@ -234,9 +295,12 @@ class ApiHelper {
 			)
 			.map(tr_raw => this.convertTransaction(tr_raw));
 
-		const spent: number = this.round(transactions.reduce((sum: number, transaction) => {
-			return sum + transaction.amount;
-		}, 0), 2);
+		const spent: number = this.round(
+			transactions.reduce((sum: number, transaction) => {
+				return sum + transaction.amount;
+			}, 0),
+			2
+		);
 
 		// See if the budget is finished, ongoing or upcoming
 		let period = BudgetPeriod.CURRENT;

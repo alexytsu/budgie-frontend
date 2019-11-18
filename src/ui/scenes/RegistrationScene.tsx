@@ -7,31 +7,37 @@ import UserStore from "../../stores/UserStore";
 import classNames = require("classnames");
 import ApplicationStore from "../../stores/ApplicationStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDove } from "@fortawesome/free-solid-svg-icons";
-import RegistrationScene from "./RegistrationScene";
+import { faDove, faLeaf } from "@fortawesome/free-solid-svg-icons";
+import { Redirect } from "@reach/router";
 
-interface LoginSceneState {
+interface RegistrationSceneState {
 	username: string;
 	password: string;
-	loginFailed: boolean;
-	register: boolean;
+	first_name: string;
+	last_name: string;
+	email: string;
+	registrationFailed: boolean;
+	redirect_to_login: boolean;
 }
 
 @observer
-export default class LoginScene extends Component<{}, LoginSceneState> {
+export default class RegistrationScene extends Component<any, RegistrationSceneState> {
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			username: "",
 			password: "",
-			loginFailed: false,
-			register: false,
+			email: "",
+			first_name: "",
+			last_name: "",
+			registrationFailed: false,
+			redirect_to_login: false,
 		};
 	}
 
 	onChangedInput = (
-		field: "username" | "password",
+		field: "username" | "password" | "email" | "first_name" | "last_name",
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
 		const newState = { ...this.state };
@@ -39,30 +45,34 @@ export default class LoginScene extends Component<{}, LoginSceneState> {
 		this.setState(newState);
 	};
 
-	attemptLogin = async () => {
+	attemptRegistration = async () => {
 		try {
-			const loginResp = await apiHelpers.loginUser(
+			const registrationResp = await apiHelpers.registerUser(
 				this.state.username,
-				this.state.password
+				this.state.password,
+				this.state.email,
+				this.state.first_name,
+				this.state.last_name,
 			);
-			await ApplicationStore.init(loginResp.token);
-			UserStore.token = loginResp.token;
-			UserStore.username = this.state.username;
-			UserStore.getUserDetails(loginResp.token, loginResp.id);
+
+			this.setState({redirect_to_login: true});
+
 		} catch (e) {
-			this.setState({ loginFailed: true });
+			this.setState({ registrationFailed: true });
 		}
+		this.props.redirect();
 	};
 
 	render() {
+
+		if (this.state.redirect_to_login) {
+			return <Redirect to="/login"></Redirect>
+		}
+
 		const fieldDynamicClass = classNames({
 			"shadow appearance-none bg-gray-100 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline": true,
-			"border-2 border-red-400": this.state.loginFailed
+			"border-2 border-red-400": this.state.registrationFailed
 		});
-
-		if (this.state.register) {
-			return <RegistrationScene redirect={()=>{this.setState({register: false})}}></RegistrationScene>
-		}
 
 		return (
 			<div className="bg-gray-200 h-screen w-screen">
@@ -74,7 +84,7 @@ export default class LoginScene extends Component<{}, LoginSceneState> {
 								icon={faDove}
 							></FontAwesomeIcon>
 							<h1 className="font-sans text-5xl mt-6 mb-8 text-blue-900 text-center">
-								Budgie
+								Register
 							</h1>
 						</div>
 						<div className="mb-4">
@@ -89,8 +99,55 @@ export default class LoginScene extends Component<{}, LoginSceneState> {
 								id="username"
 								type="text"
 								placeholder="Username"
+								value={this.state.username}
 								onChange={e => this.onChangedInput("username", e)}
 							></input>
+
+							<label
+								className="block text-gray-700 text-sm font-bold mb-2"
+								htmlFor="email"
+							>
+							Email
+							</label>
+							<input
+								className={fieldDynamicClass}
+								id="email"
+								type="email"
+								placeholder="joe@example.com"
+								value={this.state.email}
+								onChange={e => this.onChangedInput("email", e)}
+							></input>
+
+							<label
+								className="block text-gray-700 text-sm font-bold mb-2"
+								htmlFor="first_name"
+							>
+							First Name
+							</label>
+							<input
+								className={fieldDynamicClass}
+								id="first_name"
+								type="text"
+								placeholder="Joe"
+								value={this.state.first_name}
+								onChange={e => this.onChangedInput("first_name", e)}
+							></input>
+
+							<label
+								className="block text-gray-700 text-sm font-bold mb-2"
+								htmlFor="last_name"
+							>
+								Last Name
+							</label>
+							<input
+								className={fieldDynamicClass}
+								id="last_name"
+								type="text"
+								placeholder="last_name"
+								value={this.state.last_name}
+								onChange={e => this.onChangedInput("last_name", e)}
+							></input>
+
 							<label
 								className="block text-gray-700 text-sm font-bold mb-2"
 								htmlFor="password"
@@ -109,19 +166,13 @@ export default class LoginScene extends Component<{}, LoginSceneState> {
 						<div className="flex justify-between">
 							<button
 								className="bg-blue-500 hover:bg-blue-700 text-white text-sm py-2 px-4 rounded focus:outline-none focus:shadow-outline "
-								onClick={this.attemptLogin}
-							>
-								Login
-							</button>
-							<button
-								className="text-blue-900 text-sm font-bold py-2"
-								onClick={()=> this.setState({register: true})}
+								onClick={this.attemptRegistration}
 							>
 								Register
 							</button>
 						</div>
 						<div className="font-bold text-sm mb-4">
-							{this.state.loginFailed ? "Login Failed" : null}
+							{this.state.registrationFailed ? "Login Failed" : null}
 						</div>
 					</div>
 				</div>

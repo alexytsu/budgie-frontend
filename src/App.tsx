@@ -20,7 +20,7 @@ import CategoryScene from "./ui/scenes/CategoryScene";
 import NetWorthVsBudgetedGraph from "./ui/components/graphs/NetWorthVsBudgetedGraph";
 
 
-const DEBUG = true;
+const DEBUG = false;
 
 @observer
 class App extends Component {
