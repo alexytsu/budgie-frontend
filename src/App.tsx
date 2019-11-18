@@ -25,6 +25,9 @@ import "./custom.css";
 import CategoryScene from "./ui/scenes/CategoryScene";
 import NetWorthVsBudgetedGraph from "./ui/components/graphs/NetWorthVsBudgetedGraph";
 import classNames = require("classnames");
+import AccountScene from "./ui/scenes/AccountScene";
+import AccountSceneStore from "./stores/AccountSceneStore";
+
 
 const DEBUG = true;
 
@@ -39,6 +42,7 @@ class App extends Component<any, {}> {
 			UserStore.token = loginResp.token;
 			UserStore.username = "TestUserFacePersonManFace";
 			ApplicationStore.init(loginResp.token);
+			AccountSceneStore.init(loginResp.token)
 		}
 
 		console.log(this.props.location);
@@ -55,23 +59,23 @@ class App extends Component<any, {}> {
 							<Navbar></Navbar>
 					<div className="bg-gray-100 rounded-lg rounded-r-none w-full pt-6 px-8 h-full">
 						<div className="mx-auto h-full">
-							<Switch>
-								<Route path="/transactions">
-									<LedgerScene></LedgerScene>
-								</Route>
-								<Route path="/budgets">
-									<BudgetScene></BudgetScene>
-								</Route>
-								<Route path="/categories">
-									<CategoryScene />
-								</Route>
-								<Route path="/accounts">
-									<NetWorthVsBudgetedGraph></NetWorthVsBudgetedGraph>
-								</Route>
-								<Route path="/">
-									<ProfileScene></ProfileScene>
-								</Route>
-							</Switch>
+						<Switch>
+							<Route path="/transactions">
+								<LedgerScene></LedgerScene>
+							</Route>
+							<Route path="/budgets">
+								<BudgetScene></BudgetScene>
+							</Route>
+							<Route path="/categories">
+								<CategoryScene/>
+							</Route>
+							<Route path="/accounts">
+								<AccountScene></AccountScene>
+							</Route>
+							<Route path="/">
+								<ProfileScene></ProfileScene>
+							</Route>
+						</Switch>
 						</div>
 					</div>
 				</Router>

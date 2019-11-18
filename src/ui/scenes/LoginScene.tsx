@@ -9,6 +9,7 @@ import ApplicationStore from "../../stores/ApplicationStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDove } from "@fortawesome/free-solid-svg-icons";
 import RegistrationScene from "./RegistrationScene";
+import AccountSceneStore from "../../stores/AccountSceneStore";
 
 interface LoginSceneState {
 	username: string;
@@ -46,6 +47,7 @@ export default class LoginScene extends Component<{}, LoginSceneState> {
 				this.state.password
 			);
 			await ApplicationStore.init(loginResp.token);
+			await AccountSceneStore.init(loginResp.token);
 			UserStore.token = loginResp.token;
 			UserStore.username = this.state.username;
 			UserStore.getUserDetails(loginResp.token, loginResp.id);

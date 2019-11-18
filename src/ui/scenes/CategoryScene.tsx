@@ -15,9 +15,14 @@ export default class CategoryScene extends Component<{},{}> {
     render() {
         return (
             <div>
-                <label>CATEGORIES SCENE</label>
-                <CreateCategory></CreateCategory>
-                <ViewAllCategories></ViewAllCategories>
+                {/* <label className="text-xl font-bold">CATEGORIES SCENE</label> */}
+                <div className="flex float-right">
+                    <CreateCategory></CreateCategory>
+                </div>
+                <div className="overflow-auto h-full w-3/4 float-left">
+                    <ViewAllCategories></ViewAllCategories>
+                </div>
+                
             </div>
         );
     }
