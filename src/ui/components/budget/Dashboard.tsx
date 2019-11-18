@@ -39,7 +39,7 @@ export const Dashboard = observer((props: DashboardProps) => {
 
 	return (
 		<div className="h-full flex">
-			<div className="flex flex-col">
+			<div style={{minWidth: 250}} className="flex flex-col">
 				<div className="font-bold text-4xl">
 					{BudgetSceneStore.currentCategory.name}
 				</div>

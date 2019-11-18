@@ -20,15 +20,15 @@ import CategoryScene from "./ui/scenes/CategoryScene";
 import NetWorthVsBudgetedGraph from "./ui/components/graphs/NetWorthVsBudgetedGraph";
 
 
-const DEBUG = false;
+const DEBUG = true;
 
 @observer
 class App extends Component {
 	async componentDidMount() {
 		if (DEBUG) {
-			const loginResp = await apiHelpers.loginUser("userdemo", "password");
+			const loginResp = await apiHelpers.loginUser("testmanpersonface", "password");
 			UserStore.token = loginResp.token;
-			UserStore.username = "userdemo";
+			UserStore.username = "TestUserFacePersonManFace";
 			ApplicationStore.init(loginResp.token);
 		}
 	}

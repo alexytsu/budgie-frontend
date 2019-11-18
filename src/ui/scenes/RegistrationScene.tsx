@@ -170,6 +170,12 @@ export default class RegistrationScene extends Component<any, RegistrationSceneS
 							>
 								Register
 							</button>
+							<button
+								className="text-blue-900 text-sm py-2 px-4 rounded font-bold focus:outline-none focus:shadow-outline "
+								onClick={this.props.redirect}
+							>
+								Return to Login
+							</button>
 						</div>
 						<div className="font-bold text-sm mb-4">
 							{this.state.registrationFailed ? "Login Failed" : null}
