@@ -11,7 +11,7 @@ export default class AccountList extends React.Component<{}, any>{
         
         const sliderSettings = {
             dots:true,
-            arrows: false,
+            arrows: true,
             
             infinite: true,
             speed: 500,
