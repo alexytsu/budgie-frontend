@@ -32,7 +32,14 @@ class AccountsStore {
     transactions: TransactionResp[] = []
 
     @observable
-    selectedAcct: AccountResp
+    selectedAcct: AccountResp = {
+        balance: 0,
+        id: "",
+        importDate: "01-01-0001",
+        name: "None",
+        number: "",
+        user: 1
+    }
 
     init = async (token: string) => {
         this.transactions = ApplicationStore.transactions_raw

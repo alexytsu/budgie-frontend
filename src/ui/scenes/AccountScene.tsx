@@ -40,7 +40,7 @@ export default class AccountScene extends Component <{}, any>{
 
         return (
             <div className="flex-1">
-                <div className="flex-auto">
+                <div className="flex-auto text-left">
                     <h1>ACCOUNTS</h1>
                 </div>
                 <div className="">

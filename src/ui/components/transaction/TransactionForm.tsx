@@ -39,8 +39,8 @@ export default class TransactionForm extends Component<
 			amount: 0,
 			description: "",
 			date: moment(),
-			category: ApplicationStore.categories_raw[0].id,
-			account: AccountSceneStore.accounts[0].id,
+			category: 1,
+			account: "",
 			type: TransactionType.EXPENSE,
 			warning: false,
 			datePickerFocused: false
@@ -70,8 +70,8 @@ export default class TransactionForm extends Component<
 				amount: 0,
 				description: "",
 				date: moment(),
-				category: ApplicationStore.categories_raw[0].id,
-				account: AccountSceneStore.accounts[0].id,
+				category: 1,
+				account: "",
 				type: TransactionType.EXPENSE,
 				warning: false,
 				datePickerFocused: false
