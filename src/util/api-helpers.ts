@@ -17,9 +17,11 @@ import {
 	CreateBudgetReq,
 	BudgetPeriod
 } from "./types/BudgetTypes";
+import { LinkCred } from "../stores/AccountSceneStore"
 import CategoryStories from "../test/Category.stories";
-import Budget from "../ui/components/budget/Budget";
+import Budget from "../ui/components/budget/Budget"
 import { faSortAmountDown } from "@fortawesome/free-solid-svg-icons";
+import { async } from "q";
 
 export type MoneyAtMoment = {
 	date: moment.Moment;
@@ -80,6 +82,9 @@ class ApiHelper {
 		token: string,
 		transaction: CreateTransactionReq
 	): Promise<TransactionResp> => {
+		console.log(transaction.amount)
+		console.log(transaction.account)
+		console.log(transaction.category)
 		const resp = await axios.post(
 			API_URL + "/transactions/",
 			{ ...transaction },
@@ -93,6 +98,7 @@ class ApiHelper {
 		const new_transaction: TransactionResp = {
 			...resp.data
 		};
+		console.log(new_transaction)
 
 		return new_transaction;
 	};
@@ -220,6 +226,33 @@ class ApiHelper {
 
 		return resp.data;
 	};
+
+	linkBank = async (token: String, creds: LinkCred) => {
+		const resp = await axios.post(
+			API_URL + "/bankconnection/", 
+			{...creds},
+			{
+				headers: {
+					Authorization: "Token " + token
+				}
+			}
+		);
+
+		return resp.data
+	}
+
+	getlinkBank = async (token: String) => {
+		const resp = await axios.get(
+			API_URL + "/bankconnection/", 
+			{
+				headers: {
+					Authorization: "Token " + token
+				}
+			}
+		);
+
+		return resp.data
+	}
 
 	async authenticatedGetAll(token: string, resource: string) {
 		const endpoint = "/" + resource + "/";

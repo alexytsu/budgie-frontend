@@ -57,7 +57,7 @@ export class ExpenseGraph implements GraphType {
 export class IncomeGraph implements GraphType {
     generateData(trans) {
         if (trans.amount < 0) {
-            return Number(trans.amount)
+            return 0 - Number(trans.amount)
         } else {
             return 0
         }
@@ -102,7 +102,7 @@ export class BalanceGraph implements GraphType {
         if (trans.amount > 0) {
             return Number(trans.amount)
         } else {
-            return (0 - Number(trans.amount))
+            return (Number(trans.amount))
         }
     }
     isBalance() {

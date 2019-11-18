@@ -12,6 +12,7 @@ import { observer } from "mobx-react";
 import { endBatch } from "mobx/lib/internal";
 
 export interface BudgetGraphProps {
+    key: string;
     transactions: TransactionResp[];
     budget: number;
 }
@@ -64,7 +65,7 @@ export default class Graph extends Component< BudgetGraphProps, any> {
     render() {
         const {timeline, graphtype, transactions, budget} = this.state;
         return (
-            <div>
+            <div key={this.props.key}>
                 {graphtype.render(timeline.generateDatesToString(), timeline.generateData(transactions, graphtype, budget))}
                 
                 {/* <div className="inline-block relative w-64 ml-14">

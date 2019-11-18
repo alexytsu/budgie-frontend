@@ -23,6 +23,7 @@ export interface CreateTransactionReq {
     amount: number;
     date: string;
     category: number;
+    account: string;
     description: string;
 }
 
@@ -33,6 +34,7 @@ export interface TransactionResp {
     date: string;
     operation: TransactionType;
     category: number;
+    account: string;
     user: number;
     description: string;
 }

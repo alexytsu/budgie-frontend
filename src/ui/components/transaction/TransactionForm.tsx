@@ -15,13 +15,14 @@ import "../../styles.css";
 import ApplicationStore from "../../../stores/ApplicationStore";
 import UserStore from "../../../stores/UserStore";
 import moment = require("moment");
+import AccountSceneStore from "../../../stores/AccountSceneStore";
 
 interface TransactionFormState {
 	amount: number;
 	description: string;
 	date: moment.Moment;
 	category: number;
-	account: number;
+	account: string;
 	type: TransactionType;
 	warning: boolean;
 	datePickerFocused: boolean;
@@ -38,8 +39,8 @@ export default class TransactionForm extends Component<
 			amount: 0,
 			description: "",
 			date: moment(),
-			category: 1,
-			account: 1,
+			category: ApplicationStore.categories_raw[0].id,
+			account: AccountSceneStore.accounts[0].id,
 			type: TransactionType.EXPENSE,
 			warning: false,
 			datePickerFocused: false
@@ -60,6 +61,7 @@ export default class TransactionForm extends Component<
 			category: this.state.category,
 			date: this.state.date.format("YYYY-MM-DD"),
 			description: this.state.description,
+			account: this.state.account
 		};
 
 		try {
@@ -68,8 +70,8 @@ export default class TransactionForm extends Component<
 				amount: 0,
 				description: "",
 				date: moment(),
-				category: 1,
-				account: 1,
+				category: ApplicationStore.categories_raw[0].id,
+				account: AccountSceneStore.accounts[0].id,
 				type: TransactionType.EXPENSE,
 				warning: false,
 				datePickerFocused: false
@@ -127,7 +129,7 @@ export default class TransactionForm extends Component<
 						name="account"
 						className="my-2 p-2 text-sm rounded bg-indigo-100 shadow block"
 					>
-						{ApplicationStore.categories_raw.map(acc => {
+						{AccountSceneStore.accounts.map(acc => {
 							return (
 								<option key={acc.id} value={acc.id}>
 									{acc.name}

@@ -18,6 +18,8 @@ import './custom.css';
 
 import CategoryScene from "./ui/scenes/CategoryScene";
 import NetWorthVsBudgetedGraph from "./ui/components/graphs/NetWorthVsBudgetedGraph";
+import AccountScene from "./ui/scenes/AccountScene";
+import AccountSceneStore from "./stores/AccountSceneStore";
 
 
 const DEBUG = true;
@@ -30,6 +32,7 @@ class App extends Component {
 			UserStore.token = loginResp.token;
 			UserStore.username = "userdemo";
 			ApplicationStore.init(loginResp.token);
+			AccountSceneStore.init(loginResp.token)
 		}
 	}
 
@@ -89,7 +92,7 @@ class App extends Component {
 								<CategoryScene/>
 							</Route>
 							<Route path="/accounts">
-								<NetWorthVsBudgetedGraph></NetWorthVsBudgetedGraph>
+								<AccountScene></AccountScene>
 							</Route>
 							<Route path="/">
 								<ProfileScene></ProfileScene>

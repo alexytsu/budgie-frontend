@@ -3,12 +3,15 @@ import { Component } from "react";
 import { Pie } from 'react-chartjs-2';
 import { TransactionResp } from "../../../util/types/TransactionTypes";
 import { CategoryResp } from "../../../util/types/CategoryTypes";
+import { observer } from "mobx-react";
 
 export interface AccountChartProps {
+    key: string;
     transactions: TransactionResp[];
     categories: CategoryResp[];
 }
 
+@observer
 export default class PieChart extends Component<AccountChartProps, any> {
     constructor(props) {
         super(props)
@@ -16,8 +19,8 @@ export default class PieChart extends Component<AccountChartProps, any> {
             transactions: this.props.transactions,
             categories: this.props.categories,
             data: [],
-            // TODO dynamic coloring
-            backgroundColor: ['red', 'blue', 'green', 'yellow'],   
+            
+            backgroundColor: [],   
             labels: []
         }
     }
@@ -25,9 +28,10 @@ export default class PieChart extends Component<AccountChartProps, any> {
     componentDidMount() {
         let data = []
         let label = []
+        let color = []
 
         let dict = {}
-        this.state.transactions.map((trans) => {   
+        this.state.transactions.map((trans) => {  
             this.state.categories.map((cat) => {
                 if (cat.id === trans.category) {
                     if (cat.name in dict) {
@@ -40,20 +44,28 @@ export default class PieChart extends Component<AccountChartProps, any> {
         })
         for (var key in dict) {
             label.push(String(key))
-            data.push(dict[key].toFixed(2))
+            if (dict[key] < 0) {
+                color.push("#008000")
+                data.push(0 - dict[key].toFixed(2))
+            } else {
+                color.push("#800000")
+                data.push(dict[key].toFixed(2))
+            }
+            
         }
-     
-        this.addvalues(data, label)
+    
+        this.addvalues(data, label, color)
     }
 
-    addvalues(data, label) {
+    addvalues(data, label, color) {
         this.setState({data: data})
         this.setState({labels: label})
+        this.setState({backgroundColor: color})
     }
 
     render() {
         return(
-            <div>
+            <div key={this.props.key}>
                 <Pie
                     data={{
                         labels: this.state.labels,
