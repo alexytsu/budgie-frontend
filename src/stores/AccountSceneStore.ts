@@ -2,6 +2,7 @@ import ApplicationStore, { AppStore } from "./ApplicationStore";
 import apiHelpers from "../util/api-helpers";
 import { TransactionResp } from "../util/types/TransactionTypes";
 import { observable } from "mobx";
+import { observer } from "mobx-react";
 
 interface AccountResp {
     balance: number,
@@ -22,7 +23,7 @@ export interface LinkCred {
 }
 
 class AccountsStore {
-    @observable
+    @observable 
     appStore = ApplicationStore
 
     @observable

@@ -85,10 +85,12 @@ export class Month implements TimeType {
     }
 
     generateDatesToString() {
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
         let days = this.generateDates()
         let dayString = []
         days.forEach((date) => {
-            dayString.push(date.getDate())
+            dayString.push(date.getDate() + monthNames[date.getMonth()])
         })
         return dayString
     }
