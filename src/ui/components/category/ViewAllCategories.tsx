@@ -68,10 +68,10 @@ export default class ViewAllCategories extends Component<
 
 	render() {
 		return (
-			<div className="flex justify-between bg-white rounded-lg shadow-md p-8">
-				<div className="w-full ml-4">
+			<div className="flex h-full pb-4">
+				<div className="w-full ml-8">
 					<label
-						className="font-sans text-5xl font-semibold mt-6 mb-8 text-gray-800 text-left"
+						className="font-sans text-3xl font-semibold mt-6 mb-8 text-gray-800 text-left"
 						htmlFor="category"
 					>
 						Categories
@@ -119,9 +119,9 @@ export default class ViewAllCategories extends Component<
 						</div>
 					)}
 				</div>
-				<div className="w-full ml-4">
+				<div className="w-full mr-40">
 					{ApplicationStore.selectedCategoryId === 0 ? null : (
-						<div>
+						<div className="pt-1">
 							<div className="text-gray-600 my-2">Expense Period</div>
 							<DateRangePicker
 								startDate={this.state.startDate}
