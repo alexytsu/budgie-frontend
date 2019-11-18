@@ -211,6 +211,16 @@ class ApiHelper {
 		return resp.data;
 	};
 
+	getBankAccounts = async (token: string) => {
+		const resp = await axios.get(API_URL + "/bankaccounts/", {
+			headers: {
+				Authorization: "Token " + token
+			}
+		});
+
+		return resp.data;
+	};
+
 	async authenticatedGetAll(token: string, resource: string) {
 		const endpoint = "/" + resource + "/";
 		const resp = await axios.get(API_URL + endpoint, {

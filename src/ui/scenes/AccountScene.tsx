@@ -4,6 +4,7 @@ import { Component } from "react";
 import Graph, { BudgetGraphProps } from "../components/graph/Graph";
 import PieChart, {AccountChartProps} from "../components/graph/Chart";
 import ApplicationStore from "../../stores/ApplicationStore";
+import AccountsList from "../components/accounts/AccountsList"
 
 
 /**
@@ -28,6 +29,10 @@ export default class AccountScene extends Component <{}, any>{
         }
         return (
             <div className="">
+                <div>
+                    <h1>ACCOUNTS</h1>
+                </div>
+                <AccountsList></AccountsList>
                 <div className="">
                     <PieChart {...Chartprops}></PieChart>
                 </div>
