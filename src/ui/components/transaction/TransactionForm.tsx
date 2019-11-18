@@ -102,13 +102,13 @@ export default class TransactionForm extends Component<
 						placeholder="Amount"
 						onChange={this.changeHandler}
 					/>
-					<input
+					{/* <input
 						className="border-2 border-solid rounded my-2 py-1 px-2 text-sm block"
 						name="description"
 						value={description}
 						placeholder="Description"
 						onChange={this.changeHandler}
-					/>
+					/> */}
 					<select
 						onChange={this.changeHandler}
 						name="category"
@@ -122,7 +122,7 @@ export default class TransactionForm extends Component<
 							);
 						})}
 					</select>
-					<select
+					{/* <select
 						onChange={this.changeHandler}
 						name="account"
 						className="my-2 p-2 text-sm rounded bg-indigo-100 shadow block"
@@ -134,7 +134,7 @@ export default class TransactionForm extends Component<
 								</option>
 							);
 						})}
-					</select>
+					</select> */}
 
 					<div className="flex justify-between">
 						<div className="">
