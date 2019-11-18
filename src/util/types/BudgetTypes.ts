@@ -39,3 +39,11 @@ export interface CreateBudgetReq {
 	category: number;
 	amount: number;
 }
+
+
+export interface BudgetSuggestions {
+	message?: string;
+	previousAmount: number;
+	previousDateStart: moment.Moment;
+	previousDateEnd: moment.Moment;
+}

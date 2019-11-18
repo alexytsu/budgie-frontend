@@ -7,10 +7,10 @@ import {
 	TransactionType
 } from "../../../util/types/TransactionTypes";
 
-import "../../tailwind.css";
 import { observer } from "mobx-react";
 import ApplicationStore from "../../../stores/ApplicationStore";
 import moment = require("moment");
+import { faSortNumericDown } from "@fortawesome/free-solid-svg-icons";
 
 @observer
 export default class Transaction extends Component<
@@ -46,17 +46,14 @@ export default class Transaction extends Component<
 				className={transactionClass}
 			>
 				<div>
-					<div className="font-bold text-xs text-black">
-						${Math.abs(this.props.amount).toFixed(2)}
-					</div>
-					<div className="font-semibold text-xs text-gray-900">
-						{this.props.account}
+					<div className="font-bold text-black text-xs text-left">{categoryName}</div>
+					<div className="font-semibold text-gray-900 text-xs text-left">
+						{moment(this.props.date).format("DD MMM YY")}
 					</div>
 				</div>
-				<div>
-					<div className="font-bold text-black text-xs text-right">{categoryName}</div>
-					<div className="font-semibold text-gray-900 text-xs text-right">
-						{moment(this.props.date).format("DD MMM YY")}
+				<div className="flex flex-col justify-center">
+					<div style={{fontVariantNumeric: "tabular-nums"}} className="align-middle font-bold text-sm text-black">
+						${Math.abs(this.props.amount).toFixed(2)}
 					</div>
 				</div>
 			</div>

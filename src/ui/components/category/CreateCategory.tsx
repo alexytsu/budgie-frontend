@@ -62,7 +62,7 @@ export default class CreateCategory extends Component<{}, CreateCategoryState> {
 
 	render() {
 		return (
-			<div className="bg-white rounded-lg shadow-md p-8">
+			<div className="bg-white rounded-lg p-8">
 				<label className="font-sans text-3xl font-semibold mt-6 mb-4 text-gray-800 text-left">
 					Create a Category
 				</label>

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Component } from "react";
 
-import "../../tailwind.css";
 import UserStore from "../../../stores/UserStore";
 import ApplicationStore from "../../../stores/ApplicationStore";
 

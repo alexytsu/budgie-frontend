@@ -8,12 +8,17 @@ import apiHelpers from "../util/api-helpers";
 import { BudgetResp, CreateBudgetReq } from "../util/types/BudgetTypes";
 import { computedFn } from "mobx-utils";
 import moment = require("moment");
+import Budget from "../ui/components/budget/Budget";
 
 export interface AppStore {
 	transactions_raw: TransactionResp[];
 	categories_raw: CategoryResp[];
 	budgets_raw: BudgetResp[];
 	selectedCategoryId: number;
+
+	createBudget(token: string, budget:CreateBudgetReq): Promise<BudgetResp>;
+	updateBudget(token: string, id: number, budget: CreateBudgetReq): Promise<BudgetResp>;
+	deleteBudget(token: string, id: number);
 }
 
 class ApplicationStore implements AppStore {
@@ -40,11 +45,12 @@ class ApplicationStore implements AppStore {
 		this.transactions_raw = await apiHelpers.getAllTransactions(token);
 	};
 
-	createBudget = async (token: string, budget: CreateBudgetReq) => {
+	createBudget = async (token: string, budget: CreateBudgetReq):Promise<BudgetResp> => {
 		const b = await apiHelpers.createBudget(token, budget);
 		this.budgets_raw.push(b);
 		return b;
 	};
+
 
 	@computed
 	get netWorth() {
@@ -66,13 +72,13 @@ class ApplicationStore implements AppStore {
 		this.selectedTransactionId = 0;
 	}
 
-	getNetWorthOn = computedFn(function getNetWorthOn(date: moment.Moment) {
+	getNetWorthOn = computedFn(function getNetWorthOn(date: moment.Moment): number {
 		const transactions = this.transactions_raw.filter(tr =>
 			moment(tr.date).isSameOrBefore(date)
 		);
 		return transactions.reduce((sum, tr) => {
-			return sum -= tr.amount;
-		}, 0);
+			return sum -= tr.amount.toFixed(2);
+		}, 0).toFixed(2);
 	});
 
 	getAmountBudgetdOn = computedFn(function getAmountBudgetdOn(date: moment.Moment) {
@@ -82,7 +88,7 @@ class ApplicationStore implements AppStore {
 			return sum += b.amount;
 		}, 0);
 
-		return budgeted;
+		return budgeted.toFixed(2);
 	});
 
 	createCategory = async (token: string, category: CreateCategoryReq) => {
@@ -116,11 +122,18 @@ class ApplicationStore implements AppStore {
 		return this.categories_raw;
 	};
 
+	deleteBudget = async (token: string, id: number) => {
+		await apiHelpers.deleteBudget(token, id);
+		const loc = this.budgets_raw.findIndex(b => b.id === id);
+		this.budgets_raw.splice(loc, 1);
+	}
+
 	deleteCategory = async (token: string, id: number) => {
 		await apiHelpers.deleteCategory(token, id);
 		this.categories_raw = await apiHelpers.getAllCategories(token);
 		this.selectedCategoryId = 0;
 	};
+
 
 	updateCategory = async (token: string, id: string, catName: string) => {
 		const cat = await apiHelpers.updateCategory(token, id, catName);
@@ -131,9 +144,11 @@ class ApplicationStore implements AppStore {
 		token: string,
 		id: number,
 		budgetProps: CreateBudgetReq
-	) => {
-		const cat = await apiHelpers.updateBudget(token, id, budgetProps);
-		this.budgets_raw = await apiHelpers.getAllBudgets(token);
+	): Promise<BudgetResp> => {
+		const bud = await apiHelpers.updateBudget(token, id, budgetProps);
+		this.budgets_raw = this.budgets_raw.filter(b => b.id !== id);
+		this.budgets_raw.push(bud);
+		return bud;
 	};
 
 	deleteTransaction = async (token: string, id: number) => {

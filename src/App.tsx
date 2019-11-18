@@ -4,7 +4,7 @@ import LoginScene from "./ui/scenes/LoginScene";
 import UserStore from "./stores/UserStore";
 import ProfileScene from "./ui/scenes/ProfileScene";
 import { observer } from "mobx-react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, withRouter } from "react-router-dom";
 import LedgerScene from "./ui/scenes/LedgerScene";
 import apiHelpers from "./util/api-helpers";
 import ApplicationStore from "./stores/ApplicationStore";
@@ -16,14 +16,15 @@ import CategoryScene from "./ui/scenes/CategoryScene";
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import './custom.css';
+
 import CategoryScene from "./ui/scenes/CategoryScene";
-import BudgetOverTimeGraph from "./ui/components/budget/BudgetOverTimeGraph";
+import NetWorthVsBudgetedGraph from "./ui/components/graphs/NetWorthVsBudgetedGraph";
 
 
 const DEBUG = true;
 
 @observer
-export default class App extends Component {
+class App extends Component {
 	async componentDidMount() {
 		if (DEBUG) {
 			const loginResp = await apiHelpers.loginUser("userdemo", "password");
@@ -39,7 +40,7 @@ export default class App extends Component {
 		}
 
 		return (
-			<div className="bg-purple-800 h-screen flex">
+			<div className="bg-blue-900 h-screen flex">
 				<Router>
 					<div className="shadow text-white flex-column justify-between p-6">
 						<div className="flex">
@@ -89,7 +90,7 @@ export default class App extends Component {
 								<CategoryScene></CategoryScene>
 							</Route>
 							<Route path="/accounts">
-								<BudgetOverTimeGraph></BudgetOverTimeGraph>
+								<NetWorthVsBudgetedGraph></NetWorthVsBudgetedGraph>
 							</Route>
 							<Route path="/">
 								<ProfileScene></ProfileScene>
@@ -102,3 +103,4 @@ export default class App extends Component {
 		);
 	}
 }
+export default App;

@@ -7,11 +7,17 @@ import {
 	BudgetDisplayProps,
 	BudgetPeriod
 } from "../../../util/types/BudgetTypes";
-import "../../tailwind.css";
 
 export default class extends Component<BudgetDisplayProps, {}> {
 	render() {
-		const { category, limit, spent, startDate, endDate } = this.props;
+		const { category, spent, startDate, endDate } = this.props;
+
+		let { limit } = this.props;
+
+		if (limit === undefined) {
+			limit = 0;
+		}
+
 		const midDate = new Date((startDate.getTime() + endDate.getTime()) / 2);
 		const today = new Date();
 
@@ -35,8 +41,10 @@ export default class extends Component<BudgetDisplayProps, {}> {
 		const current = this.props.period === BudgetPeriod.CURRENT;
 
 		const dateProgressStyle = classNames({
-			"h-full border-green-600 border-solid border-2 rounded-lg bg-green-100": !spendingAheadOfSchedule && current,
-			"h-full border-red-700 border-solid border-t-2 border-l-2 border-b-2 rounded-lg rounded-r-none bg-green-600 absolute": spendingAheadOfSchedule && current,
+			"h-full border-green-600 border-solid rounded-lg bg-green-100":
+				!spendingAheadOfSchedule && current,
+			"h-full border-red-700 border-solid border-t-2 border-l-2 border-b-2 rounded-lg rounded-r-none bg-green-600 absolute":
+				spendingAheadOfSchedule && current,
 			"h-full border-blue-600 border-solid border-2 rounded-lg bg-blue-100":
 				this.props.period === BudgetPeriod.PAST
 		});
@@ -44,7 +52,7 @@ export default class extends Component<BudgetDisplayProps, {}> {
 		const spendingProgressStyle = classNames({
 			"h-full bg-green-600 overflow-visible absolute rounded-l-lg":
 				!spendingAheadOfSchedule && !spendingExceededLimit && current,
-			"h-full bg-red-300 border-solid border-2 border-red-700 rounded-lg absolute overflow-visible":
+			"h-full bg-red-300 border-solid border-2 border-red-700 rounded-l-lg absolute overflow-visible":
 				spendingAheadOfSchedule && !spendingExceededLimit && current,
 			"h-full bg-blue-600 overflow-visible absolute rounded-l-lg":
 				this.props.period === BudgetPeriod.PAST
@@ -56,8 +64,13 @@ export default class extends Component<BudgetDisplayProps, {}> {
 			"m-2": !this.props.selected,
 			"bg-white": current,
 			"bg-red-200 py-2": spendingExceededLimit,
-			"bg-yellow-200": this.props.period === BudgetPeriod.FUTURE,
+			"bg-yellow-200": this.props.period === BudgetPeriod.FUTURE
 		});
+
+		const dateStyle = classNames({
+			"font-bold": this.props.selected,
+			"font-semibold text-gray-600": !this.props.selected,
+		})
 
 		let bar = (
 			<>
@@ -91,7 +104,7 @@ export default class extends Component<BudgetDisplayProps, {}> {
 					${limit}
 				</div>
 				<div className={budgetStyle}>{bar}</div>
-				<div className="flex flex-row justify-between">
+				<div className={dateStyle + " flex flex-row justify-between"}>
 					<div className="mt-2 text-xs">
 						{startDate.toLocaleDateString("en-AU", dateOptions).toUpperCase()}
 					</div>

@@ -9,13 +9,11 @@ import apiHelpers from "../../../util/api-helpers";
 import { hasListeners } from "mobx/lib/internal";
 
 @observer
-export default class BudgetOverTimeGraph extends Component<{}, {}> {
+export default class NetWorthVsBudgetedGraph extends Component<{}, {}> {
 	render() {
 		const transactions = ApplicationStore.transactions_raw
 			.map(tr => apiHelpers.convertTransaction(tr))
 			.sort((a, b) => moment(a.date).diff(b.date));
-
-		console.log(transactions);
 
 		type dayAmount = {
 			date: moment.Moment;
@@ -24,24 +22,10 @@ export default class BudgetOverTimeGraph extends Component<{}, {}> {
 
 		const initial: dayAmount[] = [];
 
-		const dayByDayNetWorth: dayAmount[] = transactions.reduce((acc, tr) => {
-			const len = acc.length;
-			if (len === 0) {
-				console.log(tr.date);
-				acc.push({
-					date: moment(tr.date),
-					amount: -tr.amount
-				});
-			} else if (acc[len - 1].date.isSame(moment(tr.date), "date")) {
-				acc[len - 1].amount -= tr.amount;
-			} else {
-				acc.push({
-					date: moment(tr.date),
-					amount: acc[len - 1].amount - tr.amount
-				});
-			}
-			return acc;
-		}, initial);
+		const dayByDayNetWorth: dayAmount[] = transactions.reduce(
+			(acc, tr) => apiHelpers.transactionRunningSum(acc, tr, "date"),
+			initial
+		);
 
 		const dayByDayBudgeted = dayByDayNetWorth.map(da => {
 			return ApplicationStore.getAmountBudgetdOn(da.date);
@@ -54,21 +38,22 @@ export default class BudgetOverTimeGraph extends Component<{}, {}> {
 					label: "Budgeted",
 					type: "line",
 					data: dayByDayBudgeted,
-					borderColor: "#974400",
-					borderWidth: 1,
+					borderColor: "#9726DD",
+					backgroundColor: "#FED7E2",
+					borderWidth: 2,
 					cubicInterpolationMode: "monotone",
-					pointRadius: 0,
+					pointRadius: 0
 				},
 				{
 					label: "Net Worth",
 					type: "line",
 					data: dayByDayNetWorth.map(da => da.amount),
-					borderColor: "#004497",
-					backgroundColor: "#eeffff",
-					borderWidth: 1,
+					borderColor: "#276749",
+					backgroundColor: "#c6f6d5",
+					borderWidth: 2,
 					cubicInterpolationMode: "monotone",
-					pointRadius: 0,
-				},
+					pointRadius: 0
+				}
 			]
 		};
 
@@ -82,8 +67,8 @@ export default class BudgetOverTimeGraph extends Component<{}, {}> {
 				]
 			},
 			tooltips: {
-				enabled: false,
-			},
+				enabled: false
+			}
 		};
 
 		const chartProps: ChartComponentProps = {

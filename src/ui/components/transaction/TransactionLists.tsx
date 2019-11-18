@@ -1,10 +1,8 @@
 import * as React from "react";
 import { Component } from "react";
-import classNames from "classnames";
 
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
-import { SingleDatePicker } from "react-dates";
 
 import {
 	TransactionResp,
@@ -12,13 +10,14 @@ import {
 } from "../../../util/types/TransactionTypes";
 
 import "../../styles.css";
-import "../../tailwind.css";
 import ApplicationStore from "../../../stores/ApplicationStore";
 import UserStore from "../../../stores/UserStore";
 import moment = require("moment");
 import { observer } from "mobx-react";
 import apiHelpers from "../../../util/api-helpers";
 import Transaction from "./Transaction";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 interface TransactionListProps {
 	transactions: TransactionResp[];
@@ -31,14 +30,12 @@ export class TransactionListDateSections extends Component<
 > {
 	render() {
 		if (this.props.transactions.length == 0) {
-			return <div className="font-bold text-lg">Empty</div>;
+			return <div className="text-lg text-center my-6 text-gray-500">Empty</div>;
 		}
 
 		const transactions = this.props.transactions
 			.sort((a, b) => moment(b.date).diff(a.date))
 			.map(tr_raw => apiHelpers.convertTransaction(tr_raw));
-
-		console.log(transactions[0]);
 
 		const sections: TransactionDisplayProps[][] = [];
 		let currentSection: TransactionDisplayProps[] = [];
@@ -84,7 +81,7 @@ const TransactionDateGroup = observer((props: {
 	const date = moment(props.transactions[0].date);
 	return (
 		<>
-			<div className="font-semibold w-full bg-purple-900 text-pink-100 p-2 shadow">{date.format("DD MMM YYYY")}</div>
+			<div className="font-semibold w-full text-gray-700 py-2">{date.format("DD MMM YYYY")}</div>
 			{props.transactions.map(tr => {
 				return (
 					<div key={tr.id}>
@@ -105,6 +102,7 @@ const TransactionDateGroup = observer((props: {
 										ApplicationStore.deleteSelectedTransaction(UserStore.token);
 									}}
 								>
+								<FontAwesomeIcon icon={faTrashAlt} className="mr-1 self-center"/>
 									Delete
 								</button>
 							</div>

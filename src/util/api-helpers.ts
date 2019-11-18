@@ -19,6 +19,12 @@ import {
 } from "./types/BudgetTypes";
 import CategoryStories from "../test/Category.stories";
 import Budget from "../ui/components/budget/Budget";
+import { faSortAmountDown } from "@fortawesome/free-solid-svg-icons";
+
+export type MoneyAtMoment = {
+	date: moment.Moment;
+	amount: number;
+};
 
 export interface LoginResp {
 	id: number;
@@ -124,6 +130,14 @@ class ApiHelper {
 		return resp.data;
 	};
 
+	deleteBudget = async (token: string, id: number) => {
+		const resp = await axios.delete(API_URL + "/spendingplans/" + id, {
+			headers: {
+				Authorization: "Token " + token
+			}
+		});
+	};
+
 	deleteCategory = async (token: string, id: number) => {
 		const resp = await axios.delete(API_URL + "/categories/" + id, {
 			headers: {
@@ -151,8 +165,16 @@ class ApiHelper {
 			}
 		);
 	};
-	
-	updateBudget = async (token: string, id: number, budgetProps: CreateBudgetReq) =>{
+
+	round = (value: number, decimals: number): number => {
+		return Math.round(value * 100) / 100;
+	};
+
+	updateBudget = async (
+		token: string,
+		id: number,
+		budgetProps: CreateBudgetReq
+	): Promise<BudgetResp> => {
 		const resp = await axios.patch(
 			API_URL + "/spendingplans/" + id + "/",
 			budgetProps,
@@ -161,8 +183,18 @@ class ApiHelper {
 					Authorization: "Token " + token
 				}
 			}
-		)
-	}
+		);
+
+		const bud: BudgetResp = {
+			amount: resp.data.amount,
+			category: resp.data.category,
+			endDate: resp.data.endDate,
+			startDate: resp.data.startDate,
+			id: resp.data.id
+		};
+
+		return bud;
+	};
 
 	getAllTransactions = async (token: string) => {
 		const resp = await axios.get(API_URL + "/transactions/", {
@@ -202,10 +234,9 @@ class ApiHelper {
 			)
 			.map(tr_raw => this.convertTransaction(tr_raw));
 
-		const spent: number = transactions.reduce((sum: number, transaction) => {
+		const spent: number = this.round(transactions.reduce((sum: number, transaction) => {
 			return sum + transaction.amount;
-		}, 0);
-
+		}, 0), 2);
 
 		// See if the budget is finished, ongoing or upcoming
 		let period = BudgetPeriod.CURRENT;
@@ -229,7 +260,7 @@ class ApiHelper {
 			spent,
 			transactions,
 			type: BudgetType.LIMIT,
-			period,
+			period
 		};
 
 		return b;
@@ -252,10 +283,32 @@ class ApiHelper {
 			date: new Date(tr_raw.date),
 			description: tr_raw.description,
 			id: tr_raw.id,
-			type,
+			type
 		};
 
 		return tr;
+	};
+
+	transactionRunningSum = (
+		acc: MoneyAtMoment[],
+		tr: TransactionDisplayProps | TransactionResp,
+		granularity: moment.unitOfTime.StartOf
+	) => {
+		const len = acc.length;
+		if (len === 0) {
+			acc.push({
+				date: moment(tr.date),
+				amount: -tr.amount
+			});
+		} else if (acc[len - 1].date.isSame(moment(tr.date), granularity)) {
+			acc[len - 1].amount -= tr.amount;
+		} else {
+			acc.push({
+				date: moment(tr.date),
+				amount: acc[len - 1].amount - tr.amount
+			});
+		}
+		return acc;
 	};
 }
 
