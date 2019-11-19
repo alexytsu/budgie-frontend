@@ -15,8 +15,9 @@ export default class CategoryScene extends Component<{},{}> {
     render() {
         return (
             <div>
-                <CreateCategory></CreateCategory>
-                <ViewAllCategories></ViewAllCategories>
+                {/* <label className="text-xl font-bold">CATEGORIES SCENE</label> */}
+                    <CreateCategory></CreateCategory>
+                    <ViewAllCategories></ViewAllCategories>                
             </div>
         );
     }

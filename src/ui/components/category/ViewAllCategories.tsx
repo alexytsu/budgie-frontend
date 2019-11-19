@@ -7,7 +7,7 @@ import * as moment from "moment";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 import { DateRangePicker } from "react-dates";
-import { Week, Month, Year, DateRange } from '../graph/TimeType'
+import { Month, DateRange } from '../graph/TimeType'
 import { ExpenseGraph, IncomeGraph, BalanceGraph, CategoryGraph } from '../graph/GraphType'
 
 import apiHelpers from "../../../util/api-helpers";

@@ -101,8 +101,8 @@ export default class LedgerScene extends Component<{}, LedgerSceneState> {
 						></TransactionListDateSections>
 					</div>
 				</div>
-				<div className="w-full ml-4">
-					<h1 className="text-xl">New Transaction</h1>
+				<div className="w-full ml-4 mt-1">
+					<h1 className="text-2xl font-bold pb-5">New Transaction</h1>
 					<TransactionForm></TransactionForm>
 				</div>
 			</div>

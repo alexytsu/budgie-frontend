@@ -111,7 +111,20 @@ class BudgetSceneStore {
 						this.sceneDatePicker.endDate,
 						"date",
 						"[]"
+					) ||
+					this.sceneDatePicker.startDate.isBetween(
+						moment(bud.startDate, "YYYY-MM-DD"),
+						moment(bud.endDate, "YYYY-MM-DD"),
+						"date",
+						"[]"
+					) ||
+					this.sceneDatePicker.endDate.isBetween(
+						moment(bud.startDate, "YYYY-MM-DD"),
+						moment(bud.endDate, "YYYY-MM-DD"),
+						"date",
+						"[]"
 					)
+
 				);
 			});
 		}

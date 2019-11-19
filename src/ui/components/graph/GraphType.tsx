@@ -47,6 +47,7 @@ export class ExpenseGraph implements GraphType {
                     pointRadius: 1,
                     pointHitRadius: 10,
                     data: data
+                    
                     }
                 ]
             }} ></Bar>
@@ -57,7 +58,7 @@ export class ExpenseGraph implements GraphType {
 export class IncomeGraph implements GraphType {
     generateData(trans) {
         if (trans.amount < 0) {
-            return Number(trans.amount)
+            return 0 - Number(trans.amount)
         } else {
             return 0
         }
@@ -98,11 +99,12 @@ export class IncomeGraph implements GraphType {
 }   
 
 export class BalanceGraph implements GraphType {
+
     generateData(trans) {
         if (trans.amount > 0) {
             return Number(trans.amount)
         } else {
-            return (0 - Number(trans.amount))
+            return (Number(trans.amount))
         }
     }
     isBalance() {
@@ -177,9 +179,18 @@ export class BalanceGraph implements GraphType {
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: data
+                    data: data,
                     }
-                ]
+                ],
+            }} 
+            options= {{
+                scales:{
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
             }} ></Line>
         )
     }

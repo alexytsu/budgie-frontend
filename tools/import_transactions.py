@@ -5,10 +5,10 @@ df = pd.read_csv('ledger.csv')
 
 # URL = 'http://localhost:8000'
 URL = 'http://cs4920.herokuapp.com'
-USERNAME = 'userdemo'
+USERNAME = 'alexytsu'
 PASSWORD = 'password'
 
-register = requests.post(URL + '/users/', data={"username": USERNAME, "password": PASSWORD, "email": f"{USERNAME}@email.com"})
+register = requests.post(URL + '/users/', data={"username": USERNAME, "password": PASSWORD, "email": f"{USERNAME}@email.com", "first_name": "TestMan", "last_name": "PersonFace"})
 print(register.json())
 
 login_resp = requests.post(URL + "/login/", data={"username": USERNAME, "password": PASSWORD})
@@ -24,6 +24,7 @@ for cat in categories:
 	type = "OUT"
 	if cat == 'Income':
 		type = "IN"
+	
 	cat_resp = requests.post(URL + "/categories/", data={"name": cat, "operation": type}, headers=HEADER)
 	cat_resp = cat_resp.json()
 	cat_id_lookup[cat] = cat_resp["id"]
@@ -31,6 +32,8 @@ for cat in categories:
 
 print(cat_id_lookup)
 
+
+transactions = []
 for i, row in df.iterrows():
 	category = row["Category"]
 	print(category)
@@ -46,5 +49,8 @@ for i, row in df.iterrows():
 
 
 	transaction = {"amount": amount, "category": cat_id, "date": date}
-	tr_resp = requests.post(URL + "/transactions/", data=transaction, headers=HEADER)
-	print(tr_resp.json())
+	transactions.append(transaction)
+
+
+tr_resp = requests.post(URL + "/transactions/", json=transactions, headers=HEADER)
+print(tr_resp.json())
