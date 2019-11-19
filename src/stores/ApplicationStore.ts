@@ -91,6 +91,71 @@ class ApplicationStore implements AppStore {
 		return budgeted.toFixed(2);
 	});
 
+	@computed
+	get overbudgetedDays() {
+		const sortedTransactions = this.transactions_raw
+			.map(tr => apiHelpers.convertTransaction(tr))
+			.sort((a, b) => moment(a.date).diff(b.date));
+
+		type dayAmount = {
+			date: moment.Moment;
+			amount: number;
+		};
+
+		const initial: dayAmount[] = [];
+
+		const dayByDayNetWorth: dayAmount[] = sortedTransactions.reduce(
+			(acc, tr) => apiHelpers.transactionRunningSum(acc, tr, "date"),
+			initial
+		);
+
+		type overBudgetedDate = {
+			start_date: moment.Moment;
+			end_date: moment.Moment;
+			budgeted: number;
+			netWorth: number;
+		}
+
+		const init: overBudgetedDate[] = [];
+		const overbudgetedDays: overBudgetedDate[] = dayByDayNetWorth.reduce(
+			(acc, dateTr) => {
+
+				const budgeted = this.getAmountBudgetdOn(dateTr.date);
+				if(dateTr.amount < budgeted) {
+					acc.push({
+						budgeted,
+						netWorth: dateTr.amount,
+						start_date: dateTr.date,
+						end_date: dateTr.date,
+					})
+				}
+
+				return acc;
+			}, init
+		);
+
+		const init2: overBudgetedDate[] = [];
+
+		return overbudgetedDays.reduce(
+			(acc, day) => {
+
+				const indx = acc.length;
+				if(indx === 0) {
+					acc.push(day);
+					return acc;
+				}
+				else if(acc[indx - 1].end_date.isSameOrAfter(day.start_date.clone().subtract(1, "day"))) {
+					acc[indx - 1].end_date = day.end_date;
+					acc[indx - 1].budgeted = Math.max(acc[indx-1].budgeted, day.budgeted);
+				} else {
+					acc.push(day);
+				}
+
+				return acc;
+
+			}, init2);
+	}
+
 	createCategory = async (token: string, category: CreateCategoryReq) => {
 		try {
 			const cat = await apiHelpers.createCategory(token, category);

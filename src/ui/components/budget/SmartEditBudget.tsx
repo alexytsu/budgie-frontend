@@ -1,12 +1,16 @@
 import * as React from "react";
 import { observer } from "mobx-react";
-import { BudgetDisplayProps, BudgetPeriod } from "../../../util/types/BudgetTypes";
+import {
+	BudgetDisplayProps,
+	BudgetPeriod
+} from "../../../util/types/BudgetTypes";
 import classNames = require("classnames");
 import BudgetSceneStore from "../../../stores/BudgetSceneStore";
 import apiHelpers from "../../../util/api-helpers";
 import moment = require("moment");
 import UserStore from "../../../stores/UserStore";
 import { DateRangePicker } from "react-dates";
+import ApplicationStore from "../../../stores/ApplicationStore";
 
 export const SmartEditBudget = observer(
 	(props: { budget_disp: BudgetDisplayProps }) => {
@@ -14,10 +18,32 @@ export const SmartEditBudget = observer(
 			"text-green-600":
 				BudgetSceneStore.newBudget.amount >= props.budget_disp.spent,
 			"text-red-600":
-				BudgetSceneStore.newBudget.amount < props.budget_disp.spent,
+				BudgetSceneStore.newBudget.amount < props.budget_disp.spent
 		});
 
 		const suggestionsFromPrevious = BudgetSceneStore.getSuggestions();
+		const relevantPeriod = ApplicationStore.overbudgetedDays.filter(day => {
+			return day.start_date.isBetween(
+				moment(props.budget_disp.startDate),
+				moment(props.budget_disp.endDate),
+				"day",
+				"[]"
+			);
+		});
+
+		// if any of the overbudgeted periods lie in this budget
+		const suggestionsCauseOverBudgetd =
+			relevantPeriod.length <= 0 ? null : (
+				<div className="flex">
+					<div className="font-semibold pr-2 text-red-300">
+						You have overallocated during this period by $
+						{apiHelpers.round(
+							relevantPeriod[0].budgeted - relevantPeriod[0].netWorth,
+							2
+						)}
+					</div>
+				</div>
+			);
 
 		return (
 			<div className="my-2 bg-white shadow flex justify-between rounded">
@@ -26,6 +52,9 @@ export const SmartEditBudget = observer(
 					<div className="text-blue-100">
 						Begin editing values to see a live preview of your changes
 					</div>
+					{
+						suggestionsCauseOverBudgetd
+					}
 					<div className="font-semibold text-blue-100 mt-2">
 						Smart Suggestions
 					</div>
@@ -35,26 +64,28 @@ export const SmartEditBudget = observer(
 					>
 						Predict Based on This Period
 					</div>
-					{
-					props.budget_disp.period !== BudgetPeriod.PAST ? 
-					<div className="flex">
-						<div
-							onClick={() => BudgetSceneStore.newBudget.amount = suggestionsFromPrevious.previousAmount}
-							className="text-sm pr-2 text-blue-500 hover:font-bold cursor-pointer"
-						>
-							Predict Based on History
+					{props.budget_disp.period !== BudgetPeriod.PAST ? (
+						<div className="flex">
+							<div
+								onClick={() =>
+									(BudgetSceneStore.newBudget.amount =
+										suggestionsFromPrevious.previousAmount)
+								}
+								className="text-sm pr-2 text-blue-500 hover:font-bold cursor-pointer"
+							>
+								Predict Based on History
+							</div>
+							<div className="text-white text-sm">
+								Between{" "}
+								{suggestionsFromPrevious.previousDateStart.format("DD MMM")} and{" "}
+								{suggestionsFromPrevious.previousDateEnd.format("DD MMM")} you
+								spent
+							</div>
+							<div className="pl-2 text-blue-500 text-sm">
+								${suggestionsFromPrevious.previousAmount}
+							</div>
 						</div>
-						<div className="text-white text-sm">
-							Between{" "}
-							{suggestionsFromPrevious.previousDateStart.format("DD MMM")} and{" "}
-							{suggestionsFromPrevious.previousDateEnd.format("DD MMM")} you
-							spent
-						</div>
-						<div className="pl-2 text-blue-500 text-sm">
-							${suggestionsFromPrevious.previousAmount}
-						</div>
-					</div>:null
-					}
+					) : null}
 				</div>
 				<div className="p-6">
 					<div>Amount</div>
@@ -107,10 +138,7 @@ export const SmartEditBudget = observer(
 						</div>
 						<div
 							onClick={() => BudgetSceneStore.updateBudget(UserStore.token)}
-							className={
-								buttonColor +
-								" text-white text-sm font-semibold"
-							}
+							className={buttonColor + " text-white text-sm font-semibold"}
 						>
 							SAVE
 						</div>

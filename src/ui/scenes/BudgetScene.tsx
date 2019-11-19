@@ -50,6 +50,13 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 		};
 	}
 
+	componentDidMount() {
+		if(ApplicationStore.overbudgetedDays.length > 0) {
+			BudgetSceneStore.sceneDatePicker.startDate = ApplicationStore.overbudgetedDays[0].start_date;
+			BudgetSceneStore.sceneDatePicker.endDate = ApplicationStore.overbudgetedDays[0].end_date;
+		}
+	}
+
 	changeHandler = e => {
 		const stateCopy = this.state;
 		stateCopy[e.target.name] = e.target.value;
@@ -75,6 +82,12 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 			b => b.id === BudgetSceneStore.selectedBudgetId
 		);
 
+		const filterButtonStyle = classNames({
+			"p-1 rounded text-white font-semibold": true,
+			"bg-green-700": !BudgetSceneStore.sceneDatePicker.filtering,
+			"bg-red-700": BudgetSceneStore.sceneDatePicker.filtering,
+		})
+
 		return (
 			<div className="flex h-full">
 				<ReactModal
@@ -89,7 +102,7 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 						<h1 className="text-xl mb-4">Budgets</h1>
 					</div>
 					<AmountBudgetedSummary date={moment()}></AmountBudgetedSummary>
-					<div className="my-2">
+					<div className="my-2 flex">
 						<DateRangePicker
 							startDate={BudgetSceneStore.sceneDatePicker.startDate}
 							startDateId={"sceneStart"}
@@ -106,6 +119,12 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 							isOutsideRange={() => false}
 							numberOfMonths={2}
 						></DateRangePicker>
+						<button
+							className={filterButtonStyle}
+							onClick={()=> BudgetSceneStore.sceneDatePicker.filtering = !BudgetSceneStore.sceneDatePicker.filtering}
+						>
+							Filter
+						</button>
 					</div>
 					<button
 						className="p-1 rounded bg-blue-800 text-white my-2 font-semibold"
@@ -177,6 +196,19 @@ const AmountBudgetedSummary = observer((props: { date: moment.Moment }) => {
 							</td>
 						</tr>
 					)}
+					{ApplicationStore.overbudgetedDays.map(day => {
+						return( <tr key={day.start_date.format()} className="bg-red-300">
+							<td className="text-left py-2 font-bold">
+								{day.start_date.format("DD MMM")} - {day.end_date.format("DD MMM")}
+							</td>
+							<td className="py-2">
+								{apiHelpers.round(day.budgeted, 2)}
+							</td>
+							<td className="py-2">
+								{apiHelpers.round(day.netWorth, 2)}
+							</td>
+						</tr>);
+					})}
 				</tbody>
 			</table>
 		</div>

@@ -43,6 +43,10 @@ export default class ProfileScene extends Component<{}, ProfileSceneState> {
 				<div className="h-full">
 					<h1 className="text-xl">{UserStore.username}</h1>
 
+					<div>First Name: {UserStore.first_name}</div>
+					<div>Last Name: {UserStore.last_name}</div>
+					<div>Email: {UserStore.email}</div>
+
 					<div className="font-bold my-4">Show developer options</div>
 					<button
 						onClick={this.toggleDev}

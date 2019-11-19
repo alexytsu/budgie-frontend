@@ -12,6 +12,7 @@ import apiHelpers from "../../../util/api-helpers";
 import UserStore from "../../../stores/UserStore";
 import ApplicationStore from "../../../stores/ApplicationStore";
 import { budgetScene } from "../../../test/Budget.stories";
+import classNames = require("classnames");
 
 interface AddBudgetState {
 	amount: number;
@@ -63,12 +64,25 @@ export default class AddNewBudgetModal extends Component<{}, AddBudgetState> {
 			startDate: this.state.startDate.format("YYYY-MM-DD")
 		};
 
-		const resp = await ApplicationStore.createBudget(UserStore.token, budget);
+		try {
+			const resp = await ApplicationStore.createBudget(UserStore.token, budget);
+		} catch(e) {
+			console.log("UWUU fucky wucky")
+			this.setState({error: true});
+		}
+
 	};
 
 	render() {
+
+		const borderClassName = classNames({
+			"w-full bg-white border-2 border-solid shadow-md rounded-lg p-4 mb-8": true,
+			"border-indigo-200": !this.state.error,
+			"border-red-500": this.state.error,
+		})
+
 		return (
-			<div className="w-full bg-white border-2 border-solid shadow-md rounded-lg p-4 border-indigo-200 mb-8">
+			<div className={borderClassName}>
 				<div className="text-gray-600">Category</div>
 				<select
 					className="p-2 my-2 rounded block"
