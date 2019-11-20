@@ -99,7 +99,7 @@ export default class ViewAllCategories extends Component<
 											key={cat.id}
 											value={cat.id}
 											onClick={e => this.select(e)}
-											className="bg-green-500 focus:bg-red-500 text-white mt-1 py-1 px-4 rounded"
+											className="bg-green-500 w-full focus:bg-red-500 text-white mt-1 py-1 px-4 rounded"
 										>
 											{cat.name}
 										</button>
@@ -107,7 +107,7 @@ export default class ViewAllCategories extends Component<
 										<button
 											value={cat.id}
 											onClick={e => this.select(e)}
-											className="bg-orange-500 focus:bg-red-500 text-white mt-1 py-1 px-4 rounded"
+											className="bg-orange-500 w-full focus:bg-red-500 text-white mt-1 py-1 px-4 rounded"
 										>
 											{cat.name}
 										</button>
