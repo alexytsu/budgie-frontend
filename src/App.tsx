@@ -36,8 +36,8 @@ class App extends Component<any, {}> {
 	async componentDidMount() {
 		if (DEBUG) {
 			const loginResp = await apiHelpers.loginUser(
-				"testmanpersonface",
-				"password"
+				"testperson",
+				"pw"
 			);
 			UserStore.token = loginResp.token;
 			UserStore.username = "TestUserFacePersonManFace";

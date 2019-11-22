@@ -36,9 +36,9 @@ export default class ViewAllCategories extends Component<
 		super(props);
 		this.state = {
 			endDate: moment(),
-			startDate: moment().subtract(1, "week"),
+			startDate: moment().subtract(1, "month"),
 			calendarFocused: null,
-			timeline : new DateRange(moment().toDate(), moment().subtract(1, "week").toDate())
+			timeline : new DateRange(moment().subtract(1, "month").toDate(), moment().toDate())
 		};
 	}
 
@@ -69,7 +69,6 @@ export default class ViewAllCategories extends Component<
 		if ((startDate === null) || (endDate === null)){
 			return
 		}
-
 		this.setState({ startDate, endDate });
 		this.setState({timeline: new DateRange(startDate._d, endDate._d)})
 	};
