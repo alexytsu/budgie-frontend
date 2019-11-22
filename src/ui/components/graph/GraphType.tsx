@@ -14,7 +14,7 @@ interface GraphType {
 export class ExpenseGraph implements GraphType {
     generateData(trans) {
         if (trans.amount > 0) {
-            return Number(trans.amount)
+            return Number(-trans.amount).
         } else {
             return 0
         }
