@@ -6,6 +6,8 @@ import apiHelpers from "../../util/api-helpers";
 import UserStore from "../../stores/UserStore";
 import ApplicationStore from "../../stores/ApplicationStore";
 import Transaction from "../components/transaction/Transaction";
+import BankForm from "../components/accounts/LinkAccount"
+
 
 interface ProfileSceneState {
 	showDev: boolean;
@@ -65,6 +67,9 @@ export default class ProfileScene extends Component<{}, ProfileSceneState> {
 					>
 						Logout
 					</button>
+				</div>
+				<div>
+					<BankForm></BankForm>
 				</div>
 			</div>
 		);

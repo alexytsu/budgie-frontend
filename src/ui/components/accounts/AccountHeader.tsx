@@ -1,6 +1,7 @@
 import React = require("react");
 import AccountsStore from "../../../stores/AccountSceneStore";
 import { observer } from "mobx-react";
+import AccountSceneStore from "../../../stores/AccountSceneStore";
 
 @observer
 export default class AccountHeader extends React.Component<{}, any>{
@@ -27,7 +28,11 @@ export default class AccountHeader extends React.Component<{}, any>{
         let balance = this.calculateBalance(AccountsStore.getAccountTransactions())
         return(
             <div className="h-40 ml-4">
-                <h1 className="text-xl p-1 mb-2 mt-3 font-bold">{name}</h1>
+                {(AccountSceneStore.loading === true) ? 
+                    <h1 className="text-xl p-1 mb-2 mt-3 font-bold">LOADING ACCOUNTS...</h1>:
+                    <h1 className="text-xl p-1 mb-2 mt-3 font-bold">{name}</h1>
+                }
+                
                 <div className="text-xs mt-16">Available</div>
                 <div className="text-sm ">${balance}</div>
             </div>

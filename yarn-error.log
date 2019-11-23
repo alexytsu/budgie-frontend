@@ -1,8 +1,8 @@
 Arguments: 
-  /usr/bin/node /usr/bin/yarn install
+  /usr/bin/node /usr/bin/yarn
 
 PATH: 
-  /home/zenmint/.local/bin:/home/zenmint/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/zenmint/eclipse/java-2019-03/eclipse:/snap/bin
+  /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 
 Yarn version: 
   1.19.1
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: EACCES: permission denied, mkdir '/home/zenmint/Desktop/budgie-frontend/node_modules/history/node_modules/@babel'
+  Error: EACCES: permission denied, unlink '/home/luke/Documents/vscode/newBudgie/budgie-frontend/node_modules/.yarn-integrity'
 
 npm manifest: 
   {
@@ -68,6 +68,7 @@ npm manifest:
   		"react-dates": "^21.3.2",
   		"react-dom": "^16.5.2",
   		"react-modal": "^3.11.1",
+  		"react-promise-tracker": "^2.0.5",
   		"react-router-dom": "^5.1.2",
   		"react-slick": "^0.25.2",
   		"react-with-direction": "^1.3.1",

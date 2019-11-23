@@ -3,6 +3,10 @@ import apiHelpers from "../util/api-helpers";
 import { TransactionResp } from "../util/types/TransactionTypes";
 import { observable } from "mobx";
 import { observer } from "mobx-react";
+import { async } from "q";
+import { trackPromise } from "react-promise-tracker";
+import UserStore from "./UserStore";
+import { resolve } from "url";
 
 interface AccountResp {
     balance: number,
@@ -13,16 +17,29 @@ interface AccountResp {
     user: number
 }
 
+export interface BankDets {
+    id: string,
+    name: string,
+    loginId: string,
+    passwordCaption: string,
+    secondaryLoginCaption: string,
+    securityCodeCaption: string
+}
+
 export interface LinkCred {
-    loginId: String,
-    password: String,
-    institution: String,
-    secondaryLoginId: null,
-    securityCode: null
+    loginId: string,
+    password: string,
+    institution: string,
+    secondaryLoginId: string,
+    securityCode: number
 
 }
 
 class AccountsStore {
+
+    @observable
+    banks: BankDets[] = []
+
     @observable 
     appStore = ApplicationStore
 
@@ -42,17 +59,32 @@ class AccountsStore {
         user: 1
     }
 
+    @observable
+    loading: boolean = false
+
     init = async (token: string) => {
         this.transactions = ApplicationStore.transactions_raw
-        this.linkBank(token)
-        this.accounts = await apiHelpers.getBankAccounts(token);
-        this.selectedAcct = this.accounts[0]
+        try {
+            this.banks = await apiHelpers.getBanks(token)
+            await apiHelpers.getBankAccounts(token)
+                .then((result) => {
+                    this.accounts = result
+                    if (result.length !== 0) {
+                        this.selectedAcct = this.accounts[0]
+                    }
+                    
+                })
+        } catch {
+            console.log("oh no")
+            console.log(this.accounts)
+        }
         
-        console.log(this.accounts)
     };
 
     changeSelected(index) {
-        this.selectedAcct = this.accounts[index]
+        if (this.accounts.length != 0) {
+            this.selectedAcct = this.accounts[index]
+        }
     }
     
     getAllAccounts(){
@@ -60,39 +92,58 @@ class AccountsStore {
     }
 
     getAccountTransactions() {
-        console.log("hi")
-        console.log(this.transactions)
-        console.log(this.appStore.transactions_raw)
-
+        // console.log(this.transactions)
+        // console.log(this.appStore.transactions_raw)
         const filteredTrans = this.appStore.transactions_raw.filter(
-            trans => trans.account === this.selectedAcct.id
-            
+            trans => trans.account === this.selectedAcct.id  
         );
-
         return filteredTrans
     }
 
-    linkBank(token: String) {
+    linkBank = async(token: string, bankForm: LinkCred) => {
         console.log("linking...")
-        const creds: LinkCred = {
-            loginId: "gavinBelson",
-            password: "hooli2016",
-            institution: "AU00000",
-            secondaryLoginId: null,
-            securityCode: null
+        console.log(bankForm)
+
+        await apiHelpers.linkBank(token, bankForm)
+            .then((result) => {
+                console.log(result)
+            })
+
+        this.loading = true
+        this.checkBankLink(token)
+
+    }
+
+    checkBankLink = async(token: string) => {
+
+        const sleep = (millisec) => {
+            return new Promise(resolve => setTimeout(resolve, millisec))
         }
-        const link = apiHelpers.linkBank(token, creds)
-        console.log(link)
-        const pull = apiHelpers.getlinkBank(token)
 
-        console.log(pull)
+        while (this.loading) {
+            console.log("loading...")
+            await apiHelpers.getlinkBank(token)
+            .then(result => {
+                console.log(result)
+                if (result.done === true) {
+                    console.log("loading done")
+                    ApplicationStore.init(token)
+                    this.init(token)
+                    this.loading = false
+                }
+            })
+            await sleep(5000)
+        }
+
+        
     }
 
-    checkBankLink(token: String) {
-        const pull = apiHelpers.getlinkBank(token)
-        console.log(pull)
+    deleteBank(token: string) {
+        const deleted = apiHelpers.deleteBank(token)
+        console.log(deleted)
+        ApplicationStore.init(token)
+        this.init(token)
     }
-
 }
 
 export default new AccountsStore();
