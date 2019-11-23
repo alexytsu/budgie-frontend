@@ -69,6 +69,15 @@ export default class LedgerScene extends Component<{}, LedgerSceneState> {
 
 		return (
 			<div className="flex h-full pb-4">
+				<div className="pr-5 w-full">
+					<div className="flex-auto bg-gray-900 p-1 h-20 text-white font-bold rounded-lg">
+						<h1 className="ml-2 text-lg">HOME</h1>
+					</div>
+					<div className="mt-5">
+						<TransactionForm></TransactionForm>
+					</div>
+				</div>
+				
 				<div className="flex flex-col w-full h-full">
 					<div className="flex justify-between">
 						<DateRangePicker
@@ -101,10 +110,7 @@ export default class LedgerScene extends Component<{}, LedgerSceneState> {
 						></TransactionListDateSections>
 					</div>
 				</div>
-				<div className="w-1/2 ml-4 mt-1">
-					<h1 className="text-2xl font-bold pb-5">New Transaction</h1>
-					<TransactionForm></TransactionForm>
-				</div>
+				
 			</div>
 		);
 	}

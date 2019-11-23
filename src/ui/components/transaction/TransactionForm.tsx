@@ -96,6 +96,7 @@ export default class TransactionForm extends Component<
 		return (
 			<div className="flex justify-center items-center w-full">
 				<form className={formStyle} onSubmit={this.submitHandler}>
+					<h1>ADD TRANSACTION</h1>
 					<input
 						className="appearance-none border-2 border-solid rounded my-2 py-1 px-2 text-sm block w-full"
 						type="number"
