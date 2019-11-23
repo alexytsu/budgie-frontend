@@ -22,8 +22,10 @@ export default class AccountScene extends Component <{}, any>{
     // MENU OF ACCOUNTS
     // PIE CHART OF WHERE MONEY IS GOING TO
     // LIST OF FILTER TRANSACTIONS PER ACCOUNT
+    // settimeout
     
     render() {
+
         let Graphprops: BudgetGraphProps = {
             key: AccountSceneStore.selectedAcct.id,
             transactions: AccountSceneStore.getAccountTransactions(),
@@ -37,16 +39,11 @@ export default class AccountScene extends Component <{}, any>{
 
         let transactions = AccountSceneStore.getAccountTransactions()
 
-        console.log(transactions)
-
         return (
             <div className="flex-auto w-11/12 h-full">
-
                 <div className="flex-auto float-left w-4/5 my-2 pr-5">
-
                     <div className="flex-auto bg-gray-900 p-1 h-20 text-white font-bold rounded-lg">
                         <h1 className="ml-2 text-lg">ACCOUNTS</h1>
-                    
                         <div className="flex-auto h-10 w-11/12 p-1 ml-12 mt-2 rounded-lg text-white">
                             <AccountsList></AccountsList>
                         </div>
@@ -55,10 +52,10 @@ export default class AccountScene extends Component <{}, any>{
                         <AccountHeader></AccountHeader>
                     </div>
                     <div className="mr-10">
-                        <div className="flex-auto float-left w-1/2">
+                        <div className="flex-auto float-right w-1/2">
                             <PieChart {...Chartprops}></PieChart>
                         </div>
-                        <div className="flex-auto float-right w-1/2 pr-5">
+                        <div className="flex-auto float-left w-1/2 pr-5">
                             <Graph {...Graphprops}></Graph>
                         </div>
                     </div>

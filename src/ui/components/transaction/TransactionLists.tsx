@@ -18,6 +18,7 @@ import apiHelpers from "../../../util/api-helpers";
 import Transaction from "./Transaction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import AccountSceneStore from "../../../stores/AccountSceneStore";
 
 interface TransactionListProps {
 	transactions: TransactionResp[];
@@ -30,7 +31,12 @@ export class TransactionListDateSections extends Component<
 > {
 	render() {
 		if (this.props.transactions.length == 0) {
-			return <div className="text-lg text-center my-6 text-gray-500">Empty</div>;
+			if (AccountSceneStore.loading == true) {
+				return <h1 className="text-lg text-center my-6 text-gray-500">LOADING TRANSACTIONS...</h1>
+			} else {
+				return <div className="text-lg text-center my-6 text-gray-500">Empty</div>;
+			}
+			
 		}
 
 		const transactions = this.props.transactions

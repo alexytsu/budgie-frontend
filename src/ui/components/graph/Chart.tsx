@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Component } from "react";
-import { Pie } from 'react-chartjs-2';
+import { Pie, Doughnut } from 'react-chartjs-2';
 import { TransactionResp } from "../../../util/types/TransactionTypes";
 import { CategoryResp } from "../../../util/types/CategoryTypes";
 import { observer } from "mobx-react";
@@ -66,7 +66,7 @@ export default class PieChart extends Component<AccountChartProps, any> {
     render() {
         return(
             <div key={this.props.key}>
-                <Pie
+                <Doughnut
                     data={{
                         labels: this.state.labels,
                         datasets: [{
@@ -76,7 +76,7 @@ export default class PieChart extends Component<AccountChartProps, any> {
                         width: 50
                         
                     }}
-                ></Pie>
+                ></Doughnut>
             </div>
         )
     }

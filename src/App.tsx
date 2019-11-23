@@ -36,16 +36,16 @@ class App extends Component<any, {}> {
 	async componentDidMount() {
 		if (DEBUG) {
 			const loginResp = await apiHelpers.loginUser(
-				"testmanpersonface",
-				"password"
+				"testperson",
+				"pw"
 			);
 			UserStore.token = loginResp.token;
-			UserStore.username = "TestUserFacePersonManFace";
+			UserStore.username = "testperson";
 			ApplicationStore.init(loginResp.token);
 			AccountSceneStore.init(loginResp.token)
 		}
 
-		console.log(this.props.location);
+		// console.log(this.props.location);
 	}
 
 	render() {
@@ -78,7 +78,9 @@ class App extends Component<any, {}> {
 						</Switch>
 						</div>
 					</div>
+					
 				</Router>
+				
 			</div>
 		);
 	}
@@ -142,7 +144,16 @@ const Navbar = withRouter(({...props}) => {
 					Accounts
 				</Link>
 			</div>
+			<div className="mt-2">
+				<button
+					className="bg-gray-900 hover:bg-gray-700 w-full text-xs text-center text-white py-2 pr-16 pl-1"
+					onClick={() => UserStore.logout()}
+				>
+					Logout
+				</button>
+			</div>
 		</div>
+		
 	);
 });
 

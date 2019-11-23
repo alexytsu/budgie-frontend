@@ -13,7 +13,7 @@ export default class AccountList extends React.Component<{}, any>{
             dots:true,
             arrows: true,
             
-            infinite: true,
+            infinite: false,
             speed: 500,
             slidesToShow: 1,
             slidesToScroll: 1,
@@ -28,7 +28,7 @@ export default class AccountList extends React.Component<{}, any>{
             <div>
                 <Slider {...sliderSettings}>
                     {accounts.map(act => (
-                        <div className="font-sans font-bold text-center">{act.name}</div>
+                        <div key={act.id} className="font-sans font-bold text-center">{act.name}</div>
                     ))}
                 </Slider>
                 

@@ -141,7 +141,7 @@ export default class TransactionForm extends Component<
 						})}
 					</select>
 
-					<div className="flex justify-between">
+					<div className="flex justify-between mt-5">
 						<div className="">
 							<input
 								className="form-radio cursor-pointer"
@@ -174,7 +174,7 @@ export default class TransactionForm extends Component<
 							</label>
 						</div>
 					</div>
-					<div className="my-4">
+					<div className="mt-5 float-left">
 						<SingleDatePicker
 							date={this.state.date}
 							onDateChange={(date: moment.Moment) => this.setState({ date })}
@@ -189,7 +189,7 @@ export default class TransactionForm extends Component<
 					</div>
 
 					<button
-						className="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-1 px-2 mb-5 rounded shadow focus:outline-none focus:shadow-outline"
+						className="bg-blue-500 float-right hover:bg-blue-700 text-white text-sm font-bold py-1 px-2 mt-8 rounded shadow focus:outline-none focus:shadow-outline"
 						type="submit"
 					>
 						Add

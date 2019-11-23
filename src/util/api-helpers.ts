@@ -278,6 +278,17 @@ class ApiHelper {
 		return resp.data;
 	};
 
+
+	getBanks = async (token: string) => {
+		const resp = await axios.get(API_URL + "/banks/", {
+			headers: {
+				Authorization: "Token " + token
+			}
+		});
+
+		return resp.data;
+	};
+
 	getBankAccounts = async (token: string) => {
 		const resp = await axios.get(API_URL + "/bankaccounts/", {
 			headers: {
@@ -302,7 +313,7 @@ class ApiHelper {
 		return resp.data
 	}
 
-	getlinkBank = async (token: String) => {
+	getlinkBank = async (token: string) => {
 		const resp = await axios.get(
 			API_URL + "/bankconnection/", 
 			{
@@ -311,6 +322,19 @@ class ApiHelper {
 				}
 			}
 		);
+
+		return resp.data
+	}
+
+	deleteBank = async (token: string) => {
+		const resp = await axios.delete(
+			API_URL + "/bankconnection/",
+			{
+				headers: {
+					Authorization: "Token " + token
+				}
+			}
+		)
 
 		return resp.data
 	}

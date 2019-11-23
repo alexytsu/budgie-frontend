@@ -107,7 +107,7 @@ export default class ViewAllCategories extends Component<
 										<button
 											value={cat.id}
 											onClick={e => this.select(e)}
-											className="bg-orange-500 w-full focus:bg-red-500 text-white mt-1 py-1 px-4 rounded"
+											className=" bg-orange-500 w-full focus:bg-red-500 text-white mt-1 py-1 px-4 rounded"
 										>
 											{cat.name}
 										</button>
@@ -135,7 +135,7 @@ export default class ViewAllCategories extends Component<
 						)}
 					</div>
 				</div>
-				<div className="w-auto">
+				<div className="w-auto mt-10">
 					{ApplicationStore.selectedCategoryId === 0 ? null : (
 						<div>
 							<div>
@@ -171,7 +171,7 @@ export default class ViewAllCategories extends Component<
 						</div>
 					)}
 				</div>
-				<div className="flex-1">
+				<div className="flex-1 mt-16">
 					{ApplicationStore.selectedCategoryId === 0 ? null : (
 						<div>{
 							<Bar data = {{
