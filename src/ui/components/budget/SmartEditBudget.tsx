@@ -82,7 +82,7 @@ export const SmartEditBudget = observer(
 								spent
 							</div>
 							<div className="pl-2 text-blue-500 text-sm">
-								${suggestionsFromPrevious.previousAmount}
+								${apiHelpers.round(suggestionsFromPrevious.previousAmount, 2)}
 							</div>
 						</div>
 					) : null}
