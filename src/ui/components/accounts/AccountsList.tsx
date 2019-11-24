@@ -3,7 +3,9 @@ import AccountsStore from "../../../stores/AccountSceneStore";
 import apiHelpers from "../../../util/api-helpers";
 import UserStore from "../../../stores/UserStore";
 import Slider from "react-slick";
+import { observer } from "mobx-react";
 
+@observer
 export default class AccountList extends React.Component<{}, any>{
     
     render() {

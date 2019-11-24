@@ -33,9 +33,9 @@ export default class BankForm extends Component<
 	constructor(props) {
 		super(props);
 		this.state = {
-            loginIdCaption: "gavinBelson",
-            passwordCaption: "hooli2016",
-            institution: "AU00000",
+            loginIdCaption: "",
+            passwordCaption: "",
+            institution: "",
             secondaryLoginId: null,
 			securityCode: null,
 			banktype: {
@@ -180,7 +180,6 @@ export default class BankForm extends Component<
 						Clear Accounts
 					</button>
 				</form>
-
 				
 			</div>
 		);
