@@ -125,9 +125,6 @@ class ApiHelper {
 		token: string,
 		transaction: CreateTransactionReq
 	): Promise<TransactionResp> => {
-		console.log(transaction.amount)
-		console.log(transaction.account)
-		console.log(transaction.category)
 		const resp = await axios.post(
 			API_URL + "/transactions/",
 			{ ...transaction },
@@ -141,7 +138,6 @@ class ApiHelper {
 		const new_transaction: TransactionResp = {
 			...resp.data
 		};
-		console.log(new_transaction)
 
 		return new_transaction;
 	};

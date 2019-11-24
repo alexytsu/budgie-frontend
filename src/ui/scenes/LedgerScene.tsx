@@ -72,6 +72,7 @@ export default class LedgerScene extends Component<{}, LedgerSceneState> {
 				<div className="pr-5 w-full">
 					<div className="flex-auto bg-gray-900 p-1 h-20 text-white font-bold rounded-lg">
 						<h1 className="ml-2 text-lg">HOME</h1>
+						<h1 className="ml-2">{UserStore.username}</h1>
 					</div>
 					<div className="mt-5">
 						<TransactionForm></TransactionForm>

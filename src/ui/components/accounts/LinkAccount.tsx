@@ -54,7 +54,6 @@ export default class BankForm extends Component<
 	changeHandler = e => {
 		const stateCopy = this.state;
 		stateCopy[e.target.name] = e.target.value;
-		console.log(e.target.value)
 		this.setState({ ...stateCopy });
 	};
 
@@ -96,7 +95,6 @@ export default class BankForm extends Component<
 	};
 
 	selBank = e => {
-		console.log(e.target.value)
 		let bank = AccountSceneStore.banks.find(
 			b => b.id === e.target.value
 		)
@@ -107,7 +105,6 @@ export default class BankForm extends Component<
 
 	deletebank = e => {
 		const data = AccountSceneStore.deleteBank(UserStore.token)
-		console.log(data)
 	}
 
 	checkLink = e => {

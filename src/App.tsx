@@ -29,7 +29,7 @@ import AccountScene from "./ui/scenes/AccountScene";
 import AccountSceneStore from "./stores/AccountSceneStore";
 
 
-const DEBUG = true;
+const DEBUG = false;
 
 @observer
 class App extends Component<any, {}> {
@@ -45,7 +45,6 @@ class App extends Component<any, {}> {
 			AccountSceneStore.init(loginResp.token)
 		}
 
-		// console.log(this.props.location);
 	}
 
 	render() {
@@ -83,7 +82,6 @@ class App extends Component<any, {}> {
 	}
 }
 const Navbar = withRouter(({...props}) => {
-	console.log(props.location);
 
 	const homeStyle = classNames({
 		"py-4 px-8 text-lg font-semibold text-blue-100": true,

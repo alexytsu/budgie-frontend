@@ -21,7 +21,6 @@ export default class AccountList extends React.Component<{}, any>{
             slidesToScroll: 1,
 
 			afterChange: function(index) {
-                console.log(index)
 				AccountsStore.changeSelected(index)
 			}
 		};

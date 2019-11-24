@@ -67,7 +67,6 @@ export default class AddNewBudgetModal extends Component<{}, AddBudgetState> {
 		try {
 			const resp = await ApplicationStore.createBudget(UserStore.token, budget);
 		} catch(e) {
-			console.log("UWUU fucky wucky")
 			this.setState({error: true});
 		}
 
