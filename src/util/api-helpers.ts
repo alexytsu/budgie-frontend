@@ -326,12 +326,25 @@ class ApiHelper {
 		return resp.data
 	}
 
-	deleteBank = async (token: string) => {
-		const resp = await axios.delete(
-			API_URL + "/bankconnection/",
+	getuserbank = async (token: string) => {
+		const resp = await axios.get(
+			API_URL + "/bankuseraccounts/",
 			{
 				headers: {
 					Authorization: "Token " + token
+				}
+			}
+		);
+
+		return resp.data
+	}
+
+	deleteBank = async (token: string, id: string) => {
+		const resp = await axios.delete(
+			API_URL + "/bankconnection/" + id,
+			{
+				headers: {
+					Authorization: "Token " + token,
 				}
 			}
 		)

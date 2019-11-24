@@ -105,17 +105,17 @@ export default class BankForm extends Component<
 		this.setState({ warning: false });
 	};
 
-	deletebank = e => {
-		const data = AccountSceneStore.deleteBank(UserStore.token)
-		console.log(data)
-	}
-
 	checkLink = e => {
 		const reply = AccountSceneStore.checkBankLink(UserStore.token)
 	}
 
+	getuseraccounts = e => {
+		console.log("haha")
+		AccountSceneStore.getuserbank(UserStore.token)
+	}
+	
 	render() {
-		const { banktype, loading } = this.state;
+		const { banktype } = this.state;
 
 		const formStyle = classNames({
 			"w-full bg-white border-2 border-solid shadow-md rounded-lg p-8": true,
@@ -158,12 +158,7 @@ export default class BankForm extends Component<
 					>
 						Add Bank
 					</button>
-
-					<LoadingSpinnerComponent/>
 				</form>
-
-				<button onClick={this.deletebank}>Delete</button>
-				<button onClick={this.checkLink}>check bank link</button>
 			</div>
 		);
 	}

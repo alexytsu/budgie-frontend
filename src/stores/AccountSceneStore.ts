@@ -7,6 +7,8 @@ import { async } from "q";
 import { trackPromise } from "react-promise-tracker";
 import UserStore from "./UserStore";
 import { resolve } from "url";
+import { userInfo } from "os";
+import { number } from "prop-types";
 
 interface AccountResp {
     balance: number,
@@ -35,7 +37,17 @@ export interface LinkCred {
 
 }
 
+export interface accountdetails {
+    bank: string,
+    id: string,
+    loginId: string,
+    userInfo: number
+}
+
 class AccountsStore {
+
+    @observable
+    useraccounts: accountdetails[] = []
 
     @observable
     banks: BankDets[] = []
@@ -74,6 +86,7 @@ class AccountsStore {
                     }
                     
                 })
+            this.useraccounts = await apiHelpers.getuserbank(token)
         } catch {
             console.log("oh no")
             console.log(this.accounts)
@@ -138,11 +151,38 @@ class AccountsStore {
         
     }
 
-    deleteBank(token: string) {
-        const deleted = apiHelpers.deleteBank(token)
-        console.log(deleted)
-        ApplicationStore.init(token)
-        this.init(token)
+    getuserbank = async (token: string) => {
+        await apiHelpers.getuserbank(token)
+            .then(result => {
+                console.log(result)
+                this.useraccounts = result
+            })
+    }
+
+    deleteBank = async (token: string, id: string) => {
+        await apiHelpers.deleteBank(token, id)
+            .then(result => {
+                console.log(result)
+                ApplicationStore.init(token)
+                this.init(token)
+                this.reset()
+            })
+        
+    }
+
+    reset() {
+        
+        this.banks = []
+        this.accounts = []
+        this.transactions = []
+        this.selectedAcct = {
+            balance: 0,
+            id: "",
+            importDate: "01-01-0001",
+            name: "None",
+            number: "",
+            user: 1
+        }
     }
 }
 

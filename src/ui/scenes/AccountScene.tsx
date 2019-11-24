@@ -9,6 +9,8 @@ import AccountSceneStore from "../../stores/AccountSceneStore";
 import { observer } from "mobx-react";
 import { TransactionListDateSections } from "../components/transaction/TransactionLists";
 import AccountHeader from "../components/accounts/AccountHeader";
+import BankForm from "../components/accounts/LinkAccount";
+import UnlinkForm from "../components/accounts/UnlinkAccount"
 
 
 /**
@@ -48,8 +50,19 @@ export default class AccountScene extends Component <{}, any>{
                             <AccountsList></AccountsList>
                         </div>
                     </div>
-                    <div className="flex-auto bg-gray-200 shadow-md p-1 rounded-lg border-gray-500 mt-5 mb-20">
-                        <AccountHeader></AccountHeader>
+                    <div className="mt-5">
+                        <div className="flex-auto bg-gray-200 rounded-lg border-gray-500 w-3/5 float-left">
+                            <AccountHeader></AccountHeader>
+                        </div>
+                        <div className="float-left w-2/5 h-40">
+                            <div className="float-left w-1/2">
+                                <BankForm></BankForm>
+                            </div>
+                            <div className="float-right w-1/2">
+                                <UnlinkForm></UnlinkForm>
+                            </div>
+                        </div>
+                        
                     </div>
                     <div className="mr-10">
                         <div className="flex-auto float-right w-1/2">
