@@ -98,9 +98,9 @@ export default class BudgetScene extends Component<{}, BudgetSceneState> {
 					<NetWorthVsBudgetedGraph></NetWorthVsBudgetedGraph>
 				</ReactModal>
 				<div style={{ minWidth: 250 }} className="flex flex-col mr-8">
-					<div>
-						<h1 className="text-xl mb-4">Budgets</h1>
-					</div>
+					<div className="flex-auto bg-gray-900 p-1 h-20 text-white font-bold rounded-lg mb-2">
+                        <h1 className="ml-2 text-lg">BUDGETS</h1>
+                    </div>
 					<AmountBudgetedSummary date={moment()}></AmountBudgetedSummary>
 					<div className="my-2 flex">
 						<DateRangePicker

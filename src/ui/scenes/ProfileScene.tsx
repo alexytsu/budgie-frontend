@@ -42,32 +42,6 @@ export default class ProfileScene extends Component<{}, ProfileSceneState> {
 	render() {
 		return (
 			<div className="flex h-full">
-				<div className="h-full">
-					<h1 className="text-xl">{UserStore.username}</h1>
-
-					<div>First Name: {UserStore.first_name}</div>
-					<div>Last Name: {UserStore.last_name}</div>
-					<div>Email: {UserStore.email}</div>
-
-					<div className="font-bold my-4">Show developer options</div>
-					<button
-						onClick={this.toggleDev}
-						className="bg-red-600 text-white py-2 px-8 rounded m-4"
-					>
-						{this.state.showDev ? "Hide" : "Show"}
-					</button>
-
-					{this.state.showDev ? (
-						<DevOptions store={UserStore}></DevOptions>
-					) : null}
-
-					<button
-						className="bg-red-600 text-white py-2 px-8 rounded m-4"
-						onClick={() => UserStore.logout()}
-					>
-						Logout
-					</button>
-				</div>
 				<div>
 					<BankForm></BankForm>
 				</div>

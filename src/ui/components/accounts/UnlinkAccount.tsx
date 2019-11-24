@@ -71,7 +71,7 @@ export default class UnlinkForm extends Component<
 						{AccountSceneStore.useraccounts.map(bank => {
 							return (
 								<option key={bank.id} value={bank.id}>
-									{bank.bank}
+									{bank.loginId}
 								</option>
 							)
 						})}

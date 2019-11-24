@@ -198,7 +198,7 @@ export class BalanceGraph implements GraphType {
 
 export class CategoryGraph implements GraphType {
     generateData(trans) {
-        return Number(trans.amount)
+        return Number(-trans.amount)
     }
     isBalance() {
         return false

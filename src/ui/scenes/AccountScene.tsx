@@ -31,7 +31,7 @@ export default class AccountScene extends Component <{}, any>{
         let Graphprops: BudgetGraphProps = {
             key: AccountSceneStore.selectedAcct.id,
             transactions: AccountSceneStore.getAccountTransactions(),
-            budget: AccountSceneStore.selectedAcct.balance
+            budget: 0
         }
         let Chartprops: AccountChartProps = {
             key: AccountSceneStore.selectedAcct.id,
@@ -64,11 +64,12 @@ export default class AccountScene extends Component <{}, any>{
                         </div>
                         
                     </div>
-                    <div className="mr-10">
-                        <div className="flex-auto float-right w-1/2">
+                    
+                    <div className="">
+                        <div className="flex-auto float-right w-1/2 mt-32">
                             <PieChart {...Chartprops}></PieChart>
                         </div>
-                        <div className="flex-auto float-left w-1/2 pr-5">
+                        <div className="flex-auto float-left w-1/2 pr-5 mt-32">
                             <Graph {...Graphprops}></Graph>
                         </div>
                     </div>

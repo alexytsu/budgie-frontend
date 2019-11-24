@@ -36,11 +36,11 @@ class App extends Component<any, {}> {
 	async componentDidMount() {
 		if (DEBUG) {
 			const loginResp = await apiHelpers.loginUser(
-				"testperson",
-				"pw"
+				"",
+				""
 			);
 			UserStore.token = loginResp.token;
-			UserStore.username = "testperson";
+			UserStore.username = "";
 			ApplicationStore.init(loginResp.token);
 			AccountSceneStore.init(loginResp.token)
 		}
@@ -60,9 +60,6 @@ class App extends Component<any, {}> {
 					<div className="bg-gray-100 rounded-lg rounded-r-none w-full pt-6 px-8 h-full">
 						<div className="mx-auto h-full">
 						<Switch>
-							<Route path="/transactions">
-								<LedgerScene></LedgerScene>
-							</Route>
 							<Route path="/budgets">
 								<BudgetScene></BudgetScene>
 							</Route>
@@ -73,7 +70,7 @@ class App extends Component<any, {}> {
 								<AccountScene></AccountScene>
 							</Route>
 							<Route path="/">
-								<ProfileScene></ProfileScene>
+								<LedgerScene></LedgerScene>
 							</Route>
 						</Switch>
 						</div>
@@ -91,10 +88,6 @@ const Navbar = withRouter(({...props}) => {
 	const homeStyle = classNames({
 		"py-4 px-8 text-lg font-semibold text-blue-100": true,
 		"rounded-l-lg bg-blue-300 text-blue-900 font-bold": props.location.pathname === "/",
-	});
-	const ledgerStyle = classNames({
-		"py-4 px-8 text-lg font-semibold text-teal-100": true,
-		"rounded-l-lg bg-teal-300 text-teal-900 font-bold": props.location.pathname === "/transactions",
 	});
 	const budgetStyle = classNames({
 		"py-4 px-8 text-lg text-green-100 font-semibold": true,
@@ -122,11 +115,6 @@ const Navbar = withRouter(({...props}) => {
 			<div className={homeStyle}>
 				<Link className="" to="/">
 					Home
-				</Link>
-			</div>
-			<div className={ledgerStyle}>
-				<Link to="/transactions">
-					Ledger
 				</Link>
 			</div>
 			<div className={budgetStyle}>

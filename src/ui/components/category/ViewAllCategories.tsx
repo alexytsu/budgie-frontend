@@ -36,9 +36,9 @@ export default class ViewAllCategories extends Component<
 		super(props);
 		this.state = {
 			endDate: moment(),
-			startDate: moment().subtract(1, "week"),
+			startDate: moment().subtract(1, "month"),
 			calendarFocused: null,
-			timeline : new DateRange(moment().toDate(), moment().subtract(1, "week").toDate())
+			timeline : new DateRange(moment().subtract(1, "month").toDate(), moment().toDate())
 		};
 	}
 
@@ -69,7 +69,6 @@ export default class ViewAllCategories extends Component<
 		if ((startDate === null) || (endDate === null)){
 			return
 		}
-
 		this.setState({ startDate, endDate });
 		this.setState({timeline: new DateRange(startDate._d, endDate._d)})
 	};
@@ -82,12 +81,12 @@ export default class ViewAllCategories extends Component<
 		return (
 			<div className="flex justify-start">
 				<div className="w-2/12 mt-10">
-					<label
+					{/* <label
 						className="font-sans text-3xl font-semibold text-gray-800 text-left"
 						htmlFor="category"
 					>
 						Categories
-					</label>
+					</label> */}
 					<div style={{maxHeight: 600, maxWidth: 235}} className="overflow-y-scroll">
 						{ApplicationStore.categories_raw.map(cat => {
 							return (
@@ -99,7 +98,7 @@ export default class ViewAllCategories extends Component<
 											key={cat.id}
 											value={cat.id}
 											onClick={e => this.select(e)}
-											className="bg-green-500 w-full focus:bg-red-500 text-white mt-1 py-1 px-4 rounded"
+											className="bg-green-500 w-full focus:bg-green-700 text-white mt-1 py-1 px-4 rounded"
 										>
 											{cat.name}
 										</button>
@@ -107,7 +106,7 @@ export default class ViewAllCategories extends Component<
 										<button
 											value={cat.id}
 											onClick={e => this.select(e)}
-											className=" bg-orange-500 w-full focus:bg-red-500 text-white mt-1 py-1 px-4 rounded"
+											className=" bg-orange-500 w-full focus:bg-orange-700 text-white mt-1 py-1 px-4 rounded"
 										>
 											{cat.name}
 										</button>
@@ -119,12 +118,6 @@ export default class ViewAllCategories extends Component<
 					<div>
 						{ApplicationStore.selectedCategoryId === 0 ? null : (
 							<div>
-								<button
-									className="whitespace-pre bg-teal-500 text-white mt-6 py-1 px-4 mr-4 rounded"
-									onClick={() => this.edit()}
-								>
-									Edit
-								</button>
 								<button
 									className="whitespace-pre bg-teal-500 text-white mt-6 py-1 px-4 rounded"
 									onClick={() => this.delete()}

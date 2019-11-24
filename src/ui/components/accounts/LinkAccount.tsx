@@ -33,9 +33,9 @@ export default class BankForm extends Component<
 	constructor(props) {
 		super(props);
 		this.state = {
-            loginIdCaption: "gavinBelson",
-            passwordCaption: "hooli2016",
-            institution: "AU00000",
+            loginIdCaption: "",
+            passwordCaption: "",
+            institution: "",
             secondaryLoginId: null,
 			securityCode: null,
 			banktype: {
@@ -118,7 +118,7 @@ export default class BankForm extends Component<
 		const { banktype } = this.state;
 
 		const formStyle = classNames({
-			"w-full bg-white border-2 border-solid shadow-md rounded-lg p-8": true,
+			"w-full bg-white border-2 border-solid shadow-md rounded-lg p-4": true,
 			"border-grey-200": !this.state.warning,
 			"border-green-400": this.state.warning
 		});
@@ -126,6 +126,7 @@ export default class BankForm extends Component<
 		return (
 			<div className="flex justify-center items-center w-full">
 				<form className={formStyle} onSubmit={this.submitHandler}>	
+					<h1 className="text-center">ADD BANK</h1>
 					<select onChange={this.selBank} className="appearance-none form-select my-2 p-2 text-sm rounded bg-blue-100 shadow block w-full">
 						<option value={"AU00000"}>Please select a bank</option>
 						{AccountSceneStore.banks.map(bank => {
@@ -140,15 +141,28 @@ export default class BankForm extends Component<
 					
 					{Object.keys(banktype).map(i => {
 						if (banktype[i] !== null && (i !== "id" && i !== "name")) {
-							return (
-								<input
-									className="appearance-none border-2 border-solid rounded my-2 py-1 px-2 text-sm block w-full"
-									name={i}
-									key={i}
-									placeholder={banktype[i]}
-									onChange={this.changeHandler}
-								/>
-							)
+							if (i == "passwordCaption") {
+								return (
+									<input
+										className="appearance-none border-2 border-solid rounded my-2 py-1 px-2 text-sm block w-full"
+										name={i}
+										key={i}
+										type="password"
+										placeholder={banktype[i]}
+										onChange={this.changeHandler}
+									/>
+								)
+							} else {
+								return (
+									<input
+										className="appearance-none border-2 border-solid rounded my-2 py-1 px-2 text-sm block w-full"
+										name={i}
+										key={i}
+										placeholder={banktype[i]}
+										onChange={this.changeHandler}
+									/>
+								)
+							}
 						}
 					})}
 

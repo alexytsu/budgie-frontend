@@ -16,7 +16,7 @@ export default class AccountHeader extends React.Component<{}, any>{
     }
 
     calculateBalance(transactions) {
-        let balance = AccountsStore.selectedAcct.balance
+        let balance = 0
         transactions.map(trans => {
             balance -= trans.amount
         })
