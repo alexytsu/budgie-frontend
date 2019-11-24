@@ -138,11 +138,30 @@ class AccountsStore {
         
     }
 
-    deleteBank(token: string) {
-        const deleted = apiHelpers.deleteBank(token)
-        console.log(deleted)
-        ApplicationStore.init(token)
-        this.init(token)
+    deleteBank = async (token: string) => {
+        await apiHelpers.deleteBank(token)
+            .then(result => {
+                console.log(result)
+                ApplicationStore.init(token)
+                this.init(token)
+                this.reset()
+            })
+        
+    }
+
+    reset() {
+        
+        this.banks = []
+        this.accounts = []
+        this.transactions = []
+        this.selectedAcct = {
+            balance: 0,
+            id: "",
+            importDate: "01-01-0001",
+            name: "None",
+            number: "",
+            user: 1
+        }
     }
 }
 

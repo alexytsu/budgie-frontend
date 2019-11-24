@@ -30,7 +30,7 @@ export default class AccountScene extends Component <{}, any>{
         let Graphprops: BudgetGraphProps = {
             key: AccountSceneStore.selectedAcct.id,
             transactions: AccountSceneStore.getAccountTransactions(),
-            budget: AccountSceneStore.selectedAcct.balance
+            budget: 0
         }
         let Chartprops: AccountChartProps = {
             key: AccountSceneStore.selectedAcct.id,

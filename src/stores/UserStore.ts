@@ -2,6 +2,7 @@ import * as React from "react";
 import { observable, computed } from "mobx";
 import ApiHelper from "../util/api-helpers";
 import apiHelpers from "../util/api-helpers";
+import AccountSceneStore from "./AccountSceneStore";
 
 class UserStore {
 	@observable
@@ -38,6 +39,7 @@ class UserStore {
 	logout() {
 		this.username = "Not Logged In";
 		this.token = "";
+		AccountSceneStore.reset()
 	}
 }
 

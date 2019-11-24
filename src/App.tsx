@@ -36,11 +36,11 @@ class App extends Component<any, {}> {
 	async componentDidMount() {
 		if (DEBUG) {
 			const loginResp = await apiHelpers.loginUser(
-				"testperson",
-				"pw"
+				"",
+				""
 			);
 			UserStore.token = loginResp.token;
-			UserStore.username = "testperson";
+			UserStore.username = "";
 			ApplicationStore.init(loginResp.token);
 			AccountSceneStore.init(loginResp.token)
 		}
